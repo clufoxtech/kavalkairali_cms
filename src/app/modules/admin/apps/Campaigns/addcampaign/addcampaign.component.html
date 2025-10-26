@@ -1,0 +1,189 @@
+<div
+  class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+    <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+      <div class="text-xl font-bold tracking-tight fontcls">{{ (isEdit)? 'Edit Offer':'Add Offer' }}</div>
+    </div>
+    <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+
+      <button class="ml-4 " mat-stroked-button style="background-color:#8ed93b;color:white" (click)="GoBack()">
+        <span class="ml-1 mr-1">Offer List</span>
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="AddForm" (ngSubmit)="AddOffer()" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8">
+    <p-scrollPanel [style]="{width: '100%', height: '380px'}">
+      <div class="container">
+        <p-panel header="Offer Details">
+          <div class="row">
+            <div class="col-25">
+              <label for="Offer">Format</label>
+            </div>
+            <div class="col-28">
+              <p-dropdown [options]="BookType" [disabled]="isEdit" [(ngModel)]="selectedBookType"
+                (onChange)="ChangeBookType()" optionValue="code" formControlName="bookType" appendTo="body"
+                [(ngModel)]="selectedBookType" optionLabel="name"></p-dropdown>
+              <div *ngIf="getSearchControl['bookType'].touched && getSearchControl['bookType'].invalid"
+                class="text-danger">
+                <div *ngIf="getSearchControl['bookType'].errors?.['required']">Book format is required.</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="Offer">Offer Name</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="Offer" formControlName="name" [(ngModel)]="activateDetails.name"
+                placeholder="offer name..">
+
+            </div>
+          </div>
+         
+          <div class="row">
+            <div class="col-25">
+              <label for="depname">OfferType</label>
+            </div>
+            <div class="col-28">
+              <p-dropdown [options]="OfferType" formControlName="type" optionValue="code"
+                [(ngModel)]="activateDetails.type" appendTo="body" (onChange)="dropvalue($event)" optionLabel="name"
+                placeholder="Select"></p-dropdown>
+
+            </div>
+            <div class="col-15" *ngIf="selectedOfferType=='PERCENTAGE'">
+              <label for="offerPercentage">Offer Percentage</label>
+            </div>
+            <div class="col-20" *ngIf="selectedOfferType=='PERCENTAGE'">
+              <input type="text" id="offerPercentage" formControlName="amountOrPercentage"
+                [(ngModel)]="activateDetails.amountOrPercentage" placeholder="Type..">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25" *ngIf="selectedOfferType==='AMOUNT'">
+              <label for="eligibilityAmount">Eligibility Amount</label>
+            </div>
+            <div class="col-28" *ngIf="selectedOfferType==='AMOUNT'">
+              <input type="text" formControlName="eligibilityAmount" placeholder="Amount..">
+            </div>
+
+          </div>
+          <div class="row" *ngIf="selectedOfferType==='PERCENTAGE'">
+            <div class="col-25" >
+              <label for="maxDiscount">Max Discount</label>
+            </div>
+            <div class="col-28" >
+              <input type="text" formControlName="maxDiscount" [(ngModel)]="activateDetails.maxDiscount"
+                placeholder="Max discount...">
+            </div>
+            <div class="col-20" >
+
+              <p-checkbox formControlName="isNoLimit" name="noLimit" [binary]="true"
+                (onChange)="onNoLimitChange($event)" [(ngModel)]="activateDetails.isNoLimit" label="No Limit"
+                class="mr-2 fontcls"></p-checkbox>
+            </div>
+
+          </div>
+          <div class="row" *ngIf="selectedOfferType==='AMOUNT'">
+            <div class="col-25">
+              <label for="amountOrPercentage">Offer Amount</label>
+            </div>
+            <div class="col-28">
+              <input type="text" formControlName="amountOrPercentage" placeholder="Amount..">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="Offer">Offer Image</label>
+            </div>
+            <div class="col-28">
+              <input type="file" formControlName="offerImage" (change)="onFileChanged($event)" id="file"
+                accept=".jpg, .jpeg, .png">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="depname">Description</label>
+            </div>
+            <div class="col-75">
+              <textarea id="depname" formControlName="description" [(ngModel)]="activateDetails.description"
+                placeholder="Type.."></textarea>
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+              <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+            </div> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="detail">Details</label>
+            </div>
+            <div class="col-75">
+              <textarea id="depname" formControlName="detail" [(ngModel)]="activateDetails.detail"
+                placeholder="Type.."></textarea>
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+              <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+            </div> -->
+            </div>
+          </div>
+        </p-panel>
+        <p-panel header="Book Details" hidden>
+            <div class="row">
+              <div class="col-25">
+
+              </div>
+              <div class="col-15">
+                <p-checkbox formControlName="isAllBookOffer" name="isAllBookOffer" [binary]="true"
+                  (onChange)="onAllBookChange($event)"  label="All books"
+                  class="mr-2 fontcls"></p-checkbox>
+              </div>
+              <div class="col-25">
+                <p-checkbox formControlName="isLimitedBookOffer" name="isLimitedBookOffer" [binary]="true"
+                  (onChange)="onLimitedBookChange($event)"  label="Limited books"
+                  class="mr-2 fontcls"></p-checkbox>
+              </div>
+            </div>
+            <div class="row" *ngIf="isNoOfBooksNeeded">
+              <div class="col-25">
+                <label for="chooseBy">Number of books</label>
+              </div>
+              <div class="col-28">
+                <input type="text" formControlName="chooseBy" placeholder="No. of books..">
+  
+              </div>
+            </div>
+            <div class="row" *ngIf="selectedChooseBy==='CATEGORY'">
+              <div class="col-25">
+                <label for="category">Category</label>
+              </div>
+              <div class="col-75">
+                <p-multiSelect  formControlName="category" class="custom-ms" defaultLabel="Select" [options]="category"
+                  [(ngModel)]="selectedCategory" optionLabel="name" optionValue="id"></p-multiSelect>
+
+              </div>
+            </div>
+            <div class="row" *ngIf="selectedChooseBy==='AUTHOR'">
+              <div class="col-25">
+                <label for="category">Author</label>
+              </div>
+              <div class="col-75">
+                <p-multiSelect formControlName="author" class="custom-ms" defaultLabel="Select"
+                  [options]="authorContributor" [(ngModel)]="selectedAuthor" optionLabel="name"
+                  optionValue="id"></p-multiSelect>
+
+              </div>
+            </div>
+        </p-panel>
+      </div>
+
+      <div class="row" mb-10>
+        <div class="col-90 text-right fontcls">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="cancel()">CANCEL</button>
+          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+        </div>
+      </div>
+    </p-scrollPanel>
+  </form>
+</div>
+<p-toast position="bottom-right"></p-toast>

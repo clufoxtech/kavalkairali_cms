@@ -1,0 +1,23 @@
+.col-20 {
+    float: left;
+    width: 20%;
+    margin-top: 2px;
+  }
+  .col-30 {
+    float: left;
+    width: 30%;
+    margin-top: 2px;
+  }
+  /* Floating column for inputs: 75% width */
+  .col-70 {
+    float: left;
+    width: 50%;
+    margin-top: 2px;
+  }
+  input[type=file]::file-selector-button {
+    border: 1px solid #ccc;
+    padding: .2em .4em;
+    border-radius: .2em;
+    background-color: #ccc;
+    transition: 1s;
+  }

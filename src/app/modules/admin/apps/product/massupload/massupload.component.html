@@ -1,0 +1,119 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Bulk Uploading</div>
+        </div>
+       
+       
+    </div>
+    <form [formGroup]="MassForm" (ngSubmit)="Submit()" class="ml-5">
+    <div class="row mt-10">
+        <div class="col-10 mb-2">
+            <label for="depname">Cover Image</label>
+        </div>
+        <div class="col-25 mb-2">
+          <!-- <label class="custom-file-upload"> formControlName="cover"-->
+            <input type="file" id="file" multiple formControlName="cover"  accept=".jpg, .jpeg, .png" (change)="selectCover($event)">
+            <div *ngIf="getControl['cover'].touched && getControl['cover'].invalid" class="text-danger">
+                      <div *ngIf="getControl['cover'].errors?.['required']">Upload atleast one cover image.</div>
+                    </div> 
+                 
+        </div>
+       
+        <div class="col-10 mb-2">
+            <label for="depname">Epub File</label>
+        </div>
+        <div class="col-25 mb-2">
+          <!-- <label class="custom-file-upload"> formControlName="cover"-->
+            <input type="file" id="file" multiple formControlName="epub"  accept=".epub" (change)="selectEpub($event)" >
+            <div *ngIf="getControl['epub'].touched && getControl['epub'].invalid" class="text-danger">
+                      <div *ngIf="getControl['epub'].errors?.['required']">Upload atleast one file</div>
+                    </div>
+                 
+        </div>
+       
+    
+    <div class="col-25 text-left fontcls">
+    <button class="submitbtn btn-outline-secondary btn btn-md" type="submit" >Submit</button>
+    <button class="submitbtn btn-outline-secondary btn btn-md ml-3" type="button" (click)="clear()">Clear</button>
+</div>
+</div>
+<div class="row mt-4">
+    <div class="bar-loader-container" *ngIf="loading">
+        <div class="bar-loader"></div>
+      </div>
+
+</div>
+<div class="row" *ngIf="fileInfos">
+    <div class="col-6 text-xl font-bold tracking-tight fontcls">Uploaded Books  
+    </div>
+    <div class="col-5 text-right ">
+       
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'startsWith')" placeholder="Search book" />
+        </span>
+    </div>
+    
+    </div>
+    <div class="col-1 text-right  ">
+        <div class="flex">
+            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="export()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+            <!-- <i class="pi pi-download" title="Export" (click)="export()" style="cursor: pointer;"></i> -->
+        </div>
+        </div>
+    <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+    [globalFilterFields]="['name']" [value]="fileInfos" [rows]="10"  
+        [resizableColumns]="true" [scrollable]="true"
+        scrollHeight="320px" sortMode="multiple">
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="max-width:45px">NO</th>
+                <th style="min-width:85%">BOOK NAME</th>
+                <th >STATUS
+                 
+                  <p-columnFilter field="status" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                    <ng-template pTemplate="header">
+                        <div class="px-3 pt-3 pb-0">
+                            <span class="font-bold">Status Picker</span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <p-multiSelect [ngModel]="value" [options]="statuses" placeholder="Any" (onChange)="filter($event.value)" optionValue="value" optionLabel="label">
+                            <ng-template let-option pTemplate="item">
+                                <div class="inline-block vertical-align-middle">
+                                    <span class="ml-1 mt-1">{{ option.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-multiSelect>
+                    </ng-template>
+                </p-columnFilter>
+                </th> 
+            </tr>
+
+
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+            <tr>
+                <td style="max-width:45px">{{rowIndex+1}}</td>
+                <td style="min-width:85%">{{product.name}}</td>
+                <td [ngClass]="product.status==='Completed'?'success':'danger'">{{product.status}}</td>
+               
+            </tr>
+        </ng-template>
+    </p-table>
+    <!-- <ul class="list-group list-group-flush">
+      <li *ngFor="let file of fileInfos " class="list-group-item">
+       <div class="row"> <p class="col-50 mb-0">{{ file.name }}</p><p class="col-50 text-right mb-0" [ngClass]="file.status==='Completed'?'success':'danger'">{{file.status}}</p></div>
+      </li>
+    </ul>   -->
+</div>
+    </form>
+    
+</div>
+<p-toast position="bottom-right"></p-toast>
+

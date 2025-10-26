@@ -1,0 +1,35 @@
+<div
+  class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+    <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+      <div class="text-xl font-bold tracking-tight fontcls">{{ policyName }}</div>
+    </div>
+
+  </div>
+  <form [formGroup]="addForm" (ngSubmit)="addPolicy()" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8">
+    <p-scrollPanel [style]="{width: '100%', height: '380px'}">
+      <div class="container">
+            <div class="row">
+              <div class="col-25">
+                <label for="policyText">Enter comments</label>
+              </div>
+              <div class="col-28">
+                <textarea id="policyText" formControlName="policyText"  rows="2"  [(ngModel)]="content"
+                placeholder="Enter text..."></textarea>
+              </div>
+            </div>
+
+      </div>
+
+      <div class="row" mb-10>
+        <div class="col-55 text-right fontcls">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="cancel()">CANCEL</button>
+          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+        </div>
+      </div>
+    </p-scrollPanel>
+  </form>
+</div>
+<p-toast position="bottom-right"></p-toast>

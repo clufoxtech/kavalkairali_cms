@@ -1,0 +1,46 @@
+<p-dialog header="Edit Department" [(visible)]="close" (onHide)=" Cancel()" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+  <form [formGroup]="EditForm" (ngSubmit)="EditDepartment()" >
+    <div class="container">
+      <div class="row">
+        <div class="col-25">
+          <label for="depname">Name</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="depname" class="nameCapital" [pKeyFilter]="noSpecial" formControlName="depname" placeholder="Department name.." [(ngModel)]="products.name">
+          <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+              <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+            </div>
+            <div *ngIf="getControl['depname'].errors?.maxlength"  class="text-danger"> 
+              More than 50 characters is not allowed.
+         </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-25">
+            <label for="desc">Description</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="desc"  formControlName="desc" placeholder="Enter description.." [(ngModel)]="products.description">
+            <div *ngIf="getControl['desc'].touched && getControl['desc'].invalid" class="text-danger">
+              <div *ngIf="getControl['desc'].errors?.['required']">Description is required.</div>
+            </div>
+            <div *ngIf="getControl['desc'].errors?.maxlength"  class="text-danger"> 
+              More than 100 characters is not allowed.
+         </div>
+          </div>
+        </div>  
+    <div class="row" >
+      <div class="col-100 text-right fontcls">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+      </div>
+  </div>
+  </div>
+  </form>
+
+</p-dialog>
+
+<p-toast position="bottom-right"></p-toast>

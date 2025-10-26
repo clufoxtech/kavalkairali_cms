@@ -1,0 +1,198 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Subscription List</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains') ||  dt3.filterGlobal($event.target.value, 'contains')">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+        <button style="background-color:#8ed93b;color:white"
+        class="ml-4 " 
+        mat-stroked-button 
+    (click)="Create()">
+    <span class="ml-1 mr-1">Create</span>
+    </button> 
+        </div>
+    </div>
+    <!-- Main -->
+    <p-tabView class="ml-4 mt-2" [(activeIndex)]="index">
+        <p-tabPanel header="Active" >
+        <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="activeList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+               
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px">NO</th>
+                        <th >PLAN</th>
+                        <th>DURATION</th>
+                        <th>AMOUNT</th>
+                        <th>CUSTOMERS</th>
+                        <th>DAYS</th>
+                        
+                        <th style="max-width:45px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-active let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px">{{rowIndex+1}}</td>
+                        <td title={{active.name}} >{{active.name}}</td>
+                        <td >{{active.duration}}</td>
+                        <td >{{active.amount}}</td>     
+                        <td >{{active.bookCount}}</td>
+                        <td>{{active.status}}</td>
+                       
+                        <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,active)"></i></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                <ul>
+                    <li (click)="DeActivate()" style="cursor:pointer">De-activate</li>
+                </ul>
+            </ng-template>
+        </p-overlayPanel>
+       
+         
+    
+  
+        </p-tabPanel>
+
+  
+            <p-tabPanel header="De-Activated" >
+                <div class="card ">
+                    <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="deActiveList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+                       
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th style="max-width:45px">NO</th>
+                                <th >PLAN</th>
+                                <th>DURATION</th>
+                                <th>AMOUNT</th>
+                                <th>ACCESS</th>
+                                <th>CUSTOMERS</th>
+                                <th style="max-width:45px"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-deactive let-columns="columns" let-rowIndex="rowIndex">
+                            <tr>
+                                <td style="max-width:45px">{{rowIndex+1}}</td>
+                                <td title={{deactive.name}} >{{deactive.name}}</td>
+                                <td >{{deactive.duration}}</td>
+                                <td >{{deactive.amount}}</td>
+                                
+                                <td >{{deactive.subscribers}}</td>
+                                <td>{{deactive.user}}</td>
+                                <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showArchived($event,deactive)"></i></td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+        
+                <p-overlayPanel #al>
+                    <ng-template pTemplate>
+                        <ul>
+                            <li style="cursor:pointer" (click)="ActivatePlan()">Activate</li>
+                            <HR SIZE="1">
+                            <li style="cursor:pointer" (click)="showedit()">Edit</li>
+                        </ul>
+                    </ng-template>
+                </p-overlayPanel>
+                </p-tabPanel>
+
+    </p-tabView>
+    
+</div>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+
+<p-dialog header="Add Subscription" [(visible)]="AddSubscrib" [breakpoints]="{'960px': '50vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+    <form [formGroup]="addForm" (ngSubmit)="AddSubscription()" novalidate>
+        <div class="container">
+            <label><b>Plan Name</b></label>
+            <input type="text" placeholder="Type here" formControlName="plan" required>
+            <div *ngIf="getControl['plan'].touched && getControl['plan'].invalid" class="text-danger">
+                <div *ngIf="getControl['plan'].errors?.['required']">Plan is required.</div>
+              </div>
+            <label><b>Duration</b></label>
+            <input type="text" placeholder="Type here" formControlName="duration" required>
+            <div *ngIf="getControl['duration'].touched && getControl['duration'].invalid" class="text-danger">
+                <div *ngIf="getControl['duration'].errors?.['required']">Duration is required.</div>
+              </div>
+            <label><b>Amount</b></label>
+            <input type="text" placeholder="Type here" formControlName="amount" required>
+            <div *ngIf="getControl['amount'].touched && getControl['amount'].invalid" class="text-danger">
+                <div *ngIf="getControl['amount'].errors?.['required']">Amount is required.</div>
+              </div>
+
+              <label><b>Details</b></label>
+              <textarea id="details" formControlName="details" placeholder="Type.."></textarea>
+            <div *ngIf="getControl['details'].touched && getControl['details'].invalid" class="text-danger">
+            <div *ngIf="getControl['details'].errors?.['required']">Details is required.</div>
+          </div> 
+            <div class="row" >
+                <div class="col-100 text-right">
+                    <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="Cancel()">Cancel</button>
+                    <button type="button" class="submitbtn btn-outline-secondary btn btn-md ml-2" (click)="AddSubscription()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form> 
+   
+
+    
+</p-dialog>
+
+<p-dialog header="Edit Subscription" [(visible)]="edit" [breakpoints]="{'960px': '50vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+    <form [formGroup]="editForm" (ngSubmit)="EditSubscription()" novalidate>
+        <div class="container">
+            <label><b>Plan Name</b></label>
+            <input type="text" placeholder="Type here" formControlName="editplan" [(ngModel)]="planName"  required>
+            <div *ngIf="getEditControl['editplan'].touched && getEditControl['editplan'].invalid" class="text-danger">
+                <div *ngIf="getEditControl['editplan'].errors?.['required']">Plan is required.</div>
+              </div>
+            <label><b>Duration</b></label>
+            <input type="text" placeholder="Type here" formControlName="editduration" [(ngModel)]="planDuration" required>
+            <div *ngIf="getEditControl['editduration'].touched && getEditControl['editduration'].invalid" class="text-danger">
+                <div *ngIf="getEditControl['editduration'].errors?.['required']">Duration is required.</div>
+              </div>
+            <label><b>Amount</b></label>
+            <input type="text" placeholder="Type here" formControlName="editamount" [(ngModel)]="planAmount" required>
+            <div *ngIf="getEditControl['editamount'].touched && getEditControl['editamount'].invalid" class="text-danger">
+                <div *ngIf="getEditControl['editamount'].errors?.['required']">Amount is required.</div>
+              </div>
+              <label><b>Details</b></label>
+              <textarea id="editdetails" formControlName="editdetails" placeholder="Type.."  [(ngModel)]="planDetails"></textarea>
+            <div *ngIf="getEditControl['editdetails'].touched && getEditControl['editdetails'].invalid" class="text-danger">
+            <div *ngIf="getEditControl['editdetails'].errors?.['required']">Details is required.</div>
+          </div> 
+            <div class="row" >
+                <div class="col-100 text-right">
+                    <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="EditCancel()">Cancel</button>
+                    <button type="button" class="submitbtn btn-outline-secondary btn btn-md ml-2" (click)="EditSubscription()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form> 
+</p-dialog>
+
+

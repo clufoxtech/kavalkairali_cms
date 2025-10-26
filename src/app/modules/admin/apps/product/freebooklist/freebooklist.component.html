@@ -1,0 +1,81 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Free Book List</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains')">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+        <button style="background-color:#8ed93b;color:white"
+        class="ml-4 " 
+        mat-stroked-button (click)="AddFreeBook()">
+    <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white"></mat-icon>
+    <span class="ml-1 mr-1">Add FreeBook</span>
+    </button> 
+        </div>
+    </div>
+    <!-- Main -->
+        <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll" [globalFilterFields]="['title']"[value]="FreeEBookList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+               
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px">NO</th>
+                        <th >PRODUCT</th> 
+                        <th>AUTHOR</th>
+                        <th>EDITION</th>
+                        <th >VOLUME</th>
+                        <th>CODE</th>
+                        <th>ISBN</th>
+                        <th>LANGUAGE</th>
+                        <th>MRP</th>
+                        <th>NO OF READERS</th>
+                        <th style="max-width:45px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-active let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px">{{rowIndex+1}}</td>
+                        <td title={{active.product}} (click)="ShowUser(active)" style="cursor:pointer;color: rgb(40, 150, 214);">{{active.title}}</td>
+                        <td title={{active.author}}>{{active.author}}</td>
+                        <td>{{active.edition}}</td>
+                        <td style="max-width:100px">{{active.volume}}</td>
+                        <td>{{active.productCode}}</td>
+                        <td>{{active.isbn}}</td>
+                        <td>{{active.language}}</td>
+                        <td>{{active.mrp}}</td>
+                        <td>{{active.noOfReaders}}</td>
+                       
+                        <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,active)"></i></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                <ul>
+                    <li (click)="RemoveBook(BookDetail)" style="cursor:pointer">Remove</li>
+                    
+                </ul>
+            </ng-template>
+        </p-overlayPanel>
+    
+</div>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+
+

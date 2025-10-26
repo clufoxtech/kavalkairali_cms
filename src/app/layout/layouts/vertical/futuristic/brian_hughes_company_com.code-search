@@ -1,0 +1,10 @@
+# Query: brian.hughes@company.com
+# Flags: CaseSensitive WordMatch
+# ContextLines: 1
+
+1 result - 1 file
+
+src\app\layout\layouts\vertical\futuristic\futuristic.component.html:
+  29                  <div class="w-full mt-0.5 whitespace-nowrap text-sm text-ellipsis overflow-hidden leading-normal text-current opacity-50">
+  30:                     Aneesh@dcbooks.com
+  31                  </div>

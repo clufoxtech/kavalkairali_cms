@@ -1,0 +1,203 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Contributors</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="applyGlobalFilter($event)">
+                <button pButton  class="icon-size-5" icon="pi pi-times-circle" (click)="clear()"></button>
+        </mat-form-field>
+            <!-- Add product button -->
+            <button
+                class="ml-4" style="background-color:#8ed93b;color:white"
+                mat-stroked-button 
+            (click)="NewContributor()">
+            <mat-icon [svgIcon]="'heroicons_outline:plus'"style="color:white"></mat-icon>
+            <span class="ml-1 mr-1">Add Contributor</span>
+            </button>
+        </div>
+       
+    </div>
+    <!-- Main -->
+    
+        <div class="card ml-4">
+            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll" [value]="contributor" [globalFilterFields]="['name']" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple"
+ [paginator]="true" [totalRecords]="totalRecords" (onLazyLoad)="LazyLoadContributor($event)"  [lazy]="true">
+               <!--  -->
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px;min-width:30px;">NO</th>
+                        <th >PERSON</th>
+                        <th>PHOTO</th>
+                        <th style="min-width:100px">AUTHOR</th> 
+                        <th style="min-width:100px">NARRATOR</th>
+                        <th style="min-width:100px">ILLUSTRATOR</th>
+                        <th style="min-width:100px">EDITOR</th>
+                        <th style="min-width:100px">TRANSLATOR</th>
+                        <th style="min-width:100px">COMPILER</th>
+                        <th style="max-width:45px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
+                        <td style="min-width:100px">{{product.name | titlecase}}</td>
+                        <td><img src="" ></td>
+                        <td style="min-width:100px" >{{(existsInArray(product.contributorTypes,'AUTHOR'))?'Yes':'No'}}</td>
+                        <td style="min-width:100px" >{{(existsInArray(product.contributorTypes,'NARRATOR'))?'Yes':'No'}}</td>
+                        <td style="min-width:100px" >{{(existsInArray(product.contributorTypes,'ILLUSTRATOR'))?'Yes':'No'}}</td>
+                        <td style="min-width:100px" >{{(existsInArray(product.contributorTypes,'EDITOR'))?'Yes':'No'}}</td>
+                        <td style="min-width:100px" >{{(existsInArray(product.contributorTypes,'TRANSLATOR'))?'Yes':'No'}}</td>
+                        <td style="min-width:100px" >{{(existsInArray(product.contributorTypes,'COMPILER'))?'Yes':'No'}}</td>
+                        <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-overlayPanel #op>
+                <ng-template pTemplate>
+                    <ul>
+                        <li (click)="Edit(product)" style="cursor:pointer;">Edit</li>
+                        <HR SIZE="1">
+                        <li (click)="Delete(product)" style="cursor:pointer;">Delete</li>
+                    </ul>
+                </ng-template>
+            </p-overlayPanel>
+</div>
+<p-dialog [(visible)]="display" header="Add Contributors" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+  <form [formGroup]="AddForm" (ngSubmit)="AddContributor()"  novalidate>
+    <div class="container">
+    <div class="row">
+      
+        <div class="col-25">
+          <label for="contributor">Contributor Image</label>
+        </div>
+        <div class="col-50">
+          <input  type="file" id="file" formControlName="photo"  accept=".jpg, .jpeg, .png" (change)="onFileChanged($event)" >
+      </div>
+      <div class="col-25">
+        <img src={{url}} style="width:50px;height:50px;" *ngIf="url">
+      </div>
+      <div class="col-25">
+        <label for="contributor">Contributor</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="contributor" class="nameCapital" [pKeyFilter]="noSpecial" formControlName="contributor" placeholder="Name.." >
+        <div *ngIf="getControl['contributor'].touched && getControl['contributor'].invalid" class="text-danger">
+            <div *ngIf="getControl['contributor'].errors?.['required']">Contributor is required.</div>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+          <label for="role">Choose role</label>
+        </div>
+        <div class="col-75">
+            <div class="row mt-1">
+            <p-checkbox formControlName="groupname1" inputId="author" value="AUTHOR" label=Author (onChange)="contributorType($event,'AUTHOR')"  binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+            <p-checkbox formControlName="groupname2" inputId="narrator" value="NARRATOR" label=Narrator  (onChange)="contributorType($event,'NARRATOR')" binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+            <p-checkbox formControlName="groupname3" inputId="illustrator" value="ILLUSTRATOR" label=Illustrator (onChange)="contributorType($event,'ILLUSTRATOR')"  binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+            <p-checkbox formControlName="groupname4" inputId="editor" value="EDITOR" label=Editor (onChange)="contributorType($event,'EDITOR')"  binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+                <p-checkbox formControlName="groupname5" inputId="translator" value="TRANSLATOR" label=Translator (onChange)="contributorType($event,'TRANSLATOR')"  binary="true"></p-checkbox>
+                </div>
+                <div class="row mt-1">
+                  <p-checkbox formControlName="groupname5" inputId="compiler" value="COMPILER" label=Compiler (onChange)="contributorType($event,'COMPILER')"  binary="true"></p-checkbox>
+                  </div>
+        </div>
+      </div>
+   
+    <div class="row" >
+        <div class="col-100 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm " (click)="Cancel()">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm " >SUBMIT</button>
+        </div>
+    </div>
+  </div>
+  </form>
+
+</p-dialog>
+<p-dialog header="Edit Contribution" [(visible)]="editdisplay"  [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+  <form [formGroup]="EditForm" (ngSubmit)="EditContribution()" >
+    <div class="container">
+      <div class="row">
+        <div class="col-25">
+          <label for="contributor">Contributor Image</label>
+        </div>
+        <div class="col-50">
+          <input  type="file" id="file" formControlName="editphoto"  accept=".jpg, .jpeg, .png" (change)="onFileChanged($event)" ngModel="{{url}}">
+      </div>
+      <div class="col-25">
+        <img src={{url}} style="width:50px;height:50px;" *ngIf="url">
+      </div>
+        <div class="col-25">
+          <label for="editcontributor">Contribution</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="editcontributor" class="nameCapital" [pKeyFilter]="noSpecial" formControlName="editcontributor" placeholder="Type here.." [(ngModel)]="product.name" >
+          <div *ngIf="getEditControl['editcontributor'].touched && getEditControl['editcontributor'].invalid" class="text-danger">
+              <div *ngIf="getEditControl['editcontributor'].errors?.['required']">Contribution is required.</div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="role">Choose role</label>
+        </div>
+        <div class="col-75">
+            <div class="row mt-1">
+            <p-checkbox formControlName="editgroupname1"  inputId="author" value="editAuthor" [(ngModel)]="editAuthor"  label="Author" (onChange)="contributorType($event,'AUTHOR')" binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+            <p-checkbox formControlName="editgroupname2" inputId="narrator" value="editNarrator" [(ngModel)]="editNarrator" label=Narrator (onChange)="contributorType($event,'NARRATOR')" binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+            <p-checkbox formControlName="editgroupname3" inputId="illustrator" value="editIllustrator" [(ngModel)]="editIllustrator" label=Illustrator (onChange)="contributorType($event,'ILLUSTRATOR')" binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+            <p-checkbox formControlName="editgroupname4" inputId="editor" value="editEditor" [(ngModel)]="editEditor" label=Editor (onChange)="contributorType($event,'EDITOR')" binary="true"></p-checkbox>
+            </div>
+            <div class="row mt-1">
+                <p-checkbox formControlName="editgroupname5" inputId="translator" value="editTranslator" [(ngModel)]="editTranslator" label=Translator  (onChange)="contributorType($event,'TRANSLATOR')" binary="true"></p-checkbox>
+                </div>
+                <div class="row mt-1">
+                  <p-checkbox formControlName="editgroupname6" inputId="compiler" value="editCompiler" [(ngModel)]="editCompiler" label=Compiler (onChange)="contributorType($event,'COMPILER')" binary="true"></p-checkbox>
+                  </div>
+        </div>
+      </div>
+      <div class="col-100 text-right fontcls">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="EditCancel()">CANCEL</button>
+          <button type="submit"  class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+      </div>
+  </div>
+  </form>
+
+</p-dialog>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+<p-toast position="bottom-right"></p-toast>
+

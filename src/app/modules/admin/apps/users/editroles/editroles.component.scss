@@ -1,0 +1,38 @@
+
+  /* Style the label to display next to the inputs */
+  label {
+    padding: 0.5rem;
+    display: inline-block;
+    font-family: 'Hind';
+    font-size: 15px;
+    align-items: center;
+    text-align: center;
+  }
+  .col-40 {
+    float: left;
+    width: 40%;
+  }
+  
+  /* Floating column for inputs: 75% width */
+  .col-60 {
+    float: left;
+    width: 60%;
+  }
+  .font{
+    font-family: 'Hind';
+    font-size: 13px;
+  }
+  :host ::ng-deep .p-checkbox-label {
+  font-size: 13px;
+  font-family: 'Hind';
+}
+.cancelbtn ,.submitbtn {
+  font-size: 13px;
+}
+.mat-stroked-button{
+  font-size: 13px;
+  height: 12%;
+}
+button:hover {
+  background-color: #8ed93b;
+}

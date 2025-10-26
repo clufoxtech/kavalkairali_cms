@@ -1,0 +1,235 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b ">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Magazine List</div>
+        </div>
+        
+        <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 pr-3">
+          <div class="flex  sm:flex-row flex-0  shrink-0 items-center  mt-6 sm:mt-0  mr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="applyGlobalFilter($event)"/>
+                <button pButton  class="icon-size-5" icon="pi pi-times-circle" (click)="clear()"></button>
+        </mat-form-field>
+        </div>
+    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 " >
+        
+        <button
+                class="ml-4 " 
+                mat-stroked-button style="background-color:#8ed93b;color:white"
+            (click)="AddProduct()">
+            <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white;size:2px;"></mat-icon>
+            <span class="ml-1 mr-1">Add magazine</span>
+            </button>
+</div>
+
+        </div>
+    </div>
+    
+    <!-- Main -->
+            <p-tabView (onChange)="handleChangeStatus($event)" [(activeIndex)]="statusIndex">
+                <p-tabPanel header="Published" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"  [totalRecords]="totalRecords"
+                            [globalFilterFields]="['title']"  (onPage)="LazyLoadPrintPublish($event)" [lazy]="true"[value]="printpublished" [paginator]="true" [rows]=perPage
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple" >
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >MAGAZINE</th>
+                                    <th>EDITION</th>
+                                    <th>CATEGORY</th>
+                                    <th>PUBLISHED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookPublish($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-overlayPanel #opp>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="EditPrintBook(bookdetails)" style="cursor:pointer">Edit</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="ArchiveBook(bookdetails)">Archive</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+    
+                    <p-overlayPanel #om>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="exportExcel()">Export</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="fileInput.click()" >Import</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="fileInputStock.click()" >Stock</li>
+                                <input type="file" #fileInput style="display: none"  accept=".xlsx, .xls" (change)="importList($event)" />
+                                <input type="file" #fileInputStock style="display: none"  accept=".xlsx, .xls" (change)="importStock($event)" />
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="Drafts" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll" [totalRecords]="totalRecords"
+                        [globalFilterFields]="['title']" [value]="printdraft"  (onPage)="LazyLoadPrintDraft($event)" [lazy]="true" [paginator]="true" [rows]=perPage
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >MAGAZINE</th>
+                                    <th>CATEGORY</th>
+                                    <th>EDITION</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.name}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookDraft($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-overlayPanel #opd>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="PublishBook(bookdetails)" style="cursor:pointer">Publish</li>
+                                <HR SIZE="1">
+                                <li (click)="EditPrintBook(bookdetails)" style="cursor:pointer">Edit</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="Delete(bookdetails)">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="Archived" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt4 responsiveLayout="scroll" [totalRecords]="totalRecords"
+                        [globalFilterFields]="['title']" [value]="printarchived"  (onPage)="LazyLoadPrintArchive($event)" [lazy]="true" [paginator]="true" [rows]=perPage
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >MAGAZINE</th>
+                                    <th>CATEGORY</th>
+                                    <th>EDITION</th>
+                                    <th>ARCHIVED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.name}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showPrintArchive($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-overlayPanel #opa>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="Delete(bookdetails)">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+            </p-tabView>
+    </div>
+
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+<p-dialog [(visible)]="publish" header="Choose" [breakpoints]="{'960px': '55vw', '640px': '80vw'}"  [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+  <form [formGroup]="PublishForm" (ngSubmit)="BookPublishing()" >
+    <div class="container">
+    <div class="row">
+      <div class="col-25">
+        <p-radioButton formControlName="groupname" (click)="SchedulePublish('Schedule')" value="Schedule" label="Schedule"  [(ngModel)]="selectedValue"></p-radioButton>
+      </div>
+      <div class="col-25 mt-1">
+        
+      <p-radioButton formControlName="groupname" (click)="SchedulePublish('Immediate')" value="Immediate" label="Immediate" [(ngModel)]="selectedValue"></p-radioButton>
+       
+      </div>
+    </div>
+    <div class="row mt-2" *ngIf="Schedule">
+        <div class="col-12">
+            <label>Date</label>
+        </div>
+        <div class="col-30">
+            <input type="date" formControlName="date">
+            <div *ngIf="getControl['date'].touched && getControl['date'].invalid" class="text-danger">
+                    <div *ngIf="getControl['date'].errors?.['required']">Date is required.</div>
+                  </div>
+        </div>
+        <div class="col-12">
+            <label>Time</label>
+        </div>
+        <div class="col-30">
+            <input type="time" formControlName="time">
+            <div *ngIf="getControl['time'].touched && getControl['time'].invalid" class="text-danger">
+                    <div *ngIf="getControl['time'].errors?.['required']">Time is required.</div>
+                  </div>
+        </div>
+    </div>
+      
+   <div class="row" >
+    <div class="col-100 text-right fontcls">
+        <button type="submit" class="cancelbtn btn-outline-secondary btn btn-sm" >OK</button>
+    </div>
+</div>
+  </div>
+  </form>
+</p-dialog>
+
+
+<p-toast position="bottom-right"></p-toast>

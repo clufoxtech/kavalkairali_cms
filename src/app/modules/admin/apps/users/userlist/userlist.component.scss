@@ -1,0 +1,76 @@
+.mat-stroked-button {
+    padding: 0 15px !important;
+    border-radius: 5px !important; 
+}
+// hr {
+//     margin: 5px 0;
+//     border-bottom-width: 1px;
+// }
+
+ul{
+    padding-left: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    padding: 0.7rem !important;
+    font-weight: 600 !important;
+}
+:host ::ng-deep .p-tabview .p-tabview-panels {
+    padding: 0;
+}
+
+:host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 0rem white;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    background: #ffffff;
+    border-color: #8ed93b;
+    color: #27272a;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav .p-tabview-ink-bar {
+    background-color: #8ed93b;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav {
+    background: #ffffff;
+     border: none; 
+    border-width: 0 0 0 0; 
+  }
+  :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+    font-size: 11px;
+    font-family: 'Hind';
+  }
+  :host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+   font-size:13px !important;
+    color: gray;
+    font-family: 'Hind';
+  }
+  :host ::ng-deep .card  {
+    border: none;
+  }
+
+  button:hover {
+    background-color: #8ed93b;
+  }
+  :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page{
+    min-width: 1.5rem;
+    height:1.5rem;
+    font-size: 13px;
+    }
+    :host ::ng-deep .p-dropdown .p-dropdown-trigger {
+      width:1.5rem;
+  
+    }
+    :host ::ng-deep .p-paginator .p-dropdown .p-dropdown-label {
+      padding:2px;
+      font-size: 13px;
+    }
+    :host ::ng-deep .p-paginator .p-dropdown {
+      height:1.6rem;
+    }
+    :host ::ng-deep .p-paginator{
+      padding:0;
+    }
+    
+     

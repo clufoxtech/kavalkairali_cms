@@ -1,0 +1,136 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Home Screen Banner</div>
+        </div> 
+       
+    </div>
+    <p-tabView class="ml-4 mt-2" [(activeIndex)]="index" (onChange)="handleTab($event)">
+        <p-tabPanel header="PRINT" >
+        <div class="card">
+        <p-scrollPanel [style]="{width: '100%', height: '300px'}" >
+            <div class="row">
+                <p style="color:rgb(112, 112, 236);size:14px;">Information : Banner resolution should be 640*360 and minimum size should be 1 Mb.</p>
+            </div>
+            <form [formGroup]="AddPrintForm" (ngSubmit)="AddPrintBanner()" >
+                <div class="row" *ngFor="let position of [1, 2, 3, 4]">
+                    <div class="col-md-3">
+                      <div class="banner">
+                        <h5>Banner-{{ position }}</h5>
+                        <div class="upload-container">
+                          <label for="print-image-upload{{ position }}">Choose Image</label>
+                          <input type="file" (change)="onFileSelected($event, position,'Print')" formControlName="image{{ position }}" id="print-image-upload{{ position }}" name="{{ position }}" accept="image/*">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="preview-container">
+                        <img id="PrintImgPreview{{ position }}" src="{{ getBannerImage(position,'Print') }}" class="preview{{ position }}" />
+                        <input *ngIf="getBannerImage(position,'Print')" (click)="removeBanner(position,'Print')" type="button" id="PrintremoveImage{{ position }}" value="x" class="btn-rmv{{ position }}" />
+                      </div>
+                    </div>
+                    <!-- If you want to always show checkboxes and dropdowns -->
+                    <div class="col-md-3 d-flex align-items-center justify-content-center">
+                      <p-checkbox formControlName="PisOfferCheckbox{{ position }}" [checked]="getIsOfferChecked(position, 'Print')" (onChange)="toggleOfferCheckbox(position,'Print')" id="PisOfferCheckbox{{ position }}" [binary]="true" name="allowOtherOffers" label="IsOffer" class="mr-2 fontcls"></p-checkbox>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center justify-content-center" *ngIf="AddPrintForm.get('PisOfferCheckbox' + position).value">
+                      <p-dropdown id="Pdropdown{{ position }}" [ngModel]="getOfferId(position, 'Print')" (onChange)="onOfferSelect(position,'Print')" [options]="printofferList"  placeholder="Select" formControlName="Pdropdown{{ position }}" optionValue="id" appendTo="body" optionLabel="name"></p-dropdown>
+                    </div>
+                  </div>
+        <div class="row mb-5" >
+            <div class="col-50 text-right fontcls">
+                <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" >CANCEL</button>
+                <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+            </div>
+        </div>
+        </form>
+        </p-scrollPanel>
+        </div>
+        </p-tabPanel>
+        <p-tabPanel header="EBOOK" >
+            <div class="card">
+            <p-scrollPanel [style]="{width: '100%', height: '300px'}" >
+                <div class="row">
+                    <p style="color:rgb(112, 112, 236);size:14px;">Information : Banner resolution should be 640*360 and minimum size should be 1 Mb.</p>
+                </div>
+                <form [formGroup]="AddEbookForm" (ngSubmit)="AddEbookBanner()" >
+                    <div class="row" *ngFor="let position of [1, 2, 3, 4]">
+                        <div class="col-md-3">
+                          <div class="banner">
+                            <h5>Banner-{{ position }}</h5>
+                            <div class="upload-container">
+                              <label for="ebook-image-upload{{ position }}">Choose Image</label>
+                              <input type="file" (change)="onFileSelected($event, position,'Ebook')" formControlName="image{{ position }}" id="ebook-image-upload{{ position }}" name="{{ position }}" accept="image/*">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="preview-container">
+                            <img id="EbookImgPreview{{ position }}" src="{{ getBannerImage(position,'Ebook') }}" class="preview{{ position }}" />
+                            <input *ngIf="getBannerImage(position,'Ebook')" (click)="removeBanner(position,'Ebook')" type="button" id="EbookremoveImage{{ position }}" value="x" class="btn-rmv{{ position }}" />
+                          </div>
+                        </div>
+                        <!-- If you want to always show checkboxes and dropdowns -->
+                        <div class="col-md-3 d-flex align-items-center justify-content-center">
+                          <p-checkbox formControlName="EisOfferCheckbox{{ position }}" [checked]="getIsOfferChecked(position, 'Ebook')" (onChange)="toggleOfferCheckbox(position,'Ebook')" id="EisOfferCheckbox{{ position }}" [binary]="true" name="allowOtherOffers" label="IsOffer" class="mr-2 fontcls"></p-checkbox>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center justify-content-center" *ngIf="AddEbookForm.get('EisOfferCheckbox' + position).value">
+                          <p-dropdown id="Edropdown{{ position }}" [ngModel]="getOfferId(position, 'Ebook')" (onChange)="onOfferSelect(position,'Ebook')" [options]="ebookofferList" placeholder="Select" formControlName="Edropdown{{ position }}" optionValue="id" appendTo="body" optionLabel="name"></p-dropdown>
+                        </div>
+                      </div>
+            <div class="row mb-5" >
+                <div class="col-50 text-right fontcls">
+                    <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" >CANCEL</button>
+                    <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+                </div>
+            </div>
+            </form>
+            </p-scrollPanel>
+            </div>
+            </p-tabPanel>
+            <p-tabPanel header="AUDIO" >
+                <div class="card">
+                <p-scrollPanel [style]="{width: '100%', height: '300px'}" >
+                    <div class="row">
+                        <p style="color:rgb(112, 112, 236);size:14px;">Information : Banner resolution should be 640*360 and minimum size should be 1 Mb.</p>
+                    </div>
+                    <form [formGroup]="AddAudioForm" (ngSubmit)="AddAudioBanner()" >
+                        <div class="row" *ngFor="let position of [1, 2, 3, 4]">
+                            <div class="col-md-3">
+                              <div class="banner">
+                                <h5>Banner-{{ position }}</h5>
+                                <div class="upload-container">
+                                  <label for="audio-image-upload{{ position }}">Choose Image</label>
+                                  <input type="file" (change)="onFileSelected($event, position,'Audio')" formControlName="image{{ position }}" id="audio-image-upload{{ position }}" name="{{ position }}" accept="image/*">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="preview-container">
+                                <img id="AudioImgPreview{{ position }}" src="{{ getBannerImage(position,'Audio') }}" class="preview{{ position }}" />
+                                <input *ngIf="getBannerImage(position,'Audio')" (click)="removeBanner(position,'Audio')" type="button" id="PrintremoveImage{{ position }}" value="x" class="btn-rmv{{ position }}" />
+                              </div>
+                            </div>
+                            <!-- If you want to always show checkboxes and dropdowns -->
+                            <div class="col-md-3 d-flex align-items-center justify-content-center">
+                              <p-checkbox formControlName="AisOfferCheckbox{{ position }}" [checked]="getIsOfferChecked(position, 'Audio')" (onChange)="toggleOfferCheckbox(position,'Audio')" id="AisOfferCheckbox{{ position }}" [binary]="true" name="allowOtherOffers" label="IsOffer" class="mr-2 fontcls"></p-checkbox>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-center justify-content-center" *ngIf="AddAudioForm.get('AisOfferCheckbox' + position).value">
+                              <p-dropdown id="Adropdown{{ position }}"  [ngModel]="getOfferId(position, 'Audio')" (onChange)="onOfferSelect(position,'Audio')" [options]="audioofferList" placeholder="Select" formControlName="Adropdown{{ position }}" optionValue="id" appendTo="body" optionLabel="name"></p-dropdown>
+                            </div>
+                          </div>
+                <div class="row mb-5" >
+                    <div class="col-50 text-right fontcls">
+                        <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" >CANCEL</button>
+                        <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+                    </div>
+                </div>
+                </form>
+                </p-scrollPanel>
+                </div>
+                </p-tabPanel>
+    </p-tabView>
+    </div>
+    <p-toast position="bottom-right"></p-toast>

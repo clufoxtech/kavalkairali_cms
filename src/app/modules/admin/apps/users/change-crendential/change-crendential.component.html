@@ -1,0 +1,36 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+<div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-5 col-xs-5 col-md-5 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Change Credential</div>
+        </div>
+     
+    </div>
+    <form action="action_page.php" class="mr-20 md:ml-7 mt-10 sm:ml-9">
+        <div class="container">
+        <div class="row">
+          <div class="col-25">
+            <label for="fname">Email Id</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="fname" name="firstname" placeholder="Your mail id.." disabled ngModel="{{CredentialDetails.username}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="lname">Password</label>
+          </div>
+          <div class="col-75 clearable">
+            <input type="text" id="lname" disabled  name="lastname" placeholder="Your last name.." ngModel="{{CredentialDetails.password}}">
+            <i class="pi pi-undo" (click)="GeneratePassword()"></i>
+          </div>
+        </div>
+        <div class="row" >
+          <div class="col-100 text-right">
+              <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="Cancel()">Cancel</button>
+              <button type="button" class="submitbtn btn-outline-secondary btn btn-md" (click)="ChangePassword()">Submit</button>
+          </div>
+      </div>
+      </div>
+      </form>
+
+</div>   

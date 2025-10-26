@@ -1,0 +1,72 @@
+<div
+  class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
+    <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+      <div class="text-2xl font-bold tracking-tight fontcls">Add Gallery</div>
+    </div>
+
+    <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 ">
+
+
+      <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3">
+
+        <button class="ml-4 " mat-stroked-button style="background-color: #8ed93b;color:white">
+          <span class="ml-1 mr-1 fontcls">Magazine List</span>
+        </button>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Main -->
+  <form [formGroup]="AddForm" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8">
+    <p-scrollPanel [style]="{width: '100%', height: '380px'}">
+      <div class="container">
+        <p-panel header="Gallery details">
+
+          <div class="row">
+            <div class="col-25">
+              <label for="title">Title<span class="text-danger reqd">*</span></label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="title" class="nameCapital" formControlName="title">
+              <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
+                <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
+              </div>
+            </div>
+
+          </div>
+ <div class="row">
+            <div class="col-25">
+              <label for="depname">Add images (upto 20 images)</label>
+            </div>
+            <div class="col-25">
+
+              <input type="file" id="file" name='files[]' formControlName="cover" accept=".jpg, .jpeg, image/png"
+                multiple (change)="onFileChanged($event)" />
+              <div *ngIf="selectedFiles.length > 0">
+                <ul>
+                  <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-25 mb-1">
+              <img src={{urls}}  style="width:50px;height:50px;" *ngFor="let urls of url">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-50 text-right fontcls">
+              <button type="button" class="cancelbtn btn-outline-secondary btn btn-md">CANCEL</button>
+              <button type="submit" class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
+            </div>
+          </div>
+        </p-panel>
+      </div>
+    </p-scrollPanel>
+  </form>
+</div>
+<p-toast position="bottom-right"></p-toast>

@@ -1,0 +1,511 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Offer List</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains') ||  dt3.filterGlobal($event.target.value, 'contains')">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+        <button
+        class="ml-4 " 
+        mat-stroked-button style="background-color:#8ed93b;color:white"
+            (click)="NewOffer()" >
+    <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white"></mat-icon>
+    <span class="ml-1 mr-1">New offer</span>
+    </button>
+        </div>
+    </div>
+    <!-- Main -->
+    <p-tabView class="ml-4" [(activeIndex)]="index" (onChange)="handleMainTab($event)">
+    
+        <p-tabPanel header="Print" >
+            <p-tabView [(activeIndex)]="statusindex" (onChange)="handleTab($event)">
+                <p-tabPanel header="Active">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['name']" [value]="ActiveOfferList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th >ORDERS</th>
+                                    <th>TOTAL REVENUE</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.product}} (click)="showOfferDetails(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.name}}</td>
+                                    <td>{{product.amountOrPercentage}} %</td>
+                                    <td>{{product.startDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{product.endDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{product.revenue}}</td>
+                                    <td>{{product.coupon}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+        
+                    <p-overlayPanel #op>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="ChangeStatus(activateDetails,'DISCONTINUED')" style="cursor:pointer" style="cursor:pointer">De-activate</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="Discontinued">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"
+                            [value]="DiscontinueOfferList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]"
+                            [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th >ORDERS</th>
+                                    <th>TOTAL REVENUE</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{archive.product}} (click)="showOfferDetails(archive)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                    <td>{{archive.amountOrPercentage}} %</td>
+                                    <td>{{archive.startDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{archive.endDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{archive.revenue}}</td>
+                                    <td>{{archive.coupon}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showArchived($event,archive)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>     
+                    <p-overlayPanel #al>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="Delete('DEACTIVE')">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="New">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"
+                        [value]="NewOfferList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]"
+                            [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{archive.product}} (click)="showOfferDetails(archive)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                    <td>{{archive.amountOrPercentage}} %</td>
+                                   
+                                    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showNewPrintOptions($event,archive)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+        
+                    <p-overlayPanel #np>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="showActivate($event,offerbook)">Activate</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="EditOffer(offerbook)">Edit</li>
+                                <HR SIZE="1">
+                                <li (click)="Delete('NEW')" style="cursor:pointer">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+            </p-tabView>
+        </p-tabPanel>
+        <p-tabPanel header="eBook">
+            <p-tabView [(activeIndex)]="statusindex" (onChange)="handleTab($event)">
+                <p-tabPanel header="Active">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['name']" [value]="ActiveOfferList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th>USERS</th>
+                                    <th>REVENUE</th>
+                                    <th>COUPONS</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-active let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{active.product}} (click)="showOfferDetails(active)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{active.name}}</td>
+                                    <td>{{active.amountOrPercentage}} %</td>
+                                    <td>{{active.startDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{active.endDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{active.users}}</td>
+                                    <td>{{active.revenue}}</td>
+                                    <td>{{active.coupon}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,active)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+        
+                    <p-overlayPanel #op>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="ChangeStatus(activateDetails,'DISCONTINUED')" style="cursor:pointer">De-activate</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>     
+                </p-tabPanel>
+                <p-tabPanel header="Discontinued">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"
+                            [value]="DiscontinueOfferList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]"
+                            [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th>USERS</th>
+                                    <th>REVENUE</th>
+                                    <th>COUPONS</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{archive.product}} (click)="showOfferDetails(archive)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                    <td>{{archive.amountOrPercentage}} %</td>
+                                    <td>{{archive.startDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{archive.endDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{archive.users}}</td>
+                                    <td>{{archive.revenue}}</td>
+                                    <td>{{archive.coupon}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showArchived($event,archive)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+        
+                    <p-overlayPanel #al>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="New">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"
+                            [value]="NewOfferList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]"
+                            [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{archive.product}} (click)="showOfferDetails(archive)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                    <td>{{archive.amountOrPercentage}} %</td>
+                                   
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showNewEbookOptions($event,archive)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+        
+                    <p-overlayPanel #ne>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="edit(UserDetail)">Edit</li>
+                                <HR SIZE="1">
+                                <li (click)="Delete('NEW')" style="cursor:pointer">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+            </p-tabView>
+        </p-tabPanel>
+        <p-tabPanel header="Audio">
+            <p-tabView [(activeIndex)]="statusindex" (onChange)="handleTab($event)">
+                <p-tabPanel header="Active">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['name']" [value]="ActiveOfferList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th>USERS</th>
+                                    <th>REVENUE</th>
+                                    <th>COUPONS</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-active let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{active.product}} (click)="showOfferDetails(active)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{active.name}}</td>
+                                    <td>{{active.amountOrPercentage}} %</td>
+                                    <td>{{active.startDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{active.endDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{active.users}}</td>
+                                    <td>{{active.revenue}}</td>
+                                    <td>{{active.coupon}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,active)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>      
+                    <p-overlayPanel #op>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="ChangeStatus(activateDetails,'DISCONTINUED')" style="cursor:pointer">De-activate</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="Discontinued">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"
+                            [value]="DiscontinueOfferList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]"
+                            [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    <th>START DATE</th>
+                                    <th>END DATE</th>
+                                    <th>USERS</th>
+                                    <th>REVENUE</th>
+                                    <th>COUPONS</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{archive.product}} (click)="showOfferDetails(archive)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                    <td>{{archive.amountOrPercentage}} %</td>
+                                    <td>{{archive.startDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{archive.endDate | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{archive.users}}</td>
+                                    <td>{{archive.revenue}}</td>
+                                    <td>{{archive.coupon}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showArchived($event,archive)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+        
+                    <p-overlayPanel #al>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="dc.toggle($event)">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="New">
+                    <div class="card ">
+                        <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"
+                            [value]="NewOfferList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]"
+                            [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true" scrollHeight="380px"
+                            sortMode="multiple">
+        
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>OFFER</th>
+                                    <th>TYPE</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{archive.product}} (click)="showOfferDetails(archive)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                    <td>{{archive.amountOrPercentage}} %</td>
+                                   
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showNewAudioOptions($event,archive)"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>      
+                    <p-overlayPanel #na>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                                <HR SIZE="1">
+                                <li style="cursor:pointer" (click)="edit(UserDetail)">Edit</li>
+                                <HR SIZE="1">
+                                <li (click)="Delete('NEW')" style="cursor:pointer">Delete</li>
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+                </p-tabPanel>
+            </p-tabView>
+        </p-tabPanel>
+    </p-tabView>
+    
+</div>
+
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+
+</p-confirmDialog>
+<p-overlayPanel #ac>
+    <div>Offer activated successfully!</div>
+    <div class="row" >
+        <div class="col-90 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="confirmOk()">Ok</button>
+          
+        </div>
+    </div>
+</p-overlayPanel>
+
+<p-overlayPanel #dc>
+    <ng-template pTemplate>
+      <form [formGroup]="ActivateForm" (ngSubmit)="ActivateCoupon(offeractive)"  novalidate>
+       <div class="row">
+        <div class="col-25">
+          <label for="startDate">Start Date</label>
+        </div>
+        <div class="col-28">
+          <input type="date" id="startDate" formControlName="startDate" placeholder="Type.." >
+          <div *ngIf="getDateControl['startDate'].touched && getDateControl['startDate'].invalid" class="text-danger">
+            <div *ngIf="getDateControl['startDate'].errors?.['required']">Start date is required.</div>
+          </div>
+        </div>
+        <div class="col-15">
+            <label for="startTime">Time</label>
+          </div>
+          <div class="col-28">
+            <input type="time" id="depname" formControlName="startTime" placeholder="Type.." >
+           <div *ngIf="getDateControl['startTime'].touched && getDateControl['startTime'].invalid" class="text-danger">
+                <div *ngIf="getDateControl['startTime'].errors?.['required']">Start time is required.</div>
+              </div>
+          </div>
+      </div> 
+      <div class="row">
+        <div class="col-25">
+          <label for="endDate">End Date</label>
+        </div>
+        <div class="col-28">
+          <input type="date" id="endDate" formControlName="endDate" placeholder="Type.." >
+          <div *ngIf="getDateControl['endDate'].touched && getDateControl['endDate'].invalid" class="text-danger">
+            <div *ngIf="getDateControl['endDate'].errors?.['required']">End date is required.</div>
+          </div>
+        </div>
+        <div class="col-15">
+            <label for="endTime">Time</label>
+          </div>
+          <div class="col-28">
+            <input type="time" id="depname" formControlName="endTime" placeholder="Type.." >
+             <div *ngIf="getDateControl['endTime'].touched && getDateControl['endTime'].invalid" class="text-danger">
+                <div *ngIf="getDateControl['endTime'].errors?.['required']">Time is required.</div>
+              </div> 
+          </div>
+      </div>
+      <div class="row" >
+        <div class="col-90 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" >CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" (click)="ActivateCoupon(offeractive)" >SUBMIT</button>
+        </div>
+    </div>
+  </form>
+    </ng-template>
+  </p-overlayPanel>

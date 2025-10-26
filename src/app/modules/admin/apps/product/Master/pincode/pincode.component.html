@@ -1,0 +1,154 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Pincode</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains')">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+            <!-- Add product button -->
+            <button style="background-color:#8ed93b;color:white"
+                class="ml-4 " 
+                mat-stroked-button 
+            (click)="NewPincode()">
+            <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white"></mat-icon>
+            <span class="ml-1 mr-1">Add Pincode</span>
+            </button>
+        </div>
+       
+    </div>
+    <!-- Main -->
+    
+        <div class="card ml-4">
+            <p-table styleClass="p-datatable-sm" #dt1 [value]="pincode" responsiveLayout="scroll" [globalFilterFields]="['Pincode']" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
+               
+                
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px;min-width:30px;">NO</th>
+                        <th style="min-width:100px">PINCODE</th>
+                        <th>ZONE</th>
+                        <th style="max-width:45px;"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
+                        <td  style="min-width:100px">{{product.name}}</td>
+                        <td >{{product.name}}</td>
+                        <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+                <p-overlayPanel #op>
+                    <ng-template pTemplate>
+                        <ul>
+                            <li (click)="Edit(product)" style="cursor:pointer;">Edit</li>
+                            <HR SIZE="1">
+                            <li (click)="Delete(product)" style="cursor:pointer;">Delete</li>
+                        </ul>
+                    </ng-template>
+            </p-overlayPanel>
+</div>
+<p-dialog [(visible)]="display" header="Add Pincode" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+  <form [formGroup]="AddForm" (ngSubmit)="AddPincode()" novalidate>
+    <div class="container">
+    
+      <div class="row">
+        <div class="col-25">
+          <label for="pincode">Pincode</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="pincode" pKeyFilter="pint" formControlName="pincode" placeholder="Type here.." >
+          <div *ngIf="getControl['pincode'].touched && getControl['pincode'].invalid" class="text-danger">
+              <div *ngIf="getControl['pincode'].errors?.['required']">City name is required.</div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="zone">Zone</label>
+        </div>
+        <div class="col-75">
+            <select formControlName="zone">
+              <option *ngFor="let item of zone" value="{{item._links.self.href}}" >{{item.name}}</option>
+            </select>
+          <div *ngIf="getControl['zone'].touched && getControl['zone'].invalid" class="text-danger">
+            <div *ngIf="getControl['zone'].errors?.['required']">Zone is required.</div>
+          </div>
+        </div>
+      </div>  
+    <div class="row" >
+        <div class="col-100 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+        </div>
+    </div>
+  </div>
+  </form>
+
+</p-dialog>
+
+<p-dialog [(visible)]="editdisplay" header="Edit Pincode" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+  <form [formGroup]="EditForm" (ngSubmit)="EditPincode()" novalidate>
+    <div class="container">
+    
+    
+        <div class="row">
+            <div class="col-25">
+              <label for="editpincode">Pincode</label>
+            </div>
+            <div class="col-75">
+              <input type="text" id="editpincode" pKeyFilter="pint" formControlName="editpincode" placeholder="Type here.." [(ngModel)]="product.name">
+              <div *ngIf="getEditControl['editpincode'].touched && getEditControl['editpincode'].invalid" class="text-danger">
+                  <div *ngIf="getEditControl['editpincode'].errors?.['required']">Pincode is required.</div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-25">
+              <label for="editzone">Zone</label>
+            </div>
+            <div class="col-75">
+                <select formControlName="editzone">
+                  <option *ngFor="let item of zone" value="{{item._links.self.href}}" [selected]="item.id===zoneId">{{item.name}}</option>
+                </select>
+              <div *ngIf="getEditControl['editzone'].touched && getEditControl['editzone'].invalid" class="text-danger">
+                <div *ngIf="getEditControl['editzone'].errors?.['required']">Zone is required.</div>
+              </div>
+            </div>
+          </div>  
+    <div class="row" >
+        <div class="col-100 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="EditCancel()">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+        </div>
+    </div>
+  </div>
+  </form>
+
+</p-dialog>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+<p-toast position="bottom-right"></p-toast>
+
+

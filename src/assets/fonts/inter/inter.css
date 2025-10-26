@@ -1,0 +1,28 @@
+@font-face {
+    font-family: 'Inter var';
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+    font-named-instance: 'Regular';
+    src: url("Inter-roman.var.woff2?v=3.18") format("woff2");
+}
+
+@font-face {
+    font-family: 'Inter var';
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: italic;
+    font-named-instance: 'Italic';
+    src: url("Inter-italic.var.woff2?v=3.18") format("woff2");
+}
+@font-face {
+    font-family: 'Hind';
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    src: url("Hind-Regular.ttf") format("opentype");
+}
+/* @font-face {
+    font-family: 'Hind';
+    src: url("Hind.ttf") format("ttf");
+} */

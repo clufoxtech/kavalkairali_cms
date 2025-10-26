@@ -1,0 +1,65 @@
+<p-dialog header="Edit Customer"[(visible)]="close" (onHide)="Cancel()" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+  <form action="action_page.php" style="border:1px solid #ccc">
+    <div class="container">
+    <div class="row">
+      <div class="col-25">
+        <label for="fname">Name</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="fname" name="firstname" placeholder="Your name.." disabled ngModel="{{products.name}}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="ph">Phone</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="ph" name="phone" placeholder="Your last name.." ngModel="{{products.phone}}">
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="loc">Location</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="loc" name="Location" placeholder="Your last name.." ngModel="{{products.location}}">
+          </div>
+        </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="mem">Membership</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="mem" name="Membership" placeholder="Your last name.." ngModel="{{products.subscriptionStatus}}">
+          </div>
+        </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="loy">Loyalty</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="loy" name="Loyalty" placeholder="Your last name.." ngModel="{{products.loyalty}}">
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="mar">Marketing</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="mar" name="Marketing" placeholder="Your last name.." ngModel="{{products.merketingEnabled}}">
+              </div>
+            </div>
+    <div class="row" >
+      <div class="col-100">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">Cancel</button>
+          <button type="button" class="submitbtn btn-outline-secondary btn btn-sm">Submit</button>
+      </div>
+  </div>
+  </div>
+  </form>
+
+</p-dialog>
+
+ 

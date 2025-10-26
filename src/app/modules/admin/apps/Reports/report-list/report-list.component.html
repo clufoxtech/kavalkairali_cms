@@ -1,0 +1,560 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b ">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Report List</div>
+        </div>
+        
+        <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 pr-3">
+          <div class="flex  sm:flex-row flex-0  shrink-0 items-center  mt-6 sm:mt-0  mr-3">
+            <!-- Search -->
+          
+        </div>
+       
+    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 " >
+    
+       
+         
+<button mat-icon-button class="ml-2" aria-label="" title="More" style="border: solid 1px  #8ed93b;background-color: #8ed93b;" (click)="More($event)">
+<mat-icon style="color:white">more_horiz</mat-icon>
+</button>
+</div>
+
+        </div>
+    </div>
+    
+    <!-- Main -->
+   
+    <p-tabView class="ml-4" (onChange)="handleChange($event)" [(activeIndex)]="index">
+    
+        <p-tabPanel header="Print" >
+            <p-tabView (onChange)="handleChangeStatus($event)" [(activeIndex)]="statusIndex">
+                <p-tabPanel header="Orders" >
+                    <div class="card">
+                        
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['title']" [value]="printorder" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >DATE</th>
+                                    <th>ORDERS</th>
+                                    <th>BOOKS</th>
+                                    <th>AMOUNT</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>  
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"   selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="onDateRangeChange()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th>    
+                                </tr> 
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td>{{product.date}}</td>
+                                    <td title={{product.author}}>{{product.orders}}</td>
+                                    <td>{{product.books}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookPublish($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="printorder?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Orders :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('orders') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td>
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Books" >
+                    <div class="card">
+                       
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="printbooks" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>BOOKS</th>
+                                    <th>UNITS SOLD</th>
+                                    <th>REVENUE GENERATED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"  selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th>
+                                        <p-dropdown [options]="bookList"  [(ngModel)]="selectedBook" appendTo="body" optionValue="title" (onFilter)="onFilterBooks($event)" [filter]="true" filterBy="title"  optionLabel="title" placeholder="Book Name"></p-dropdown>
+                                    </th>
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="DateRangeandBook()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th>   
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td>{{product.books}}</td>
+                                    <td title={{product.author}}>{{product.product}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                   
+                                    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookDraft($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="printbooks?.length>0">
+                            <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Units Unsold :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('units') }}</td>
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                                </tr>
+                                </ng-template>
+                        </p-table>
+                    </div>
+    
+                    
+                </p-tabPanel>               
+                <p-tabPanel header="Authors" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="printauthor" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >AUTHOR</th>
+                                    <th>BOOKS</th>
+                                    <th>REVENUE GENERATED</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"  selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th>
+                                        <p-dropdown [options]="authorList"  (onFilter)="GetAuthorList()"  [(ngModel)]="selectedAuthor" appendTo="body" optionValue="name"  [filter]="true" filterBy="title"   optionLabel="name" placeholder="Author"></p-dropdown>
+                                    </th>  
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="DateRangeandAuthor()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th>   
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    
+                                    <td >{{product.name}}</td>
+                                    <td >{{product.books}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showPrintArchive($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="printauthors?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+               
+            </p-tabView>
+        </p-tabPanel>
+        <p-tabPanel header="eBook" >
+            <p-tabView (onChange)="handleChangeStatus($event)" [(activeIndex)]="statusIndex">
+                <p-tabPanel header="Orders" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['title']" [value]="ebookorder" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="325px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >DATE</th>
+                                    <th>ORDERS</th>
+                                    <th>BOOKS</th>
+                                    <th>AMOUNT</th>
+                                    <th style="max-width:45px"></th>
+                                </tr> 
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"   selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="onDateRangeChange()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th>   
+                                </tr>   
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td>{{product.date}}</td>
+                                    <td title={{product.author}}>{{product.orders}}</td>
+                                    <td>{{product.books}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookPublish($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="ebookorder?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Orders :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('orders') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td>
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Books" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="ebookbooks" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>BOOKS</th>
+                                    <th>UNITS SOLD</th>
+                                    <th>REVENUE GENERATED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"   selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th>
+                                        <p-dropdown [options]="bookList"  [(ngModel)]="selectedBook" appendTo="body" optionValue="title" (onFilter)="onFilterBooks($event)"  [filter]="true" filterBy="title"  optionLabel="title" placeholder="Book Name"></p-dropdown>
+                                    </th>  
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="DateRangeandBook()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th>
+                                </tr>
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td>{{product.books}}</td>
+                                    <td >{{product.product}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookDraft($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="ebookbooks?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Units Unsold :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('units') }}</td>
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+               
+                <p-tabPanel header="Authors" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="data" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >AUTHOR</th>
+                                    <th>BOOKS</th>
+                                    <th>REVENUE GENERATED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"  selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th>
+                                        <p-dropdown [options]="authorList"  (onFilter)="GetAuthorList()"  [(ngModel)]="selectedAuthor" appendTo="body" optionValue="name"   [filter]="true" filterBy="title"   optionLabel="name" placeholder="Author"></p-dropdown>
+                                    </th> 
+                                    <th></th> 
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="DateRangeandAuthor()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()" ></a>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td >{{product.name}}</td>
+                                    <td >{{product.books}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showPrintArchive($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="ebookauthors?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+
+                </p-tabPanel>
+                
+            </p-tabView>
+        </p-tabPanel>
+        <p-tabPanel header="Audio" >
+            <p-tabView (onChange)="handleChangeStatus($event)" [(activeIndex)]="statusIndex">
+                <p-tabPanel header="Orders" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['title']" [value]="audioorder" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >DATE</th>
+                                    <th>ORDERS</th>
+                                    <th>BOOKS</th>
+                                    <th>AMOUNT</th>
+                                    <th style="max-width:45px"></th>
+                                </tr> 
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"   selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th></th> 
+                                    <th></th>
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="onDateRangeChange()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th> 
+                                    
+                                </tr>     
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td>{{product.date}}</td>
+                                    <td title={{product.author}}>{{product.orders}}</td>
+                                    <td>{{product.books}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookPublish($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="audioorder?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Orders :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('orders') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td>
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                   
+                </p-tabPanel>
+                <p-tabPanel header="Books" >
+                    <div class="card">
+                      
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="audiobooks" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th>BOOKS</th>
+                                    <th>UNITS SOLD</th>
+                                    <th>REVENUE GENERATED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body" selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th>
+                                        <p-dropdown [options]="bookList"  [(ngModel)]="selectedBook" appendTo="body" optionValue="title" (onFilter)="onFilterBooks($event)"  [filter]="true" filterBy="title"  optionLabel="title" placeholder="Book Name"></p-dropdown>
+                                    </th> 
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="DateRangeandBook()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray" (click)="ClearFilter()"></a>
+                                    </th>   
+                                </tr>
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td>{{product.books}}</td>
+                                    <td title={{product.author}}>{{product.product}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showprintbookDraft($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="audiobooks?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Units Unsold :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('units') }}</td>
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabPanel>
+                
+                <p-tabPanel header="Authors" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="data" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >AUTHOR</th>
+                                    <th>BOOKS</th>
+                                    <th>REVENUE GENERATED</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                                <tr>
+                                    <th style="max-width:45px"></th>
+                                    <th>
+                                        <p-calendar  dateFormat="dd/mm/yy" [(ngModel)]="selectedDateRange" appendTo="body"  selectionMode="range" placeholder="date range" [readonlyInput]="true"></p-calendar> 
+                                    </th> 
+                                    <th>
+                                        <p-dropdown [options]="authorList"  (onFilter)="GetAuthorList()"  [(ngModel)]="selectedAuthor" appendTo="body" optionValue="name"   [filter]="true" filterBy="title"   optionLabel="name" placeholder="Author"></p-dropdown>
+                                    </th> 
+                                    <th></th>
+                                    <th style="max-width:50px">
+                                        <a title="Filter" class="pi pi-filter" style="cursor: pointer;color:rgb(81, 216, 81)" (click)="DateRangeandAuthor()"></a>&nbsp;
+                                        <a  title="Clear" class="pi pi-filter-slash" style="cursor: pointer;margin-left:5px;margin-right:2px;color:gray"(click)="ClearFilter()"></a>
+                                    </th>  
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td >{{product.name}}</td>
+                                    <td >{{product.books}}</td>
+                                    <td>{{product.totalAmount}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="showPrintArchive($event,product)"></i></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" >
+                                <tr  *ngIf="audioauthors?.length>0">
+                                    <td style="min-width: 300px"></td> <!-- Empty cell for the index column -->
+                                    <td style="min-width: 100px">Total Books :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('books') }}</td> <!-- colspan=2 to cover the Date and Author columns -->
+                                    <td style="min-width: 100px">Total Amount :</td>
+                                    <td style="min-width: 100px">{{ calculateSum('totalAmount') }}</td>
+                            </ng-template>
+                        </p-table>
+                    </div>
+
+                </p-tabPanel>
+               
+              
+            </p-tabView>
+        </p-tabPanel>
+    
+       
+    </p-tabView>
+    </div>
+    <p-overlayPanel #om>
+        <ng-template pTemplate>
+            <ul>
+                <li style="cursor:pointer" (click)="Export()">Export</li>
+            </ul>
+        </ng-template>
+    </p-overlayPanel>
+<p-confirmDialog >
+</p-confirmDialog>
+<p-toast></p-toast>
+
+
+
+
+
+
+

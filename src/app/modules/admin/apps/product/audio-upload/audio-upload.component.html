@@ -1,0 +1,85 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b ">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Audio Upload</div>
+        </div>
+        
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3" >
+          <button style="background-color:#8ed93b;color:white"
+              class="ml-4 " 
+              mat-stroked-button (click)="GoBack()">
+         
+          <span class="ml-1 mr-1">Product List</span>
+          </button>
+      </div>
+
+    </div>
+    <div class="ml-4 mt-2">
+            <p-scrollPanel [style]="{width: '100%', height: '450px'}">
+                <div class="row">
+                    <div class="col-20">
+                      <label for="subject">Title</label>
+                    </div>
+                    <div class="col-30">
+                      <label for="fname">{{book.title}}</label>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-20">
+                      <label for="subject">Title Type</label>
+                    </div>
+                    <div class="col-30">
+                      <label for="fname">{{book?.titleType}}</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-20">
+                      <label for="subject">Author Type</label>
+                    </div>
+                    <div class="col-30">
+                      <label for="fname">{{book?.authorType}}</label>
+                    </div>
+                  </div>
+                  <form [formGroup]="AddForm" (ngSubmit)="UploadAudio()">
+                
+                <div *ngIf="ChapterType=='BOOK'">
+                  <div class="row" *ngFor="let book of book.titles;trackByFunction" [value]="book">
+                    <div class="col-20">
+                      <label for="fname">{{book.name}}</label>
+                    </div>
+                    <div class="col-30">
+                      <input type="file" id="file-{{ book.id }}" accept=".mp3,.mp4" (change)="onAudioChanged($event,book.id)">
+                      <span id="file-span-{{ book.id }}" style="display: block;">File Uploaded: {{ book.audioBookFileId }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="ChapterType=='CHAPTER'">
+                  <div class="row" *ngFor="let book of book.titles;trackByFunction" [value]="book">
+                    <div class="col-20">
+                      <label for="fname">{{book.name}}</label>
+                    </div>
+                    <div class="col-30">
+                      <input type="file" id="file-{{ book.id }}" accept=".mp3,.mp4" (change)="onAudioChanged($event,book.id)">
+                      <span id="file-span-{{ book.id }}" style="display: block;">File Uploaded: {{ book.audioBookFileId}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row text-center mb-2">
+                  <div class="col-70">
+                    <button type="submit" class="btn-outline-secondary btn btn-sm">SUBMIT</button>
+                  </div>
+                  
+                </div>
+               </form> 
+                </p-scrollPanel>  
+        </div>
+    
+</div>
+
+
+
+<p-toast position="bottom-right"></p-toast>

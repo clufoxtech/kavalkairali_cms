@@ -1,0 +1,172 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">User List</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'startsWith') || dt2.filterGlobal($event.target.value, 'startsWith') || dt3.filterGlobal($event.target.value, 'startsWith')">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+            <button
+                class="ml-4 " 
+                mat-stroked-button style="background-color:#8ed93b;color:white"
+            (click)="NewUser()">
+            <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white;size:2px;"></mat-icon>
+            <span class="ml-1 mr-1">Add</span>
+            </button>
+        </div>
+    </div>
+    <!-- Main -->
+   
+    <p-tabView class="ml-4 mt-2" [(activeIndex)]="index">
+        <p-tabPanel header="Active" >
+        <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name','email']"[value]="ActiveUserList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+               
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px">NO</th>
+                        <th style="max-width:200px">NAME</th>
+                        <th style="max-width:200px">EMAIL</th>
+                        <th >PHONE</th>
+                        <th style="max-width:200px">ROLE</th>
+                        <th>DATE</th>
+                        <th style="max-width:200px">DEPARTMENT</th>
+                        <th style="max-width:45px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-activeuser let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px">{{rowIndex+1}}</td>
+                        <td title={{activeuser.name}} (click)="ShowUser(activeuser)" style="cursor:pointer;color: rgb(40, 150, 214);max-width:200px;">{{activeuser.name| titlecase}}</td>
+                        <td title={{activeuser.email}} style="max-width:200px">{{activeuser.email}}</td>
+                        <td >{{activeuser.phone}}</td>
+                        <td style="max-width:200px">{{activeuser.roleName| titlecase}}</td>
+                        <td >{{activeuser.creationTimestamp | date:'dd-MM-yyyy'}}</td>
+                        <td style="max-width:200px">{{activeuser.departmentName| titlecase}}</td>
+                        <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,activeuser)"></i></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                <ul>
+                    <li (click)="Edit(UserDetail)" style="cursor:pointer">Edit</li>
+                    <HR SIZE="1">
+                    <li (click)="BlockUser(UserDetail)" style="cursor:pointer">Block</li>
+                    <HR SIZE="1">
+                    <li (click)="ArchiveUser(UserDetail)" style="cursor:pointer">Archive</li>
+                </ul>
+            </ng-template>
+        </p-overlayPanel>
+       
+         
+    
+  
+        </p-tabPanel>
+
+        <p-tabPanel header="Blocked" >
+            <div class="card ">
+                <p-table styleClass="p-datatable-sm" #dt2 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="BlockedUserList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+                   
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th style="max-width:45px">NO</th>
+                            <th style="max-width:200px">NAME</th>
+                            <th style="max-width:200px">EMAIL</th>
+                            <th>PHONE</th>
+                            <th style="max-width:200px">ROLE</th>
+                            <th >DATE</th>
+                            <th style="max-width:200px">DEPARTMENT</th>
+                            <th style="max-width:45px"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-BlockedUser let-columns="columns" let-rowIndex="rowIndex">
+                        <tr>
+                            <td style="max-width:45px">{{rowIndex+1}}</td>
+                            <td title={{BlockedUser.name}} (click)="ShowUser(BlockedUser)" style="cursor:pointer;color: rgb(40, 150, 214);max-width:200px;">
+                                {{BlockedUser.name| titlecase}}</td>
+                            <td title={{BlockedUser.email}} style="max-width:200px">{{BlockedUser.email}}</td>
+                            <td >{{BlockedUser.phone}}</td>
+                            <td style="max-width:200px">{{BlockedUser.roleName| titlecase}}</td>
+                            <td >{{BlockedUser.updateTimestamp | date:'dd-MM-yyyy'}}</td>
+                            <td style="max-width:200px">{{BlockedUser.departmentName| titlecase}}</td>
+                            <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showBlocked($event,BlockedUser)"></i></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+    
+            <p-overlayPanel #bl>
+                <ng-template pTemplate>
+                    <ul>
+                        <li style="cursor:pointer" (click)="UnBlockUser(blockeduser)">UnBlock</li>
+                        <HR SIZE="1">
+                        <li style="cursor:pointer" (click)="ArchiveUser(blockeduser)">Archive</li>
+                    </ul>
+                </ng-template>
+            </p-overlayPanel>
+            </p-tabPanel>
+
+            <p-tabPanel header="Archived" >
+                <div class="card ">
+                    <p-table styleClass="p-datatable-sm" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="ArchivedUserList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+                       
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th style="max-width:45px">NO</th>
+                                <th style="max-width:200px">NAME</th>
+                                <th style="max-width:200px">EMAIL</th>
+                                <th >PHONE</th>
+                                <th style="max-width:200px">ROLE</th>
+                                <th >DATE</th>
+                                <th style="max-width:200px">DEPARTMENT</th>
+                                <th style="max-width:45px"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-archiveduser let-columns="columns" let-rowIndex="rowIndex">
+                            <tr>
+                                <td style="max-width:45px">{{rowIndex+1}}</td>
+                                <td title={{archiveduser.name}} (click)="ShowUser(archiveduser)" style="cursor:pointer;color: rgb(40, 150, 214);max-width:200px;">
+                                    {{archiveduser.name| titlecase}}</td>
+                                <td title={{archiveduser.email}} style="max-width:200px">{{archiveduser.email}}</td>
+                                <td >{{archiveduser.phone}}</td>
+                                <td style="max-width:200px" >{{archiveduser.roleName| titlecase}}</td>
+                                <td >{{archiveduser.updateTimestamp | date:'dd-MM-yyyy'}}</td>
+                                <td style="max-width:200px">{{archiveduser.departmentName| titlecase}}</td>
+                                <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showArchived($event,archiveduser)"></i></td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+        
+                <p-overlayPanel #al>
+                    <ng-template pTemplate>
+                        <ul>
+                            <li style="cursor:pointer" (click)="DeleteArchivedUser(archiveuser)">Delete</li>
+                        </ul>
+                    </ng-template>
+                </p-overlayPanel>
+                </p-tabPanel>
+
+    </p-tabView>
+    <app-edituser *ngIf="edit" (edit)="EditCancel($event)" [UserDetail]="UserDetail"></app-edituser>
+    <app-newuser *ngIf="display" (display)="Cancel($event)"></app-newuser> 
+    <app-user-details *ngIf="user" [product]="product" (Credential)="ChangeCredential($event)"  ></app-user-details>
+</div>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>

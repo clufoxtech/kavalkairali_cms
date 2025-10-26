@@ -1,0 +1,223 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+            <div class="col-sm-5 col-xs-5 col-md-5 pl-3">
+                <div class="text-xl font-bold tracking-tight fontcls">Edit Roles and Privileges</div>
+            </div>
+           
+        </div>
+        <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between px-1 md:px-1 ml-2">
+            <div class="flex flex-row col-sm-5 col-xs-5 col-md-5">
+                <label class="text-xl  fontcls">Roles :</label>
+                  <label class="text-xl fontcls" >{{roles.type}}</label>
+            </div>
+        </div>
+        <div class="relative flex flex-row items-center sm:flex-col flex-0 sm:items-center sm:justify-between  px-1 md:px-1 ml-2 ">
+            <div class="flex flex-row col-sm-5 col-xs-5 col-md-5">
+                <label class="text-xl  fontcls">Privileges :</label>
+            </div>
+            <div class="flex sm:flex-row flex-0 justify-between col-sm-2 col-xs-2 col-md-2 mr-4 mt-1 sm:mt-0 sm:ml-4 mb-1">
+                <button
+                class="ml-1 btn-sm"
+                    mat-stroked-button   (click)="Cancel()">
+                    <span >Cancel</span>
+                </button>
+                <button
+                class="ml-1 csbtn"
+                    mat-stroked-button  btn-sm (click)="Save()">
+                    <span >Save</span>
+                </button>
+        </div>
+        </div>
+        <!-- <form action="action_page.php"> -->
+            <div class="container ml-2">
+              <div class="col-40 mb-1" >
+                <p-checkbox name="print" class="font"id="print" value="val2" label="Print " [(ngModel)]="val" binary="true"></p-checkbox>
+                
+                <p-checkbox name="ebook" class="font"id="ebook" value="val2" label="E-Book "  binary="true"></p-checkbox>
+                <p-checkbox name="audio" class="font"id="audio" value="val2" label="Audio "  binary="true"></p-checkbox>
+              </div>
+                <p-scrollPanel [style]="{width: '100%', height: '350px'}">  
+                  <p-divider align="left">
+                    <span class="p-tag">User</span>
+                </p-divider>
+              <ng-container *ngFor="let data of data">
+ 
+                <div class="row">
+                  <div class="col-40">
+                    <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)" [(ngModel)]="data.selected" binary="true" ></p-checkbox>
+                  </div>
+                  <div class="col-60">
+                    <p class="font">- {{data.list}}</p>
+                  </div>
+                </div>
+             
+              </ng-container>
+              <p-divider align="left">
+                <span class="p-tag">Customer</span>
+            </p-divider>
+          <ng-container *ngFor="let data of data2">
+
+            <div class="row">
+              <div class="col-40">
+                <p-checkbox name="groupname"inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)" [(ngModel)]="data.selected" binary="true"></p-checkbox>
+              </div>
+              <div class="col-60">
+                <p class="font">- {{data.list}}</p>
+              </div>
+            </div>
+         
+          </ng-container>
+          <p-divider align="left">
+            <span class="p-tag">Products</span>
+        </p-divider>
+      <ng-container *ngFor="let data of data3">
+
+        <div class="row">
+          <div class="col-40">
+            <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)" [(ngModel)]="data.selected" binary="true"></p-checkbox>
+          </div>
+          <div class="col-60">
+            <p class="font">- {{data.list}}</p>
+          </div>
+        </div>
+     
+      </ng-container>
+      <p-divider align="left">
+        <span class="p-tag">Orders</span>
+    </p-divider>
+  <ng-container *ngFor="let data of data4">
+
+    <div class="row">
+      <div class="col-40">
+        <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+      </div>
+      <div class="col-60">
+        <p class="font">- {{data.list}}</p>
+      </div>
+    </div>
+ 
+  </ng-container>
+  <p-divider align="left">
+    <span class="p-tag">Royalty</span>
+</p-divider>
+<ng-container *ngFor="let data of data5">
+
+<div class="row">
+  <div class="col-40">
+    <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+  </div>
+  <div class="col-60">
+    <p class="font">- {{data.list}}</p>
+  </div>
+</div>
+
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Offers</span>
+</p-divider>
+<ng-container *ngFor="let data of data6">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Loyalty</span>
+</p-divider>
+<ng-container *ngFor="let data of data7">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Subscription</span>
+</p-divider>
+<ng-container *ngFor="let data of data8">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)" [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Recommondation</span>
+</p-divider>
+<ng-container *ngFor="let data of data9">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)" [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Reports</span>
+</p-divider>
+<ng-container *ngFor="let data of data10">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Library</span>
+</p-divider>
+<ng-container *ngFor="let data of data10">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+</ng-container>
+<p-divider align="left">
+  <span class="p-tag">Settings</span>
+</p-divider>
+<ng-container *ngFor="let data of data11">
+
+<div class="row">
+<div class="col-40">
+  <p-checkbox name="groupname" inputId="data.id" value="data.privilageid" label="{{data.name}}" (onChange)="UnselectAll($event,data)"  [(ngModel)]="data.selected" binary="true"></p-checkbox>
+</div>
+<div class="col-60">
+  <p class="font">- {{data.list}}</p>
+</div>
+</div>
+
+</ng-container>
+            </p-scrollPanel>
+              
+          </div>
+          <!-- </form> -->
+    
+    </div>   

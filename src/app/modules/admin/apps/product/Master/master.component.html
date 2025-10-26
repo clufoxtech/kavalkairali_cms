@@ -1,0 +1,32 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Product Masters</div>
+        </div>
+       
+    </div>
+    <!-- Main -->
+    
+        <div class="card ml-4">
+            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll"  [value]="data" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="500px" sortMode="multiple">
+               
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px;min-width:30px;">NO</th>
+                        <th >MASTERS</th>
+                        <th style="max-width:30px;"></th>
+                       
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns">
+                    <tr>
+                         <td style="max-width:45px;min-width:30px;">{{product.No}}</td>
+                        <td title={{product.name}} (click)="ShowMaster(product.Link)" style="min-width:100px;cursor: pointer;color: rgb(40, 150, 214);">{{product.Master}}</td>
+                        <td style="max-width:30px;cursor: pointer;color: rgb(40, 150, 214);" ><span (click)="ShowMaster(product.Link)" class="pi pi-angle-right"></span></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+</div>
+

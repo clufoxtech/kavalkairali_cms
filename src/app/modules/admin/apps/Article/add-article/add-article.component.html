@@ -1,0 +1,91 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-2xl font-bold tracking-tight fontcls">Add Magazine</div>
+        </div>
+        
+        <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 ">
+         
+      
+    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3" >
+    
+        <button
+                class="ml-4 " 
+                mat-stroked-button style="background-color: #8ed93b;color:white"
+            (click)="GoBack()">
+            <span class="ml-1 mr-1 fontcls">Article List</span>
+            </button>
+         
+  
+  </div>
+  
+        </div>
+    </div>
+    
+    <!-- Main -->
+    <form [formGroup]="AddForm" (ngSubmit)="AddArticle()" class="ml-3">
+    <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+        <ng-template pTemplate="icons">
+            <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
+        </ng-template>
+       
+       
+        <div class="row">
+            <div class="col-15 mb-1">
+                <label for="depname">Cover Image</label>
+            </div>
+            <div class="col-25 mb-1">
+              <!-- <label class="custom-file-upload"> formControlName="cover"-->
+                <input type="file" id="file" formControlName="cover" accept=".jpg, .jpeg, image/png" (change)="onFileChanged($event)">
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+                      <!-- </label> -->
+            </div>
+            <div class="col-25 mb-1">
+              <img src={{url}} style="width:50px;height:50px;" *ngIf="url">
+            </div>
+        </div>
+       
+        <div class="row">
+            <div class="col-50">
+                <label for="title">Title<span class="text-danger reqd">*</span></label>
+                <input type="text" id="title" class="nameCapital" formControlName="title" >
+                <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
+                          <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
+                        </div>
+            </div>
+           
+           </div>
+           <div class="row">
+            <div class="col-50">
+              <label for="author">Author</label>
+              <input type="text" id="author" formControlName="author" >
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+            </div>
+
+        <div class="row">
+          <div class="col-50">
+            <label for="summary">Description</label>
+            <textarea id="summary" formControlName="summary"  rows="2"></textarea>
+         
+        </div>
+            </div>
+       
+
+    <div class="row" >
+        <div class="col-50 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="GoBack()">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
+        </div>
+    </div>
+  </p-scrollPanel>
+  </form>
+    </div>
+    <p-toast position="bottom-right"></p-toast>
+    

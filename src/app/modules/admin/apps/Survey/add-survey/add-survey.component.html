@@ -1,0 +1,70 @@
+<div
+    class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-2xl font-bold tracking-tight fontcls">Add Magazine</div>
+        </div>
+
+        <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 ">
+
+
+            <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3">
+
+                <button class="ml-4 " mat-stroked-button style="background-color: #8ed93b;color:white"
+                    (click)="GoBack()">
+                    <span class="ml-1 mr-1 fontcls">Survey List</span>
+                </button>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main -->
+    <p-scrollPanel [style]="{width: '100%', height: '500px'}" style="margin-left: 10px;">
+        <ng-template pTemplate="icons">
+            <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
+        </ng-template>
+
+        <div class="row">
+            <div class="col-50">
+                <label for="surveyName">Survey name<span class="text-danger reqd">*</span></label>
+                <input type="text" id="surveyName" class="nameCapital">
+                <div *ngIf="getControl['surveyName'].touched && getControl['surveyName'].invalid" class="text-danger">
+                    <div *ngIf="getControl['surveyName'].errors?.['required']">Survey name is required.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-50">
+                <label for="question">Question</label>
+                <textarea id="question" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+               <div class="col-50">
+                
+            <label for="question">Multiple choice</label>
+            <div *ngFor="let field of inputFields; let i = index">
+                <input style="width: 96%;margin-bottom: 10px;" type="text" [(ngModel)]="inputFields[i]" placeholder="Enter value" />
+                <button style="margin-left: 10px;" (click)="removeInput(i)">X</button>
+            </div>
+            <button class="submitbtn btn-outline-secondary btn btn-md" style="font-size: 13px;" (click)="addInput()">Add Choices</button>
+              </div>
+        </div>
+
+        <div class="row">
+            <div class="col-50 text-right fontcls">
+                <button type="button" class="cancelbtn btn-outline-secondary btn btn-md"
+                    (click)="GoBack()">CANCEL</button>
+                <button type="submit" (click)="AddSurvey()"
+                    class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
+            </div>
+        </div>
+    </p-scrollPanel>
+</div>
+<p-toast position="bottom-right"></p-toast>

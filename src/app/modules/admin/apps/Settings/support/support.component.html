@@ -1,0 +1,97 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Support</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="applyGlobalFilter($event)">
+                <button pButton  class="icon-size-5" icon="pi pi-times-circle" (click)="clear()"></button>
+        </mat-form-field>
+            <!-- Add product button -->
+           
+        </div>
+       
+    </div>
+    <!-- Main -->
+    
+        <div class="card ml-4">
+            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="supportlist"  [paginator]="true" (onPage)="LazySupport($event)" [paginator]="true" [rows]=perPage [lazy]="true" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
+               
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px;min-width:30px;">NO</th>
+                        <th >PLATFORM</th>
+                        <th >CUSTOMER</th>
+                        <th >TICKET</th> 
+                        <th >CUSTOMER COMMENT</th>
+                        <th >DATE</th>
+                        <th >ADMIN REPLY</th>
+                        <th >STATUS</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
+                        <td >{{product.mode}}</td>
+                        <td title={{product.customerEmail}} (click)="ShowUser(product)" >{{product.customerEmail}}</td>
+                        <td >{{product.reason}}</td>
+                        <td style="cursor:pointer;color: rgb(40, 150, 214);"><i class="pi pi-comment" (click)="op.toggle($event)"></i></td>
+                        <p-overlayPanel #op>
+                           <p>{{product.description}}</p>
+                        </p-overlayPanel>
+                        <td>{{product.creationTimestamp | date:'dd-MM-yyyy hh:mm a'}}</td>
+                        <td style="cursor:pointer;color: rgb(40, 150, 214);"><i class="pi pi-comment" (click)="oa.toggle($event)"></i></td>
+                        <p-overlayPanel #oa>
+                            <p>{{product.adminComment}}</p>
+                        </p-overlayPanel>
+                        <td> 
+                            <p-dropdown [options]="dropdownOptions" [(ngModel)]="product.status" appendTo="body" (onChange)="ChangeStatus(product)"></p-dropdown>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <p-dialog header="Close the ticket" [(visible)]="display" (onHide)="Cancel()" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+        [draggable]="false" [resizable]="false">
+        
+          <form [formGroup]="closeForm" (ngSubmit)="CloseTicket()"  novalidate>
+            <div class="container">
+            <div class="row">
+              <div class="col-100">
+                <label for="adminComment">Enter comments</label>
+              </div>
+              <div class="col-100">
+                <input type="text"  pKeyFilter="pnum"  id="adminComment" formControlName="adminComment" placeholder="Type here.." >
+                <div *ngIf="getControl['adminComment'].touched && getControl['adminComment'].invalid" class="text-danger">
+                    <div *ngIf="getControl['adminComment'].errors?.['required']">Admin Comment is required.</div>
+                  </div>
+            </div>
+            </div>
+
+            <div class="row" >
+              <div class="col-100 text-right fontcls">
+                  <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+                  <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+              </div>
+          </div>
+          </div>
+          </form>
+        
+        </p-dialog>
+      
+    
+   
+</div>
+

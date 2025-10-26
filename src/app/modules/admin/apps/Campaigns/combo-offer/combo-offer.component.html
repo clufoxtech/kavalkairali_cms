@@ -1,0 +1,450 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Combo Offer</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains') ||  dt3.filterGlobal($event.target.value, 'contains')">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+        <button
+        class="ml-4 " 
+        mat-stroked-button style="background-color:#8ed93b;color:white"
+             (click)="NewCoupon()" >
+    <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white"></mat-icon>
+    <span class="ml-1 mr-1">Add</span>
+    </button>
+        </div>
+    </div>
+
+    <p-tabView class="ml-4 mt-2" [(activeIndex)]="index" (onChange)="handleTab($event)">
+        <p-tabPanel header="Active" >
+        <div class="card ">
+            <p-table styleClass="p-datatable-sm" [lazy]="true"  (onPage)="LazyLoadActiveCombo($event)"[autoLayout]="true" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="ActiveList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+               
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width:45px">NO</th>
+                        <th >COMPO-OFFER</th>
+                        <th>BOOK TYPE</th>
+                        <th>START DATE</th>
+                        <th>END DATE</th>
+                      
+                        <th >USERS</th>
+                       
+                        <th style="max-width:45px"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-active let-columns="columns" let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="max-width:45px">{{rowIndex+1}}</td>
+                        <td title={{active.product}} (click)="ShowUser(active)" style="cursor:pointer;color: rgb(40, 150, 214);">{{active.name}}</td>
+                        <td >{{active.bookType}}</td>
+                        <td >{{active.startDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{active.endDate | date:'dd-MM-yyyy'}}</td>
+                        
+                        <td>{{active.users}}</td>
+                       
+                        <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,active)"></i></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                <ul>
+                    <li (click)="Edit(comboDetail)" style="cursor:pointer">Edit</li>
+                    <HR SIZE="1">
+                    <li (click)="ChangeStatus(comboDetail,'DEACTIVE')" style="cursor:pointer">De-activate</li>
+                </ul>
+            </ng-template>
+        </p-overlayPanel>
+       
+         
+    
+  
+        </p-tabPanel>
+
+  
+            <p-tabPanel header="De-Activated" >
+                <div class="card ">
+                    <p-table styleClass="p-datatable-sm" [lazy]="true"  (onPage)="LazyLoadDeActiveCombo($event)" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="DeActiveList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+                       
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th style="max-width:45px">NO</th>
+                                <th >COMBO OFFER</th>
+                        <th>BOOK TYPE</th>
+                        <th>START DATE</th>
+                        <th>END DATE</th>
+                    
+                        <th >USERS</th>
+                                <th style="max-width:45px"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                            <tr>
+                                <td style="max-width:45px">{{rowIndex+1}}</td>
+                                <td title={{archive.product}} (click)="ShowUser(archive)" style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                <td >{{archive.bookType}}</td>
+                        <td>{{archive.startDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{archive.endDate | date:'dd-MM-yyyy'}}</td>
+                      
+                        <td>{{archive.users}}</td>
+                                <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showArchived($event,archive)"></i></td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+        
+                <p-overlayPanel #al>
+                    <ng-template pTemplate>
+                        <ul>
+                            <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                        </ul>
+                    </ng-template>
+                </p-overlayPanel>
+                </p-tabPanel>
+                <p-tabPanel header="New" >
+                  <div class="card ">
+                      <p-table styleClass="p-datatable-sm" [lazy]="true"  (onPage)="LazyLoadNewCombo($event)" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="NewList" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+                         
+                          <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                  <th style="max-width:45px">NO</th>
+                                  <th >COMBO OFFER</th>
+                          <th>BOOK TYPE</th>
+                                  <th style="max-width:45px"></th>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                              <tr>
+                                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                                  <td title={{archive.product}} (click)="ShowUser(archive)" style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.name}}</td>
+                                  <td >{{archive.bookType}}</td>
+                                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showArchived($event,archive)"></i></td>
+                              </tr>
+                          </ng-template>
+                      </p-table>
+                  </div>
+          
+                  <p-overlayPanel #al>
+                      <ng-template pTemplate>
+                          <ul>
+                              <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                          </ul>
+                      </ng-template>
+                  </p-overlayPanel>
+                  </p-tabPanel>
+    </p-tabView>
+</div>
+<p-dialog [(visible)]="display" header="Combo Offer" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+  <form [formGroup]="AddForm" (ngSubmit)="AddCoupon()"  novalidate>
+    <div class="container">
+    <div class="row">
+      <div class="col-25">
+        <label for="depname">Offer Name</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="depname" formControlName="name" [(ngModel)]="comboDetail.name" placeholder="Type.." >
+        
+      </div>
+    </div>
+    <div class="row" *ngIf="isEdit">
+      <div class="col-25">
+        <label for="startDate">Start Date</label>
+      </div>
+      <div class="col-28">
+        <input type="date" id="startDate" ngModel="{{comboDetail.startDate | date:'yyyy-MM-dd'}}" formControlName="startDate" placeholder="Type.." >
+        
+      </div>
+      <div class="col-15">
+          <label for="startTime">Time</label>
+        </div>
+        <div class="col-20">
+          <input type="time" id="depname" formControlName="startTime" [(ngModel)]="comboDetail.startTime" placeholder="Type.." >
+         
+        </div>
+    </div> 
+    <div class="row" *ngIf="isEdit">
+      <div class="col-25">
+        <label for="endDate">End Date</label>
+      </div>
+      <div class="col-28">
+        <input type="date" id="endDate" formControlName="endDate" ngModel="{{comboDetail.endDate | date:'yyyy-MM-dd'}}" placeholder="Type.." >
+       
+      </div>
+      <div class="col-15">
+          <label for="endTime">Time</label>
+        </div>
+        <div class="col-20">
+          <input type="time" id="depname" formControlName="endTime" [(ngModel)]="comboDetail.endTime" placeholder="Type.." >
+          
+        </div>
+    </div>
+   
+    <div class="row">
+     
+      <div class="col-25">
+        <label for="depname">No.Books</label>
+      </div>
+      <div class="col-28">
+        <p-dropdown   formControlName="booklength" [(ngModel)]="selectedBookLength" optionValue="code" [options]="NoOfBooks" appendTo="body" optionLabel="name" placeholder="Select" ></p-dropdown>
+      </div>
+    </div>
+    
+
+    <form [formGroup]="SearchForm" (ngSubmit)="SearchBook()">
+      
+      <div class="row">
+        <div class="col-25">
+          <label for="Offer">Book</label>
+        </div>
+        <div class="col-28">
+          <p-dropdown [options]="BookType" [disabled]="isEdit" [(ngModel)]="selectedBookType" optionValue="code" (onChange)="ChangeBookType()" formControlName="bookType"appendTo="body"  [(ngModel)]="selectedBookType" optionLabel="name" ></p-dropdown>
+          <div *ngIf="getSearchControl['bookType'].touched && getSearchControl['bookType'].invalid" class="text-danger">
+            <div *ngIf="getSearchControl['bookType'].errors?.['required']">Book format is required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-25">
+          <label for="Offer">Search Book</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="Offer" formControlName="title" placeholder="Search here.." >
+         
+        </div>
+      </div>
+    <div class="row" >
+        <div class="col-90 text-right fontcls">
+            <button type="submit" class="cancelbtn btn-outline-secondary btn btn-sm" >SEARCH</button>
+            <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="clear()">CLEAR</button>
+        </div>
+    </div>
+  </form>
+  
+    <div class="row" >
+      <div class="col-25">
+        <label for="depname">Total Price</label>
+      </div>
+      <div class="col-28">
+        <input type="text" id="depname"  [(ngModel)]="comboDetail.totalPrice" formControlName="totalPrice" placeholder=".." >
+        <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+      </div>
+      </div>
+      <div class="row" >
+        <div class="col-25">
+          <label for="depname">Offer Price</label>
+        </div>
+        <div class="col-28">
+          <input type="text" id="depname"  [(ngModel)]="comboDetail.offerPrice" formControlName="offerPrice" placeholder=".." >
+          <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+              <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+            </div> -->
+        </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="depname">Description</label>
+          </div>
+          <div class="col-75">
+            <textarea id="depname" formControlName="description" [(ngModel)]="comboDetail.description" placeholder="Type.." ></textarea>
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+              </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="detail">Details</label>
+          </div>
+          <div class="col-75">
+            <textarea id="depname" formControlName="detail" [(ngModel)]="comboDetail.detail" placeholder="Type.." ></textarea>
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+              </div> -->
+          </div>
+        </div>
+    <div class="row">
+      <div class="col-25">
+        <p-checkbox  formControlName="allowOtherOffers"  [(ngModel)]="comboDetail.allowOtherOffers" [binary]="true" name="allowOtherOffers"  label="" class="mr-2 fontcls"></p-checkbox>
+      </div>
+      <div class="col-75">
+        <p>Allow to apply other offers & Coupons</p>
+      </div>
+    </div>
+    <p-tabView class="ml-6">
+      <p-tabPanel header="List" >
+      <div class="card ">
+          <p-table styleClass="p-datatable-sm" [(selection)]="selectedList" [autoLayout]="true" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="list" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="100px" sortMode="multiple">
+             
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th style="width: 2rem">
+                          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                      </th>
+                      <th style="max-width:45px">NO</th>
+                      <th >PRODUCT</th> 
+                      <th>AUTHOR</th>
+                      <th>EDITION</th>
+                      <th >VOLUME</th>
+                      <th>CODE</th>
+                      <th>ISBN</th>
+                      <th>LANGUAGE</th>
+                      <th>MRP</th>
+                     
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-active let-columns="columns" let-rowIndex="rowIndex">
+                  <tr>
+                      <td>
+                          <p-tableCheckbox [value]="active"></p-tableCheckbox>
+                      </td>
+                      <td style="max-width:45px">{{rowIndex+1}}</td>
+  
+                      <td title={{active.product}} (click)="ShowUser(active)" style="cursor:pointer;color: rgb(40, 150, 214);">{{active.title}}</td>
+                         
+                      <td >{{active.author}}</td>
+                      <td>{{active.edition}}</td>
+                      <td style="max-width:100px">{{active.volume}}</td>
+                      <td>{{active.code}}</td>
+                      <td>{{active.isbn}}</td>
+                      <td>{{active.language}}</td>
+                      <td>{{active.mrp}}</td>
+                     
+                  </tr>
+              </ng-template>
+          </p-table>
+      </div>
+  
+  
+      </p-tabPanel>
+  
+  
+          <p-tabPanel header="Selected" >
+              <div class="card ">
+                  <p-table styleClass="p-datatable-sm" [value]="selectedList" [(selection)]="selectedList" (onRowUnselect)="onRowUnselect($event)" #dt3 responsiveLayout="scroll" [globalFilterFields]="['name']"  [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+                     
+                      <ng-template pTemplate="header" let-columns>
+                          <tr>
+                              <th style="width: 2rem">
+                                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                              </th>
+                              <th style="max-width:45px">NO</th>
+                              <th >PRODUCT</th> 
+                              <th>AUTHOR</th>
+                              <th>EDITION</th>
+                              <th >VOLUME</th>
+                              <th>CODE</th>
+                              <th>ISBN</th>
+                              <th>LANGUAGE</th>
+                              <th>MRP</th>
+                             
+                      
+                          </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-archive let-columns="columns" let-rowIndex="rowIndex">
+                          <tr>
+                              <td>
+                                  <p-tableCheckbox [value]="archive"></p-tableCheckbox>
+                              </td>
+                              <td style="max-width:45px">{{rowIndex+1}}</td>
+                              <td title={{archive.product}} (click)="ShowUser(archive)" style="cursor:pointer;color: rgb(40, 150, 214);">{{archive.title}}</td>
+                          <td >{{archive.author}}</td>
+                          <td>{{archive.edition}}</td>
+                          <td >{{archive.volume}}</td>
+                          <td>{{archive.code}}</td>
+                          <td>{{archive.isbn}}</td>
+                          <td>{{archive.language}}</td>
+                          <td>{{archive.mrp}}</td>
+                          
+                          </tr>
+                      </ng-template>
+                  </p-table>
+              </div>
+      
+          </p-tabPanel>  
+  
+  </p-tabView>
+    <div class="row" >
+        <div class="col-90 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" >CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+        </div>
+    </div>
+  </div>
+  </form>
+
+</p-dialog>
+<p-overlayPanel #dc>
+  <ng-template pTemplate>
+    <form [formGroup]="ActivateForm" (ngSubmit)="ActivateCoupon()"  novalidate>
+     <div class="row">
+      <div class="col-25">
+        <label for="startDate">Start Date</label>
+      </div>
+      <div class="col-28">
+        <input type="date" id="startDate" formControlName="startDate" placeholder="Type.." >
+        <div *ngIf="getDateControl['startDate'].touched && getDateControl['startDate'].invalid" class="text-danger">
+          <div *ngIf="getDateControl['startDate'].errors?.['required']">Start date is required.</div>
+        </div>
+      </div>
+      <div class="col-15">
+          <label for="startTime">Time</label>
+        </div>
+        <div class="col-28">
+          <input type="time" id="depname" formControlName="startTime" placeholder="Type.." >
+         <div *ngIf="getDateControl['startTime'].touched && getDateControl['startTime'].invalid" class="text-danger">
+              <div *ngIf="getDateControl['startTime'].errors?.['required']">Start time is required.</div>
+            </div>
+        </div>
+    </div> 
+    <div class="row">
+      <div class="col-25">
+        <label for="endDate">End Date</label>
+      </div>
+      <div class="col-28">
+        <input type="date" id="endDate" formControlName="endDate" placeholder="Type.." >
+        <div *ngIf="getDateControl['endDate'].touched && getDateControl['endDate'].invalid" class="text-danger">
+          <div *ngIf="getDateControl['endDate'].errors?.['required']">End date is required.</div>
+        </div>
+      </div>
+      <div class="col-15">
+          <label for="endTime">Time</label>
+        </div>
+        <div class="col-28">
+          <input type="time" id="depname" formControlName="endTime" placeholder="Type.." >
+           <div *ngIf="getDateControl['endTime'].touched && getDateControl['endTime'].invalid" class="text-danger">
+              <div *ngIf="getDateControl['endTime'].errors?.['required']">Time is required.</div>
+            </div> 
+        </div>
+    </div>
+  
+    <div class="row" >
+      <div class="col-90 text-right fontcls">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+      </div>
+  </div>
+</form>
+  </ng-template>
+</p-overlayPanel>
+<p-toast position="bottom-right"></p-toast>

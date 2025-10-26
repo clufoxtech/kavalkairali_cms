@@ -1,0 +1,739 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Recommendation List</div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains') ">
+                <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+        </mat-form-field>
+        <button
+        class="ml-4 " 
+        mat-stroked-button style="background-color:#8ed93b;color:white"
+          (click)="NewRecommendation()"   >
+    <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white"></mat-icon>
+    <span class="ml-1 mr-1">Add</span>
+    </button>
+        </div>
+    </div>
+    <!-- Main -->
+    <p-tabView class="ml-4 mt-2"  [(activeIndex)]="Mainindex" (onChange)="handleMainTab($event)">
+    
+        <p-tabPanel header="Print" >
+            <p-tabView [(activeIndex)]="index" (onChange)="handleIndex($event)">
+                <p-tabPanel header="Trending" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['title']" [value]="TrendingPrintList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>                                   
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'TRENDING')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-overlayPanel #ops>
+                        <ng-template pTemplate>
+                            <ul>
+                                <!-- <li (click)="List(bookDetail)" style="cursor:pointer">Listing</li>
+                                <HR SIZE="1"> -->
+                                <li (click)="RemoveRecommendation(bookDetail)" style="cursor:pointer">Remove</li>
+                                
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                </p-tabPanel>
+                <p-tabPanel header="Best Seller" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="BestsellerPrintList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.name}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'BESTSELLER')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                </p-tabPanel>
+                <p-tabPanel header="New Releases" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="NewReleasesPrintList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'NEWRELEASES')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                 
+    
+                </p-tabPanel>
+                <p-tabPanel header="Recommended" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['title']" [value]="RecommendedPrintList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>                                   
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'RECOMMENDED')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-overlayPanel #ops>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="List(bookDetail)" style="cursor:pointer">Listing</li>
+                                <HR SIZE="1">
+                                <li (click)="RemoveRecommendation(bookDetail)" style="cursor:pointer">Remove</li>
+                                
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                </p-tabPanel>
+            
+            </p-tabView>
+        </p-tabPanel>
+        <p-tabPanel header="eBook" >
+            <p-tabView [(activeIndex)]="index" (onChange)="handleIndex($event)">
+                <p-tabPanel header="Trending" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="TrendingEBookList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                   
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                   
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'TRENDING')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                </p-tabPanel>
+                <p-tabPanel header="Best Seller" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="BestsellerEBookList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                   
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'BESTSELLER')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                </p-tabPanel>
+                <p-tabPanel header="New Releases" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="NewReleasesEBookList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'NEWRELEASES')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+    
+                </p-tabPanel>
+               <p-tabPanel header="Recommended" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="RecommendedEBookList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'RECOMMENDED')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                </p-tabPanel> 
+              
+            </p-tabView>
+            
+        </p-tabPanel>
+        <p-tabPanel header="Audio" >
+            <p-tabView [(activeIndex)]="index" (onChange)="handleIndex($event)">
+                <p-tabPanel header="Trending" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']"[value]="TrendingAudioList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                   
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                   
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'TRENDING')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                   
+                </p-tabPanel>
+                <p-tabPanel header="Best Seller" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['product']" [value]="BestsellerAudioList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>STOCK</th>
+                                    <th>ROYALTY</th>
+                                    <th>MRP</th>
+                                    <th style="min-width:92px">EXPIRY DATE</th>
+                                    <th>SALES</th>
+                                    
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.stock}}</td>
+                                    <td>{{product.royalty}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    <td style="min-width:92px">{{product.expiryDate}}</td>
+                                    <td>{{product.sales}}</td>
+                                    
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'BESTSELLER')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                    
+                </p-tabPanel>
+                <p-tabPanel header="New Releases" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll"
+                        [globalFilterFields]="['title']" [value]="NewReleasesAudioList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>ROYALTY</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    <th style="min-width:92px">BLOCKED</th>
+                                    <th>SALES</th>
+                                    <th>REASON</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.royalty}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    <td style="min-width:92px">{{product.expirydate}}</td>
+                                    <td>{{product.sales}}</td>
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'NEWRELEASES')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+    
+                </p-tabPanel>
+                <p-tabPanel header="Recommended" >
+                    <div class="card">
+                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+                            [globalFilterFields]="['title']" [value]="RecommendedAudioList" [paginator]="true" [rows]="9"
+                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
+                            scrollHeight="380px" sortMode="multiple">
+    
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="max-width:45px">NO</th>
+                                    <th >PRODUCT
+                                    </th>
+                                    <th>AUTHOR</th>
+                                    <th>EDITION</th>
+                                    <th>VOLUME</th>
+                                    <th>CODE</th>
+                                    <th>ISBN</th>
+                                    <th>STOCK</th>
+                                    <th>LANGUAGE</th>
+                                    <th>MRP</th>
+                                    <th>SALES</th>
+                                    <th style="max-width:45px"></th>
+                                </tr>
+    
+    
+                            </ng-template>
+                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                                    <td title={{product.title}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
+                                    <td title={{product.author}}>{{product.author}}</td>
+                                    <td>{{product.edition}}</td>
+                                    <td>{{product.volume}}</td>
+                                    <td>{{product.productCode}}</td>
+                                    <td>{{product.isbn}}</td>
+                                    <td>{{product.stock}}</td>
+                                    <td>{{product.language}}</td>
+                                    <td>{{product.mrp}}</td>
+                                    <td>{{product.sales}}</td>
+                                   
+    
+                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
+                                            class="pi pi-ellipsis-v" (click)="show($event,product,rowIndex+1,'RECOMMENDED')"></i></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+    
+                    <p-overlayPanel #ops>
+                        <ng-template pTemplate>
+                            <ul>
+                                <li (click)="List(bookDetail)" style="cursor:pointer">Listing</li>
+                                <HR SIZE="1">
+                                <li (click)="RemoveRecommendation(bookDetail)" style="cursor:pointer">Remove</li>
+                                
+                            </ul>
+                        </ng-template>
+                    </p-overlayPanel>
+    
+                    <p-dialog header="Add Position" [(visible)]="display">
+                        <ng-template pTemplate>
+                            <input type="text" pKeyFilter="pint" [(ngModel)]="currentPosition">
+                            <div class="text-right fontcls mt-2">
+                                <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPosition()">ok</button>
+                            </div>
+                        </ng-template>
+                    </p-dialog>
+                </p-tabPanel>
+             
+            </p-tabView>
+        </p-tabPanel>
+    
+    
+    </p-tabView>
+    
+</div>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+
+
+

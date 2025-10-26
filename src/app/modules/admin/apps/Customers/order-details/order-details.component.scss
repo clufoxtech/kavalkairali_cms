@@ -1,0 +1,234 @@
+
+input[type=date]{
+    width: 50%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .col-12 {
+    float: left;
+    width: 12%;
+    margin-top: 6px;
+  }
+  
+  /* Floating column for inputs: 75% width */
+   
+  .col-3 {
+    float: left;
+    width: 3%;
+    margin-top: 6px;
+  }
+  
+  .col-5 {
+    float: left;
+    width: 5%;
+    margin-top: 6px;
+  }
+  
+  .col-20 {
+    float: left;
+    width: 23%;
+    margin-top: 6px;
+  }
+  @media screen and (max-width: 600px) {
+    .col-5, .col-12,.col-20{
+      width: 100%;
+      margin-top: 0;
+    }
+   
+  }
+  input,select{
+    font-size: 13px !important;
+  }
+  input[type=text], select, textarea{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  select{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    margin-right: 3px;
+  }
+  
+  /* Style the label to display next to the inputs */
+  label {
+    padding: 5px 12px 12px 0;
+    display: inline-block;
+  }
+  
+  /* Style the label to display next to the inputs */
+  
+  /* Style the container */
+  .container {
+    border-radius: 5px;
+    padding: 15px;
+  }
+  
+  /* Floating column for labels: 25% width */
+  
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .col-100 {
+    width: 100%;
+    margin-top: 6px;
+  }
+  
+  /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+    
+    .col-100{
+      width:100%;
+      margin-top: 10px;
+    }
+    .cancelbtn,.submitbtn{
+      width:48%;
+    }
+  }
+  
+  .submitbtn,.cancelbtn{
+    width:48%;
+  }
+
+
+.submitbtn {
+  margin-left: 1rem;
+}
+ul{
+  padding-left: 0rem !important;
+  margin-bottom: 0rem !important;
+}
+:host ::ng-deep .p-fluid .p-inputtext {
+  height: 30px;
+}
+.mat-stroked-button {
+  padding: 0 15px !important;
+  border-radius: 5px !important; 
+}
+:host ::ng-deep .p-multiselect .p-multiselect-label.p-placeholder {
+  height: 29px;
+  width:100%;
+  font-size: 14px;
+}
+:host ::ng-deep .p-multiselect .p-multiselect-label {
+  padding: 0.3rem 0.3rem;
+}
+:host ::ng-deep .p-multiselect {
+  width:100px;
+}
+:host ::ng-deep  .p-calendar .p-inputtext {
+  flex: 1 1;
+  height: 30px;
+  font-size: 13px;
+  padding: 2px;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  padding: 0.7rem !important;
+  font-weight: 600 !important;
+}
+:host ::ng-deep .p-tabview .p-tabview-panels {
+  padding: 0;
+}
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  font-size:13px !important;
+  font-family: 'Hind';
+}
+:host ::ng-deep .p-overlaypanel .p-overlaypanel-close  {
+  background: #e7e7ed;
+  color: #726c6c;
+  top: 1rem !important;
+  right: 1rem !important;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 0rem white;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background: #ffffff;
+  border-color: #8ed93b;
+  color: #27272a;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav .p-tabview-ink-bar {
+  background-color: #8ed93b;
+}
+:host ::ng-deep .p-tabview .p-tabview-nav {
+  background: #ffffff;
+   border: none; 
+  border-width: 0 0 0 0; 
+}
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  font-size: 11px;
+  font-family: 'Hind';
+}
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  font-size:13px !important;
+  color: gray;
+  font-family: 'Hind';
+}
+:host ::ng-deep .card  {
+  border: none;
+}
+button:hover {
+  background-color: #8ed93b;
+}
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page{
+  min-width: 1.5rem;
+  height:1.5rem;
+  font-size: 13px;
+  }
+  :host ::ng-deep .p-dropdown .p-dropdown-trigger {
+    width:1.5rem;
+
+  }
+  :host ::ng-deep .p-paginator .p-dropdown .p-dropdown-label {
+    padding:2px;
+    font-size: 13px;
+  }
+  :host ::ng-deep .p-paginator .p-dropdown {
+    height:1.6rem;
+  }
+  :host ::ng-deep .p-paginator{
+    padding:0;
+  }
+  input[type=text], select, textarea{
+    width: 100%;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 11px;
+    font-family: 'Hind';
+    color: black;
+    background-color: white;
+    line-height: 1.5rem;
+  }
+  
+  :host ::ng-deep .p-calendar .p-inputtext {
+    background-color: white;
+  }
+  .p-button {
+    color: #999292;
+    background: none;
+    border: none;
+  }
+  .p-button:enabled:hover{
+    color: #999292;
+    background:none;
+    border: none; 
+  }

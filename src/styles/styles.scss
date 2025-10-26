@@ -1,0 +1,134 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+.mat-stroked-button {
+    padding: 0 15px !important;
+    border-radius: 5px !important; 
+  }
+ .fontcls{
+  font-family: 'Hind';
+ }
+ ul{
+  padding-left: 0rem !important;
+  margin-bottom: 0rem !important;
+  font-family: 'Hind';
+ font-size:13px !important;
+}
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+/* Floating column for inputs: 75% width */
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 6px;
+}
+.col-100 {
+  width: 100%;
+  margin-top: 6px;
+}
+input[type=text], select, textarea{
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 13px;
+  font-family: 'Hind';
+  line-height: 1.7rem;
+}
+input[type=date]{
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 13px;
+  font-family: 'Hind';
+  color: gray;
+  background-color: #f9f5f5;
+  line-height: 1.7rem;
+}
+input[type=password]{
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 13px;
+  font-family: 'Hind';
+  line-height: 1.7rem;
+}
+.select {
+  height: 10px !important;
+  overflow-y: visible !important;
+ 
+}
+.select:focus{
+  size:3px;
+}
+/* Style the label to display next to the inputs */
+label {
+  padding: 5px 0px 5px 0;
+  display: inline-block;
+  font-size: 13px;
+  font-family: 'Hind';
+}
+.p-dialog .p-dialog-header .p-dialog-title {
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: 'Hind';
+}
+:host ::ng-deep .p-tabview-title {
+  font-size: 13px;
+  font-family: 'Hind';
+}
+.content{
+  border-radius: 10px;
+  margin:1rem;
+  
+}
+select{
+  padding: 6.5px;
+}
+button:hover {
+  background-color: #8ed93b;
+}
+:host ::ng-deep.p-multiselect-trigger-icon{
+  font-size: 10px;
+  padding-right: 0px;
+}
+:host ::ng-deep.p-breadcrumb.p-menuitem{
+  background: #ffffff;
+  border: none !important; 
+  border-radius: 0px !important;
+  padding: 0px !important;
+}
+.p-datatable .p-datatable-tbody tr:nth-child(even){
+  background-color: #f2f2f2 !important;
+}
+.nameCapital{
+  text-transform: capitalize;
+}
+.sentenceCase{
+  text-transform: lowercase;
+}
+.sentenceCase:first-letter{
+  text-transform: capitalize;
+}
+
+// input.ng-pristine.ng-invalid.ng-touched{
+//   border:1px solid  red;
+//   /* border-color: red; */
+// }
+// select.ng-pristine.ng-invalid.ng-touched{
+//   border:1px solid red;
+//   /* border-color: red; */
+// }

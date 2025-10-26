@@ -1,0 +1,42 @@
+.userfont{
+    font-family: 'Hind';
+    font-size: 13px;
+    color: rgb(139, 136, 136);
+}
+.mat-icon{
+    color:rgb(180, 175, 175);
+}
+:host ::ng-deep .p-rating .p-rating-icon.pi-star-fill{
+    color:goldenrod;
+}
+.submitbtn {
+    margin-left: 1rem;
+    
+  }
+ 
+  .cancelbtn ,.submitbtn {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  button:hover {
+    background-color: #8ed93b;
+  }
+  :host ::ng-deep .mat-tab-group .mat-tab-header .mat-tab-label-container {
+    padding: 0 4px;
+}
+.col-30 {
+  float: left;
+  width: 50%;
+  margin-top: 2px;
+}
+.col-50 {
+  float: left;
+  width: 50%;
+  margin-top: 2px;
+}
+/* Floating column for inputs: 75% width */
+.col-70 {
+  float: left;
+  width: 50%;
+  margin-top: 2px;
+}

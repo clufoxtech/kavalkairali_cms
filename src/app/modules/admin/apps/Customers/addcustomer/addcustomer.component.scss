@@ -1,0 +1,100 @@
+
+
+ 
+.cancelbtn {
+    padding: 10px 15px;
+}
+.submitbtn {
+    padding: 10px 15px;
+    margin-left: 5px;
+}
+/*float cancel and signup buttons and add an equal width*/
+ 
+.cancelbtn,
+.submitbtn {
+    float: left;
+    width: 49%;
+    margin-top:10px;
+}
+/*add padding to container elements*/
+ 
+.container {
+    padding: 15px;
+}
+/*clear floats*/
+ 
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+/*styles for cancel button and signup button
+  on extra small screens*/
+ 
+@media screen and (max-width: 300px) {
+    .cancelbtn,
+    .submitbtn  {
+        width: 45%;
+        margin-top: 10px;
+    }
+}
+.pi-times{
+    width: 2rem;
+    height: 2rem;
+    color: #6c757d;
+    border: 0 none;
+    background: transparent;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    align-items: center;
+   
+    overflow: hidden;
+    float:right;
+    margin-right: 0%;
+}
+button:hover {
+    background-color: #8ed93b;
+  }
+  select{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 13px;
+    font-family: 'Hind';
+    line-height: 1.7rem;
+  }
+  .p-inputtext:enabled:focus{
+    outline-style: none;
+box-shadow: none;
+border-color:  #ccc;
+  }
+  .p-inputtext:enabled:hover{
+    outline-style: none;
+box-shadow: none;
+border-color:  #ccc;
+  }
+  .p-inputtext{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 13px;
+  font-family: 'Hind';
+  line-height: 1.7rem;
+  }
+  span .p-input-icon-left{
+    width: 100%;
+  }
+  // input[type="password"]::-ms-reveal,
+  // input[type="password"]::-ms-clear {
+  //   display: none;
+  // }
+  .p-inputgroup-addon {
+    font-size: 13px;
+  font-family: 'Hind';
+  line-height: 0.8rem;
+  border-radius: 4px;
+  }

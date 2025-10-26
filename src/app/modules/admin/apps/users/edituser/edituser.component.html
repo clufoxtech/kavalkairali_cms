@@ -1,0 +1,76 @@
+<p-dialog header="Edit User" [(visible)]="close" (onHide)="Cancel()" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+  <form [formGroup]="EditUserForm" (ngSubmit)="EditUserDetails()" novalidate>
+    <div class="container">
+    <div class="row">
+      <div class="col-25">
+        <label for="name">Name</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="name" class="nameCapital"  [pKeyFilter]="noSpecial" formControlName="name" placeholder="Your name.."  [(ngModel)]="Details.name">
+        <div *ngIf="getControl['name'].touched && getControl['name'].invalid" class="text-danger">
+          <div *ngIf="getControl['name'].errors?.['required']">Name is required.</div>
+        </div>
+        <div *ngIf="getControl['name'].errors?.maxlength"  class="text-danger"> 
+          More than 50 characters is not allowed.
+     </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="lname">Phone</label>
+      </div>
+      <div class="col-75">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon" >+91</span>
+          <input type="text" id="phone" pKeyFilter="pint"  placeholder="Enter Phone" maxlength="10" minlength="10" formControlName="phone" placeholder="Your last name.." [(ngModel)]="Details.phone">       
+       </div>
+        <div *ngIf="getControl['phone'].touched && getControl['phone'].invalid" class="text-danger">
+          <div *ngIf="getControl['phone'].errors?.['required']">Name is required.</div>
+        </div>
+        <div *ngIf="getControl['phone'].errors?.minlength || getControl['phone'].errors?.maxlength"  class="text-danger"> 
+          Phone number must contain 10 digits.
+     </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="country">Role</label>
+      </div>
+      <div class="col-75">
+        <select formControlName="role" [(ngModel)]="selectedRoleid">
+          <option *ngFor="let item of rolelist" value="{{item._links.self.href}}"
+          >{{item.type}}</option>
+      </select>
+      <div *ngIf="getControl['role'].touched && getControl['role'].invalid" class="text-danger">
+        <div *ngIf="getControl['role'].errors?.['required']">Role is required.</div>
+      </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="subject">Department</label>
+      </div>
+      <div class="col-75">
+        <select  formControlName="department" [(ngModel)]="selectedDepartmentid">
+          <option *ngFor="let item of departmentlist" value="{{item._links.self.href}}" 
+          >{{item.name}}</option>
+        </select>
+        <div *ngIf="getControl['department'].touched && getControl['department'].invalid" class="text-danger">
+          <div *ngIf="getControl['department'].errors?.['required']">Department is required.</div>
+        </div>
+        </div>
+    </div>
+    <div class="row" >
+      <div class="col-100">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">Cancel</button>
+          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">Submit</button>
+      </div>
+  </div>
+  </div>
+  </form>
+
+</p-dialog>
+
+ 

@@ -1,0 +1,269 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Subscribers List</div>
+        </div>
+        
+        <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 pr-3 ">
+          <div class="flex  sm:flex-row flex-0  shrink-0 items-center  mt-6 sm:mt-0  mr-1">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-64">
+                <mat-icon
+                class="icon-size-5"
+                matPrefix
+                [svgIcon]="'heroicons_solid:search'"></mat-icon>
+            <input
+                matInput
+                [formControl]="searchInputControl"
+                [autocomplete]="'off'"
+                [placeholder]="'Search'"(input)="applyGlobalFilter($event)"/>
+                <button pButton  class="icon-size-5" icon="pi pi-times-circle" (click)="clear()"></button>
+        </mat-form-field>
+        </div>
+        <button
+        class="ml-4 " 
+        mat-stroked-button style="background-color:#8ed93b;color:white"
+    (click)="NewCustomer()">
+    <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white;size:2px;"></mat-icon>
+    <span class="ml-1 mr-1">Add</span>
+    </button>
+        <div class="flex  sm:flex-row sm:ml-2 items-center  mt-6 sm:mt-0 ml-1"*ngIf="index==0">
+           
+     
+    <button mat-icon-button  aria-label="" title="More" (click)="More($event)" style="border: solid 1px  #8ed93b;background-color: #8ed93b;">
+      <mat-icon style="color:white;">more_horiz</mat-icon>
+      </button>
+    </div>
+    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 ml-2" *ngIf="index==1">
+      <button  style="background-color:#8ed93b;color:white"
+          mat-stroked-button (click)="BlockedReason()"
+     >
+      <span class="ml-1 mr-1 btn-sm">Blocked Reason</span>
+      </button>
+      
+
+<button mat-icon-button class="ml-2" aria-label="" title="More" style="border: solid 1px  #8ed93b;background-color: #8ed93b;" (click)="MoreBlocked($event)">
+<mat-icon style="color:white">more_horiz</mat-icon>
+</button>
+</div>
+<div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 ml-2 " *ngIf="index==2">
+<button mat-icon-button  aria-label="" title="More" (click)="MoreArchive($event)" style="border: solid 1px  #8ed93b;background-color: #8ed93b;">
+<mat-icon style="color:white">more_horiz</mat-icon>
+</button>
+</div>
+        </div>
+    </div>
+    
+    <!-- Main -->
+    <p-tabView class="ml-4 mt-2" (onChange)="handleChange($event)" [(activeIndex)]="index">
+      <p-tabPanel header="All" >
+        <div class="card">
+          <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt0 responsiveLayout="scroll" [paginator]="true" [totalRecords]="totalRecords"
+          [globalFilterFields]="['title']"   [value]="allCustomers" (onPage)="LazyLoadAllCustomer($event)" [rows]="perPage"
+          [rowsPerPageOptions]="[5,10,25,50,100]"  [resizableColumns]="true" [scrollable]="true" [lazy]="true"
+              scrollHeight="380px" sortMode="multiple">
+         
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th style="max-width:45px">NO</th>
+                      <th style="min-width:120px;" >NAME</th>
+                      <th style="min-width:120px;">EMAIL</th>
+                      <th style="min-width:110px;">PHONE</th>
+                      <th >STATUS</th>
+                      <!-- <th style="min-width:110px;max-width:110px">MARKETING</th>
+                   
+                      <th style="min-width:100px;max-width:100px">DATE</th> -->
+                      <th style="max-width:45px"></th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                  <tr>
+                      <td style="max-width:45px">{{rowIndex+1}}</td>
+                      <td title={{product.name}}  style="min-width:120px;cursor:pointer;">{{product.name}}</td>
+                      <td title={{product.email}}  (click)="ShowCustomer(product)" style="cursor:pointer;min-width:120px;color: rgb(40, 150, 214);">{{product.email}}</td>
+                      <td style="min-width:110px;">{{product.phone}}</td>
+                      <td>{{product.subscriptionStatus}}</td>
+                      <!-- <td style="min-width:110px;max-width:110px">{{product.merketingEnabled}}</td>
+                      
+                      <td style="min-width:100px;max-width:100px">{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td> -->
+                     
+                      <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showAll($event,product)"></i></td>
+                  </tr>
+              </ng-template>
+          </p-table>
+      </div>
+  
+      <!-- <p-overlayPanel #ob>
+          <ng-template pTemplate>
+              <ul>
+                 
+                  <li style="cursor:pointer" (click)="ArchiveCustomer(customerdetails)">Archive</li>
+              </ul>
+          </ng-template>
+      </p-overlayPanel> -->
+     
+      <p-overlayPanel #vo [showCloseIcon]="true">
+        <ng-template pTemplate>
+            <div class="container">
+                <div class="row">
+                  <div class="col-100">
+                    <label for="fname">Reason</label>
+                  </div>
+                  <div class="col-100">
+                    <input type="text" disabled id="reason" name="reason" placeholder="Your reason.." ngModel="{{viewreason.customerBlockedData.reason.name}}" >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-100">
+                    <label for="ph">Comment</label>
+                  </div>
+                  <div class="col-100">
+                    <textarea id="ph" disabled name="phone" rows="5" placeholder="Enter your comment.." ngModel="{{viewreason.customerBlockedData.comment}}"></textarea>
+                  </div>
+                </div>
+                </div>
+        </ng-template>
+    </p-overlayPanel>
+  
+  
+      </p-tabPanel>
+
+    <p-tabPanel header="Blocked" >
+      <div class="card">
+        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll" [paginator]="true" [totalRecords]="totalRecords"
+          [globalFilterFields]="['title']"   [value]="blockedcustomer" (onPage)="LazyLoadBlockCustomer($event)" [rows]="perPage"
+          [rowsPerPageOptions]="[5,10,25,50,100]"  [resizableColumns]="true" [scrollable]="true" [lazy]="true"
+              scrollHeight="380px" sortMode="multiple">
+        
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="max-width:45px">NO</th>
+                    <th style="min-width:110px;" >NAME</th>
+                    <th style="min-width:110px;">EMAIL</th>
+                    <th style="min-width:110px;">PHONE</th>
+                    <th style="max-width:45px"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                    <td title={{product.name}}  style="min-width:110px;">{{product.name}}</td>
+                    <td title={{product.email}} (click)="ShowCustomer(product)" style="min-width:110px;cursor:pointer;color: rgb(40, 150, 214);">{{product.email}}</td>
+                    <td style="min-width:110px;">{{product.phone}}</td>
+                   
+                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="showBlocked($event,product)"></i></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <p-overlayPanel #ob>
+        <ng-template pTemplate>
+            <ul>      
+                <li style="cursor:pointer" (click)="UnblockCustomer(customerdetails)">UnBlock</li>
+                <HR SIZE="1">
+                <li style="cursor:pointer" (click)="ArchiveCustomer(customerdetails)">Archive</li>
+            </ul>
+        </ng-template>
+    </p-overlayPanel>
+   
+    <p-overlayPanel #all>
+        <ng-template pTemplate>
+            <ul>      
+                <li style="cursor:pointer" (click)="UnblockCustomer(customerdetails)">Activate</li>
+                <HR SIZE="1">
+                <li style="cursor:pointer" (click)="ArchiveCustomer(customerdetails)">Block</li>
+            </ul>
+        </ng-template>
+    </p-overlayPanel>
+    <p-overlayPanel #vo [showCloseIcon]="true">
+      <ng-template pTemplate>
+          <div class="container">
+              <div class="row">
+                <div class="col-100">
+                  <label for="fname">Reason</label>
+                </div>
+                <div class="col-100">
+                  <input type="text" disabled id="reason" name="reason" placeholder="Your reason.." ngModel="{{viewreason.customerBlockedData.reason.name}}" >
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-100">
+                  <label for="ph">Comment</label>
+                </div>
+                <div class="col-100">
+                  <textarea id="ph" disabled name="phone" rows="5" placeholder="Enter your comment.." ngModel="{{viewreason.customerBlockedData.comment}}"></textarea>
+                </div>
+              </div>
+              </div>
+      </ng-template>
+  </p-overlayPanel>
+
+
+    </p-tabPanel>
+
+  </p-tabView>
+</div>
+<p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+</p-confirmDialog>
+<!--Block Reason-->
+<p-dialog header="Add Block Reason" [(visible)]="blockreason"  [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+  <form [formGroup]="AddBlockForm" (ngSubmit)="SubmitReason()" >
+    <div class="container">
+    <div class="row">
+      <div class="col-100">
+        <label for="fname">Reason</label>
+      </div>
+      <div class="col-100">
+        <select id="blockreason" formControlName="blockreason" >
+            <option *ngFor="let item of Blockreason" value="{{item._links.self.href}}" >{{item.name}}</option>
+          </select>
+          <div *ngIf="getControl['blockreason'].touched && getControl['blockreason'].invalid" class="text-danger">
+            <div *ngIf="getControl['blockreason'].errors?.['required']">Reason is required.</div>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-100">
+        <label for="ph">Comment</label>
+      </div>
+      <div class="col-100">
+        <textarea id="blockcomment" formControlName="blockcomment" rows="5" placeholder="Enter your comment.."></textarea>
+        <div *ngIf="getControl['blockcomment'].touched && getControl['blockcomment'].invalid" class="text-danger">
+          <div *ngIf="getControl['blockcomment'].errors?.['required']">comment is required.</div>
+        </div>
+      </div>
+    </div>
+   
+   
+    <div class="row" >
+      <div class="col-100">
+          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+      </div>
+  </div>
+  </div>
+  </form>
+
+</p-dialog>
+<p-overlayPanel #mb>
+  <ng-template pTemplate>
+      <ul>
+          <li style="cursor:pointer" (click)="exportExcel()">Export</li>
+          
+      </ul>
+  </ng-template>
+</p-overlayPanel>
+<p-overlayPanel #ma>
+  <ng-template pTemplate>
+      <ul>
+          <li style="cursor:pointer" (click)="exportExcel()">Export</li>
+          
+      </ul>
+  </ng-template>
+</p-overlayPanel>
+

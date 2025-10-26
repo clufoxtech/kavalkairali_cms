@@ -1,0 +1,619 @@
+
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+            <div class="text-2xl font-bold tracking-tight fontcls">Edit printbook</div>
+        </div>
+        
+        <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 ">
+         
+      
+    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3" >
+    
+        <button
+                class="ml-4 " 
+                mat-stroked-button style="background-color: #8ed93b;color:white"
+            (click)="GoBack()">
+            <span class="ml-1 mr-1 fontcls">Product List</span>
+            </button>
+         
+
+</div>
+
+        </div>
+    </div>
+    
+    <!-- Main -->
+    <form [formGroup]="AddForm" (ngSubmit)="Editprintbook()" class="ml-3">
+    <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+    <p-panel header="Primary Information"  [toggleable]="true">
+        <ng-template pTemplate="icons">
+            <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
+        </ng-template>
+        
+        <div class="row">
+            <div class="col-15 mb-2">
+              <label for="depname">Cover Image</label>
+            </div>
+            <div class="col-25 mb-2">
+              <input type="file" id="file" formControlName="cover" accept=".jpg, .jpeg, .png" (change)="onFileChanged($event)" />
+            </div>
+            <div class="col-25 mb-2">
+              <img [src]="url" style="width:50px;height:50px;" *ngIf="url" />
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-50">
+              <label for="title">Title</label>
+              <input type="text"  formControlName="title"  />
+            </div>
+            <div class="col-50">
+              <label for="subtitle">Sub Title</label>
+              <input type="text"  formControlName="subtitle" />
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-50">
+              <label for="titletype">Title Type<span class="text-danger reqd">*</span></label>
+              <select  formControlName="titleType"  (change)="updateValidation()">
+                <option value="" disabled>Select</option>
+                <option value="SINGLE">Single</option>
+                <option value="MULTIPLE">Multiple</option>
+              </select>
+              <div *ngIf="getControl['titleType'].touched && getControl['titleType'].invalid" class="text-danger">
+                <div *ngIf="getControl['titleType'].errors?.required">Title type is required.</div>
+              </div>
+            </div>
+        
+            <div class="col-50">
+              <label for="authortype">Author Type<span class="text-danger reqd">*</span></label>
+              <select  formControlName="authorType"  (change)="updateValidation()">
+                <option value="" disabled>Select</option>
+                <option value="SINGLE">Single</option>
+                <option value="MULTIPLE">Multiple</option>
+              </select>
+              <div *ngIf="getControl['authorType'].touched && getControl['authorType'].invalid" class="text-danger">
+                <div *ngIf="getControl['authorType'].errors?.required">Author type is required.</div>
+              </div>
+            </div>
+          </div>
+        
+          <ng-container *ngIf="isSingleTitleMultipleAuthor()">
+            <div class="row">
+              <div class="col-50">
+                <label for="noauthor">No of Authors</label>
+                <select id="noauthor" formControlName="authorno" (change)="onAuthorCountChange($event.target.value)">
+                  <option *ngFor="let i of authorCountOptions" [value]="i">{{i}}</option>
+                </select>
+              </div>
+            </div>
+        
+            <div formArrayName="STMA">
+              <div class="row" *ngFor="let authorControl of AddForm.get('STMA').controls; let i = index" [formGroupName]="i">
+                <div class="col-50">
+                  <label for="author">Author-{{i + 1}}<span class="text-danger reqd">*</span></label>
+                  <p-dropdown formControlName="author" [options]="authorContributor" optionValue="id" optionLabel="name" [filter]="true" filterBy="name" appendTo="body" placeholder="Select">
+                  </p-dropdown>
+                  <!-- <div *ngIf="getControl['author'].touched && getControl['author'].invalid" class="text-danger">
+                    <div *ngIf="getControl['author'].errors?.required">Author is required.</div>
+                  </div> -->
+                </div>
+                <div class="col-50">
+                  <label for="royalty">Royalty-{{i + 1}} %</label>
+                  <input type="text" id="royaltyPercent" formControlName="royaltyPercent" pKeyFilter="pnum">
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        
+          <ng-container *ngIf="isMultipleTitleSingleAuthor()">
+            <div class="row">
+              <div class="col-50">
+                <label for="notitle">No of Titles</label>
+                <select id="notitle" formControlName="titleno" (change)="onTitleCountChange($event.target.value)">
+                  <option *ngFor="let i of titleCountOptions" [value]="i">{{i}}</option>
+                </select>
+              </div>
+            </div>
+        
+            <div class="row" formArrayName="MTSA">
+              <div class="col-50" *ngFor="let chapterControl of AddForm.get('MTSA').controls; let i = index" [formGroupName]="i">
+                <label for="title">Title Chapter-{{i + 1}}<span class="text-danger reqd">*</span></label>
+                <input type="text" id="title" formControlName="title">
+              </div>
+            </div>
+        
+            <div class="row">
+              <div class="col-50">
+                <label for="author">Author<span class="text-danger reqd">*</span></label>
+                <p-dropdown formControlName="author" [options]="authorContributor" optionValue="id" optionLabel="name" [filter]="true" filterBy="name" appendTo="body" placeholder="Select">
+                </p-dropdown>
+              </div>
+              <div class="col-50">
+                <label for="royalty">Royalty %</label>
+                <input type="text" id="royaltyPercent" formControlName="royaltyPercent" pKeyFilter="pnum" />
+              </div>
+            </div>
+          </ng-container>
+        
+          <ng-container *ngIf="isMultipleTitleMultipleAuthor()">
+            <div class="row">
+              <div class="col-50">
+                <label for="notitle">No of Titles</label>
+                <select id="notitle" formControlName="titleno" (change)="onTitleCountChange($event.target.value)">
+                  <option *ngFor="let i of titleCountOptions" [value]="i">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-50">
+                <label for="noauthor">No of Authors</label>
+                <input type="text" id="noauthor" formControlName="authorno" [ngModel]="selectedcount" disabled>
+              </div>
+            </div>
+        
+            <div class="row" formArrayName="MTMA">
+              <div class="col-50" *ngFor="let chapterControl of AddForm.get('MTMA').controls; let i = index" [formGroupName]="i">
+                <label for="title">Title Chapter-{{i + 1}}<span class="text-danger reqd">*</span></label>
+                <input type="text" id="title" formControlName="title" />
+              </div>
+              <div class="col-50">
+                <label for="author">Author-{{i + 1}}<span class="text-danger reqd">*</span></label>
+                <p-dropdown formControlName="author" [options]="authorContributor" optionValue="id" optionLabel="name" [filter]="true" filterBy="name" appendTo="body" placeholder="Select">
+                </p-dropdown>
+              </div>
+              <div class="col-50">
+                <label for="royalty">Royalty {{i + 1}} %</label>
+                <input type="text" id="royaltyPercent" formControlName="royaltyPercent" pKeyFilter="pnum" />
+              </div>
+            </div>
+          </ng-container>
+        
+          <ng-container *ngIf="issingleTitleSingleAuthor()">
+            <div class="row">
+              <div class="col-50">
+                <label for="author">Author<span class="text-danger reqd">*</span></label>
+                <p-dropdown formControlName="author" [options]="authorContributor" optionValue="id" optionLabel="name" [filter]="true" filterBy="name" appendTo="body" placeholder="Select">
+                </p-dropdown>
+              </div>
+        
+              <div class="col-50">
+                <label for="royalty">Royalty %</label>
+                <input type="text" id="royalty" formControlName="royaltyPercent" pKeyFilter="pnum" />
+              </div>
+            </div>
+          </ng-container>
+        <div class="row">
+            <div class="col-50">
+                <label for="language">Language</label>
+                <select id="language" formControlName="language" >
+                    <option value="" disabled selected>Select</option>
+                    <option *ngFor="let item of language" value="{{item.id}}"
+                    >{{item.name}}</option>
+                  </select>
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            <div class="col-50">
+                <label for="edition">Edition</label>
+                <input type="text" id="edition" pKeyFilter="pint" formControlName="edition" >
+               
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            <div class="col-50">
+                <label for="volume">Volume</label>
+                <input type="text" id="volume" pKeyFilter="pint" formControlName="volume" >
+                
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            <div class="col-50">
+                <label for="superkey">Superkey</label>
+                <input type="text" id="superkey" formControlName="superKey" >
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+           
+        </div>
+        <div class="row">
+         
+          <div class="col-50">
+            <label for="hsnCode">HSN Code</label>
+            <input type="text" id="hsnCode" formControlName="hsnCode" >
+            <!-- <div *ngIf="getControl['hsnCode'].touched && getControl['hsnCode'].invalid" class="text-danger">
+                      <div *ngIf="getControl['hsnCode'].errors?.['required']">HSNCode is required.</div>
+                    </div> -->
+        </div>
+            
+            <div class="col-50">
+                <label for="deliveryPeriod">Delivery Period (No of days)</label>
+                <input type="text" id="deliveryPeriod" pKeyFilter="pint" formControlName="deliveryPeriod" >
+                
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            </div>
+        <div class="row">
+           
+          <div class="col-50">
+            <label for="productcode">Product Code</label>
+            <input type="text" id="productcode" formControlName="productCode" >
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                      <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                    </div> -->
+        </div>
+            
+            <div class="col-50">
+                <label for="isbnformat">ISBN Format</label>
+                <select id="isbnformat" formControlName="isbnFormat" (change)="ISBNformat($event)" >
+                    <option value="" disabled>Select</option>
+                    <option value="DIGIT_10">10 Digit</option>
+                    <option value="DIGIT_13">13 Digit</option>
+                  </select> 
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            <div class="col-50">
+                <label for="isbn" >ISBN</label>
+                <input type="text" id="isbn" formControlName="isbnCode" >
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+                        <div *ngIf="getControl['isbnCode'].errors?.minlength" class="text-danger"> 
+                          Isbn code must contain a selected number.
+                     </div> 
+            </div>
+            <div class="col-50">
+              <label for="expirydate">Expiry Date</label>
+              
+                <input type="date" formControlName="expiryDate" >
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+          
+        </div>
+      
+       
+   
+        <div class="row">
+         
+        <div class="col-50">
+          <label for="pages">No of Pages</label>
+          <input type="text" id="pages" pKeyFilter="pint" formControlName="pages" > 
+          <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                    <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                  </div> -->
+      </div>
+            
+      <div class="col-25">
+        <label for="weight">Weight (gram)</label>
+        <input type="text" id="weight" pKeyFilter="pnum" formControlName="weight" >
+       
+        <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                  <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                </div> -->
+               
+    </div>
+    <div class="col-25">
+      <label for="bindingType">Binding Type</label>
+      <select id="bindingType" formControlName="bindingType" >
+        <option value="" disabled selected>Select</option>
+        <option *ngFor="let item of BindingType" value="{{item.id}}"
+        >{{item.type}}</option>
+          
+        </select>
+      <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+              </div> -->
+             
+  </div>
+   
+   
+            
+           
+        </div>
+       
+        <div class="row">
+          
+      <div class="col-50">
+          <label for="category">Category</label>
+                <p-multiSelect formControlName="categories" (onPanelHide)="CategoryOnClose()" placeholder="Select" [options]="category"  (onChange)="add($event)" optionLabel="name" optionValue="id"></p-multiSelect>
+                <div class="text-inside">
+                <mat-chip class="outside"
+                *ngFor="let category of filtercategory"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(category)">
+                {{category.name}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip> 
+          </div>     
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+                    
+       
+      </div>
+      <div class="col-50">
+        <label for="subcategory">Sub Category</label>
+        <p-multiSelect formControlName="subCategories"  [options]="subcategory" placeholder="Select"  (onChange)="addsubcategory($event)" optionLabel="name" optionValue="id"></p-multiSelect>
+              <div class="text-inside">
+              <mat-chip class="outside"
+              *ngFor="let subcategory of filtersubcategory"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="removesubcategory(subcategory)">
+              {{subcategory.name}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip> 
+        </div>    
+        <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                  <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                </div> -->
+    </div>
+            
+            <div class="col-90">
+                <label for="summary">Summary</label>
+                <textarea id="summary" formControlName="summary"  rows="2" ></textarea>
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+        </div>
+       
+    </p-panel>
+    <p-panel header="Title Information"  [toggleable]="true">
+        <ng-template pTemplate="icons">
+           
+            <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
+        </ng-template>
+        <div class="row">
+          <div class="col-40">
+              <label >Translation</label>
+              <p-radioButton  (onClick)="IsTranslated($event,true)" formControlName="isTranslation" value="true" inputId="Translation1" ngModel="{{IsTranslation}}"  label="Yes"  class="mr-2 fontcls"></p-radioButton>
+              <p-radioButton (onClick)="IsTranslated($event,false)" formControlName="isTranslation" value="false" inputId="Translation2" ngModel="{{IsTranslation}}"  label="No"  class="mr-1 fontcls" ></p-radioButton>
+          </div>
+         
+      </div>
+      <div class="row" *ngIf="IsTranslation">
+        <div class="col-50">
+          <label for="englishtitle">English Title</label>
+         <input type="text" id="englishTitle" formControlName="englishTitle" >
+            <!--ngModel="{{printbook?.englishTitle}}" <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                      <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                    </div> -->
+        </div>
+         
+        <div class="col-50">
+          <label for="originaltitle">Original Title</label>
+          <input type="text" id="englishTitle" class="nameCapital" formControlName="originalTitle" >
+            <!--ngModel="{{printbook?.originalTitle}}"  <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                      <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                    </div> -->
+        </div>
+      </div>
+  
+     
+      <div class="row" >
+        <div class="col-50" *ngIf="IsTranslation">
+          <label for="originallanguage">Original Language</label>
+            <select id="originallanguage" class="nameCapital" formControlName="originalLanguage"  >
+              <option value="" disabled selected>Select</option>
+                <option *ngFor="let item of language" value="{{item.id}}"
+                    >{{item.name}}</option>
+              </select>
+            <!--ngModel="{{printbook.originalLanguage.id}}" <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                      <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                    </div> -->
+        </div>
+          <div class="col-50" >
+            <label for="countryorigin">Country of Origin</label>
+              <select id="countryorigin" formControlName="countryOfOrigin" >
+                <option value="" disabled selected>Select</option>
+                  <option *ngFor="let item of country" value="{{item.id}}"
+                  >{{item.name}}</option>
+                </select>
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+      </div>
+        <div class="row">
+           
+            <div class="col-50">
+              <label for="publisher">Publisher</label>
+                <select id="publisher" formControlName="publisher" >
+                  <option value="" disabled selected>Select</option>
+                    <option *ngFor="let item of publisher" value="{{item.id}}"
+                    >{{item.name}}</option>
+                  </select>
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+          
+            <div class="col-50">
+              <label for="copyright">Copy Right</label>
+                <select id="copyright" formControlName="copyrightType" (change)="Thirdparty($event)" >
+                    <option value="" disabled>Select</option>
+                    <option value="OWN">Own</option>
+                    <option value="THIRD">Third Party</option>
+                  </select>
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+           
+           
+        </div>
+      
+        <div class="row">
+          
+          
+          <div class="col-50" [attr.disabled]="!thirdParty ?'':null">
+            <label for="owner" >Owner</label>
+              <select id="owner" formControlName="copyright"  [attr.disabled]="!thirdParty ?'':null">
+                  <option value="" disabled>Select</option>
+                  <option *ngFor="let item of publisher" value="{{item.id}}"
+                    >{{item.name}}</option>
+                </select>
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+          <div class="col-50">
+            <label for="editor">Editor</label>
+            <p-multiSelect formControlName="editor"  placeholder="Select" [options]="editorContributor"   (onChange)="addeditor($event)" optionLabel="name" optionValue="id" ></p-multiSelect>
+            <div class="text-inside">
+            <mat-chip class="outside"
+            *ngFor="let editor of filtereditor"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="removeeditor(editor)">
+            {{editor.name}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip> 
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+            
+          </div>  
+        </div>
+        <div class="row">
+          <div class="col-50">
+            <label for="translator">Translator</label>
+            <p-multiSelect formControlName="translator"  placeholder="Select" [options]="translatorContributor"   (onChange)="addtranslator($event)" optionLabel="name" optionValue="id" ></p-multiSelect>
+            <div class="text-inside">
+            <mat-chip class="outside"
+            *ngFor="let translator of filtertranslator"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="removetranslator(translator)">
+            {{translator.name}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip> 
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+          </div>
+          
+          <div class="col-50">
+            <label for="illustrator">Illustrator</label>
+            <p-multiSelect formControlName="illustrator"  placeholder="Select" [options]="illustratorContributor"  (onChange)="addillustrator($event)" optionLabel="name" optionValue="id"></p-multiSelect>
+            <div class="text-inside">
+            <mat-chip class="outside"
+            *ngFor="let illustrator of filterillustrator"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="removeillustrator(illustrator)">
+            {{illustrator.name}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip> 
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+          </div>
+          </div>
+          <div class="row">
+          <div class="col-50">
+            <label for="compiler">Compiler</label>
+            <p-multiSelect formControlName="compiler"  placeholder="Select" [options]="compilerContributor"  (onChange)="addcompiler($event)" optionLabel="name" optionValue="id"></p-multiSelect>
+            <div class="text-inside">
+            <mat-chip class="outside"
+            *ngFor="let compiler of filtercompiler"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="removecompiler(compiler)">
+            {{compiler.name}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip> 
+              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                        <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                      </div> -->
+          </div>
+          </div>
+            <div class="col-50">
+              <label for="imprint">Imprint</label>
+                <select id="imprint" formControlName="imprint" >
+                  <option value="" disabled selected>Select</option>
+                    <option *ngFor="let item of imprint" value="{{item.id}}"
+                    >{{item.name}}</option>
+                  </select>
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+          
+           
+        </div>
+        
+    </p-panel>
+    <p-panel header="Price Information"  [toggleable]="true">
+        <ng-template pTemplate="icons">
+            
+            <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
+        </ng-template>
+    
+        <div class="row">
+           
+          
+          
+            <div class="col-50">
+              <label for="mrp">MRP</label>
+                <input type="text" pKeyFilter="pnum" id="mrp" formControlName="mrp" (blur)="StorePrice()" >
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            <div class="col-50">
+              <label for="tax">Tax %</label>
+                <input type="text" pKeyFilter="pnum" id="tax" formControlName="taxPercent" (blur)="StorePrice()" ngModel="{{printbook?.printBook?.taxPercent}}">
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+            <div class="col-50">
+              <label for="discount">Discount %</label>
+                <input type="text" pKeyFilter="pnum" id="discount" formControlName="discountPercent" (blur)="StorePrice()" >
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+            </div>
+      
+        <div class="col-50">
+          <label for="storePrice">Store Price</label>
+            <input type="text" pKeyFilter="pnum" id="storePrice" formControlName="storePrice" >
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                      <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                    </div> -->
+        </div>
+    </div>
+        
+     
+    </p-panel>
+    <div class="row" >
+        <div class="col-100 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="GoBack()">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
+        </div>
+    </div>
+</p-scrollPanel>
+</form>
+    </div>
+    <p-toast position="bottom-right"></p-toast>
+
+
+

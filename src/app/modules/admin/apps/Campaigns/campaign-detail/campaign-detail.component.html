@@ -1,0 +1,124 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
+      <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
+          <div class="text-2xl font-bold tracking-tight fontcls">Offer Details</div>
+      </div>
+  </div>
+  <p-scrollPanel [style]="{width: '100%', height: '450px'}">
+    <form action="action_page.php">
+      <div class="container ml-2">
+        <div class="flex  flex-auto">
+          <div class="col-75">
+            <div class="row">
+              <div class="col-30">
+                <label for="fname">Name</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.name}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">Start Date</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.startDate  | date: 'dd/MM/yyyy'}} {{offerDetails?.startTime}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="lname">End Date</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.endDate  | date: 'dd/MM/yyyy'}} {{offerDetails?.endTime}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">eligibility</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.eligibility}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">Amount Or Percentage</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.amountOrPercentage}}</label>
+              </div>
+            </div> 
+            <div class="row">
+              <div class="col-30">
+                <label for="country">User limit</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.userLimit}}</label>
+              </div>
+            </div>
+    
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">Type</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.type}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">status</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.status}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">description</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.description}}</label>
+              </div>
+            </div>
+
+              <div class="row">
+              <div class="col-30">
+                <label for="subject">isNoLimit</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.isNoLimit}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">bookType</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.bookType}}</label>
+              </div>
+              <div class="col-30">
+                <label for="subject">maxDiscount</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.maxDiscount}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-30">
+                <label for="subject">individualLimit</label>
+              </div>
+              <div class="col-50">
+                <label for="fname">{{offerDetails?.individualLimit}}</label>
+              </div>
+            </div>
+          
+          </div>
+         
+        </div>
+      </div>
+    </form>
+  </p-scrollPanel>
+  </div>
+  

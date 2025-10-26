@@ -1,0 +1,724 @@
+<div
+  class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+    <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+      <div class="text-xl font-bold tracking-tight fontcls">Coupon List</div>
+    </div>
+    <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+      <!-- Search -->
+      <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded md:min-w-64 xs:min-w-64">
+        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search'"
+          (input)="dt1.filterGlobal($event.target.value, 'contains') ||  dt3.filterGlobal($event.target.value, 'contains')">
+        <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
+      </mat-form-field>
+      <button class="ml-4 " mat-stroked-button style="background-color:#8ed93b;color:white" (click)="NewCoupon()">
+        <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white"></mat-icon>
+        <span class="ml-1 mr-1">Add</span>
+      </button>
+    </div>
+  </div>
+  <p-tabView class="ml-4" [(activeIndex)]="mainIndex" (onChange)="handleMainTab($event)">
+    <p-tabPanel header="Print">
+      <p-tabView [(activeIndex)]="index" (onChange)="handleTab($event)">
+        <p-tabPanel header="Active">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="activeCouponsPrint" [lazy]="true"
+              (onPage)="LazyLoadActiveCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px" sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+                  <th>ORDERS</th>
+                  <th>BOOKS</th>
+                  <th>CUSTOMERS</th>
+                  <th>TOTAL REVENUE</th>
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.startDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.endDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showActive($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <p-overlayPanel #op>
+            <ng-template pTemplate>
+              <ul>
+                <li (click)="ChangeStatus(couponDetail,'DEACTIVE')" style="cursor:pointer">De-activate</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+        <p-tabPanel header="De-Activated">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="deactiveCouponsPrint"
+              (onPage)="LazyLoadDeActivatedCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [lazy]="true" [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+              sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+                  <th>CUSTOMERS</th>
+                  <th>TOTAL REVENUE</th>
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.startDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.endDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td></td>
+                  <td></td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showDeActivated($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #al>
+            <ng-template pTemplate>
+              <ul>
+                <li style="cursor:pointer" (click)="Delete(couponDetail)">Delete</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+        <p-tabPanel header="New">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="newCouponListPrint"
+              (onPage)="LazyLoadDeActivatedCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [lazy]="true" [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+              sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showNew($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #nw>
+            <ng-template pTemplate>
+              <ul>
+                <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                <HR SIZE="1">
+                  <li (click)="EditCoupon(couponDetail)" style="cursor:pointer">Edit</li>
+                  <HR SIZE="1">
+                <li style="cursor:pointer" (click)="Delete(couponDetail)">Delete</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+      </p-tabView>
+    </p-tabPanel>
+    <p-tabPanel header="ebook">
+      <p-tabView [(activeIndex)]="index" (onChange)="handleTab($event)">
+        <p-tabPanel header="Active">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="activeCouponsEBook" [lazy]="true"
+              (onPage)="LazyLoadActiveCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px" sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+                  <th>ORDERS</th>
+                  <th>BOOKS</th>
+                  <th>CUSTOMERS</th>
+                  <th>TOTAL REVENUE</th>
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.startDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.endDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR
+                    '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showActive($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #op>
+            <ng-template pTemplate>
+              <ul>
+                <li (click)="ChangeStatus(couponDetail,'DEACTIVE')" style="cursor:pointer">De-activate</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+        <p-tabPanel header="De-Activated">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="deactiveCouponsEBook"
+              (onPage)="LazyLoadDeActivatedCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [lazy]="true" [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+              sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+                  <th>CUSTOMERS</th>
+                  <th>TOTAL REVENUE</th>
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.startDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.endDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td></td>
+                  <td></td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showDeActivatedEAudio($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #eaal>
+            <ng-template pTemplate>
+              <ul>
+                <li style="cursor:pointer" (click)="Delete(couponDetail)">Delete</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+        <p-tabPanel header="New">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="newCouponListEBook"
+              (onPage)="LazyLoadDeActivatedCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [lazy]="true" [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+              sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showNewEAudio($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #eanw>
+            <ng-template pTemplate>
+              <ul>
+                <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                <HR SIZE="1">
+                <li (click)="EditCoupon(couponDetail)" style="cursor:pointer">Edit</li>
+                <HR SIZE="1">
+                <li style="cursor:pointer" (click)="Delete(couponDetail)">Delete</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+      </p-tabView>
+    </p-tabPanel> 
+    <p-tabPanel header="Audio">
+      <p-tabView [(activeIndex)]="index" (onChange)="handleTab($event)">
+        <p-tabPanel header="Active">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="activeCouponsAudio" [lazy]="true"
+              (onPage)="LazyLoadActiveCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px" sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+                  <th>ORDERS</th>
+                  <th>BOOKS</th>
+                  <th>CUSTOMERS</th>
+                  <th>TOTAL REVENUE</th>
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.startDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.endDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR
+                    '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showActive($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #op>
+            <ng-template pTemplate>
+              <ul>
+                <li (click)="ChangeStatus(couponDetail,'DEACTIVE')" style="cursor:pointer">De-activate</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+        <p-tabPanel header="De-Activated">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="deactiveCouponsAudio"
+              (onPage)="LazyLoadDeActivatedCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [lazy]="true" [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+              sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+                  <th>START DATE</th>
+                  <th>END DATE</th>
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+                  <th>CUSTOMERS</th>
+                  <th>TOTAL REVENUE</th>
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.startDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.endDate | date:'dd-MM-yyyy' }}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td></td>
+                  <td></td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showDeActivatedEAudio($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #eaal>
+            <ng-template pTemplate>
+              <ul>
+                <li style="cursor:pointer" (click)="Delete(couponDetail)">Delete</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+        <p-tabPanel header="New">
+          <div class="card ">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt3 responsiveLayout="scroll"
+              [totalRecords]="totalRecords" [globalFilterFields]="['title']" [value]="newCouponListAudio"
+              (onPage)="LazyLoadDeActivatedCoupons($event)" [rows]="perPage" [rowsPerPageOptions]="[5,10,25,50,100]"
+              [lazy]="true" [paginator]="true" [resizableColumns]="true" [scrollable]="true" scrollHeight="380px"
+              sortMode="multiple">
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th style="max-width:45px">NO</th>
+                  <th>COUPON NAME</th>
+                  <th>COUPON ID</th>
+
+                  <th>TYPE</th>
+                  <th>VALUE</th>
+                  <th>LIMIT</th>
+
+                  <th style="max-width:45px"></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td title={{product.name}}>{{product.name}}</td>
+                  <td>{{product.cid}}</td>
+                  <td>{{product.type}}</td>
+                  <td>{{(product.type==='PERCENTAGE')?product.amountOrPercentage+' %':'INR '+product.amountOrPercentage}}
+                  </td>
+                  <td>{{(product.individualLimit)===1 ? 'Once':'Unlimited'}}</td>
+                  <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v"
+                      (click)="showNewEAudio($event,product)"></i></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+
+          <p-overlayPanel #eanw>
+            <ng-template pTemplate>
+              <ul>
+                <li style="cursor:pointer" (click)="dc.toggle($event)">Activate</li>
+                <HR SIZE="1">
+                <li (click)="EditCoupon(couponDetail)" style="cursor:pointer">Edit</li>
+                <HR SIZE="1">
+                <li style="cursor:pointer" (click)="Delete(couponDetail)">Delete</li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+        </p-tabPanel>
+      </p-tabView>
+    </p-tabPanel>
+  </p-tabView>
+
+  <p-dialog [(visible)]="display" header=" Coupon" (onHide)="Cancel()"
+    [breakpoints]="{'960px': '55vw', '640px': '95vw'}" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+
+
+    <form [formGroup]="AddForm" (ngSubmit)="AddCoupon()" novalidate>
+      <div class="container">
+        <div class="row">
+          <div class="col-25">
+            <label for="couponname">Coupon Name</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="couponname" formControlName="name" [(ngModel)]="couponDetail.name"
+              placeholder="Type..">
+            <div *ngIf="getControl['name'].touched && getControl['name'].invalid" class="text-danger">
+              <div *ngIf="getControl['name'].errors?.['required']">Coupon name is required.</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="couponid">Coupon Id</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="couponid" formControlName="couponId" [(ngModel)]="couponDetail.cid"
+              placeholder="Type..">
+            <div *ngIf="getControl['couponId'].touched && getControl['couponId'].invalid" class="text-danger">
+              <div *ngIf="getControl['couponId'].errors?.['required']">Id is required.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" hidden>
+          <div class="col-25">
+            <label for="eligibility">Eligibility</label>
+          </div>
+          <div class="col-28">
+            <p-dropdown [options]="EligibilityType" formControlName="eligibility" optionValue="code"
+              [(ngModel)]="couponDetail.eligibility" appendTo="body" optionLabel="name"
+              placeholder="Select"></p-dropdown>
+          </div>
+
+        </div>
+
+        <div class="row" hidden>
+          <div class="col-25">
+            <label for="type">Coupon Limit</label>
+          </div>
+          <div class="col-28">
+            <p-dropdown [options]="LimitType" formControlName="isNoLimit" optionValue="code"
+              [(ngModel)]="couponDetail.isNoLimit" appendTo="body" (onChange)="Limit($event)" optionLabel="name"
+              placeholder="Select"></p-dropdown>
+
+          </div>
+          <div class="col-15" *ngIf="selectedLimitType==true">
+            <label for="depname">Limit</label>
+          </div>
+          <div class="col-20" *ngIf="selectedLimitType==true">
+            <input type="text" id="depname" formControlName="userLimit" [(ngModel)]="couponDetail.userLimit"
+              placeholder="user limit..">
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+              <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+            </div> -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-25">
+            <label for="depname">Coupon Type</label>
+          </div>
+          <div class="col-28">
+            <p-dropdown [options]="OfferType" formControlName="type" optionValue="code" [(ngModel)]="couponDetail.type"
+              appendTo="body" (onChange)="CouponValue($event)" optionLabel="name" placeholder="Select"></p-dropdown>
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+          </div>
+          <div class="col-15" *ngIf="selectedOfferType==='PERCENTAGE'">
+            <label for="amountOrPercentage">Percentage</label>
+          </div>
+          <div class="col-20" *ngIf="selectedOfferType==='PERCENTAGE'">
+            <input type="text" id="depname" formControlName="amountOrPercentage"
+              [(ngModel)]="couponDetail.amountOrPercentage" placeholder="percentage">
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+          </div>
+          <div class="col-15" *ngIf="selectedOfferType==='AMOUNT'">
+            <label for="amountOrPercentage">Amount</label>
+          </div>
+          <div class="col-20" *ngIf="selectedOfferType==='AMOUNT'">
+            <input type="text" id="depname" formControlName="amountOrPercentage"
+              [(ngModel)]="couponDetail.amountOrPercentage" placeholder="amount">
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+          </div>
+        </div>
+        <div class="row" *ngIf="selectedOfferType==='PERCENTAGE'">
+          <div class="col-25">
+            <label for="depname">Max Discount</label>
+          </div>
+          <div class="col-28">
+            <input type="text" id="depname" formControlName="maxDiscount" [(ngModel)]="couponDetail.maxDiscount"
+              placeholder="percentage">
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="couponBookType">Format</label>
+          </div>
+          <div class="col-28">
+            <p-dropdown [options]="ApplicableType" formControlName="couponBookType" optionValue="code"
+              [(ngModel)]="couponDetail.couponBookType" appendTo="body" optionLabel="name"
+              placeholder="Select"></p-dropdown>
+            <!-- <div *ngIf="getControl['couponBookType'].touched && getControl['couponBookType'].invalid" class="text-danger">
+              <div *ngIf="getControl['couponBookType'].errors?.['required']">Name is required.</div>
+            </div> -->
+          </div>
+          <div class="col-15">
+            <label for="amountOrPercentage">Individual Limit</label>
+          </div>
+          <div class="col-20">
+            <p-dropdown [options]="IndividualLimit" formControlName="individualLimit" optionValue="code"
+              [(ngModel)]="couponDetail.individualLimit" appendTo="body" optionLabel="name"
+              placeholder="Select"></p-dropdown>
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+              <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+            </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="depname">Coupon Description</label>
+          </div>
+          <div class="col-75">
+            <textarea id="depname" formControlName="description" [(ngModel)]="couponDetail.description"
+              placeholder="Type.."></textarea>
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="detail">Coupon Details</label>
+          </div>
+          <div class="col-75">
+            <textarea id="depname" formControlName="detail" [(ngModel)]="couponDetail.detail"
+              placeholder="Type.."></textarea>
+            <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+          </div> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-90 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </p-dialog>
+
+  <p-overlayPanel #dc>
+    <ng-template pTemplate>
+      <form [formGroup]="ActivateForm" (ngSubmit)="ActivateCoupon()" novalidate>
+        <div class="row">
+          <div class="col-25">
+            <label for="startDate">Start Date</label>
+          </div>
+          <div class="col-28">
+            <input type="date" id="startDate" formControlName="startDate" placeholder="Type..">
+            <div *ngIf="getDateControl['startDate'].touched && getDateControl['startDate'].invalid" class="text-danger">
+              <div *ngIf="getDateControl['startDate'].errors?.['required']">Start date is required.</div>
+            </div>
+          </div>
+          <div class="col-15">
+            <label for="startTime">Time</label>
+          </div>
+          <div class="col-28">
+            <input type="time" id="depname" formControlName="startTime" placeholder="Type..">
+            <div *ngIf="getDateControl['startTime'].touched && getDateControl['startTime'].invalid" class="text-danger">
+              <div *ngIf="getDateControl['startTime'].errors?.['required']">Start time is required.</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="endDate">End Date</label>
+          </div>
+          <div class="col-28">
+            <input type="date" id="endDate" formControlName="endDate" placeholder="Type..">
+            <div *ngIf="getDateControl['endDate'].touched && getDateControl['endDate'].invalid" class="text-danger">
+              <div *ngIf="getDateControl['endDate'].errors?.['required']">End date is required.</div>
+            </div>
+          </div>
+          <div class="col-15">
+            <label for="endTime">Time</label>
+          </div>
+          <div class="col-28">
+            <input type="time" id="depname" formControlName="endTime" placeholder="Type..">
+            <div *ngIf="getDateControl['endTime'].touched && getDateControl['endTime'].invalid" class="text-danger">
+              <div *ngIf="getDateControl['endTime'].errors?.['required']">Time is required.</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-90 text-right fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm">CANCEL</button>
+            <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+  </p-overlayPanel>
+
+  <p-confirmDialog [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
+  </p-confirmDialog>

@@ -1,0 +1,73 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+  
+    <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+        <div class="col-sm-4 col-xs-4 col-md-4 pl-3">
+            <div class="text-xl font-bold tracking-tight fontcls">Order details</div>
+        </div>
+    </div>
+    <!-- Main -->
+  
+    <div class="card ml-4 mr-3">
+        <p-tabView >
+          <p-tabPanel header="eBook/Audio" >
+        <p-table styleClass="p-datatable-sm" [autoLayout]="true"[value]="orders" #dt1 responsiveLayout="scroll"  [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="300px" >
+           
+            <ng-template pTemplate="header"  let-columns>
+                <tr>
+                    <th style="max-width:45px">NO</th>
+                    <th >ORDER NO</th>
+                    <th>AMOUNT</th>
+                    <th>BOOKS</th>
+                    <th >DATE</th>
+                    <th>STATUS</th>
+                    <th >CHANNEL</th>
+                </tr>
+                
+            </ng-template>
+            <ng-template pTemplate="body"let-product let-columns="columns"  let-rowIndex="rowIndex">
+                <tr>
+                  <td style="max-width:45px">{{rowIndex+1}}</td>
+                  <td  (click)="ShowOrder(product)" style="cursor:pointer;color: rgb(40, 150, 214);" >{{product.orderNumber}}</td >
+                  <td >{{product.amount}}</td >
+                    <td>{{product.bookCount}}</td>
+                  <td  >{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td >
+                  <td >{{product.orderStatus}}</td >
+                  <td  >{{product.channel}}</td >
+                </tr>
+            </ng-template>
+        </p-table>
+        </p-tabPanel>
+        <p-tabPanel header="Print" >
+          <p-table styleClass="p-datatable-sm" [autoLayout]="true"[value]="orders" #dt1 responsiveLayout="scroll"  [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="300px" >
+             
+              <ng-template pTemplate="header"  let-columns>
+                  <tr>
+                      <th style="max-width:45px">NO</th>
+                      <th >ORDER NO</th>
+                      <th>AMOUNT</th>
+                      <th>BOOKS</th>
+                      <th >DATE</th>
+                      <th>STATUS</th>
+                      <th >CHANNEL</th>
+                  </tr>
+                  
+              </ng-template>
+              <ng-template pTemplate="body"let-product let-columns="columns"  let-rowIndex="rowIndex">
+                  <tr>
+                    <td style="max-width:45px">{{rowIndex+1}}</td>
+                    <td  (click)="ShowOrder(product)" style="cursor:pointer;color: rgb(40, 150, 214);" >{{product.orderNumber}}</td >
+                    <td >{{product.amount}}</td >
+                      <td>{{product.bookCount}}</td>
+                    <td  >{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td >
+                    <td >{{product.orderStatus}}</td >
+                    <td  >{{product.channel}}</td >
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+
+

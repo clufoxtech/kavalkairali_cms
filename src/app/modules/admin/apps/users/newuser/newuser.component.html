@@ -1,0 +1,72 @@
+<p-dialog header="New User" [(visible)]="closable" (onHide)="Cancel()" [breakpoints]="{'960px': '50vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+
+    <form [formGroup]="AddUserForm" (ngSubmit)="AddUser()" >
+        <div class="container">
+            <label><b>Name</b><span class="text-danger reqd">*</span></label>
+            <input type="text" placeholder="Enter Name" class="nameCapital" [pKeyFilter]="noSpecial" formControlName="name" required>
+            <div *ngIf="getControl['name'].touched && getControl['name'].invalid" class="text-danger">
+                <div *ngIf="getControl['name'].errors?.['required']">Name is required.</div>
+              </div>
+              <div *ngIf="getControl['name'].errors?.maxlength"  class="text-danger"> 
+                More than 50 characters is not allowed.
+           </div>
+            <label><b>Phone</b><span class="text-danger reqd">*</span></label>
+            <div class="p-inputgroup">
+            <span class="p-inputgroup-addon" >+91</span>
+              <input type="text" pKeyFilter="pint" pInputText placeholder="Enter Phone" maxlength="10" minlength="10" formControlName="phone" required>        
+         </div>
+            <div *ngIf="getControl['phone'].touched && getControl['phone'].invalid" class="text-danger">
+                <div *ngIf="getControl['phone'].errors?.['required']">Phone is required.</div>
+              </div>
+              <div *ngIf="getControl['phone'].errors?.minlength || getControl['phone'].errors?.maxlength"  class="text-danger"> 
+                Phone number must contain 10 digits.
+           </div> 
+            <label><b>Email</b><span class="text-danger reqd">*</span></label>
+            <input type="text" placeholder="Enter Email" formControlName="email" required>
+            <div *ngIf="getControl['email'].touched && getControl['email'].invalid" class="text-danger">
+                <div *ngIf="getControl['email'].errors?.['required']">Email is required.</div>
+              </div>
+            <label><b>Role</b><span class="text-danger reqd">*</span></label>
+            <select formControlName="role">
+                <option disabled selected>select</option>
+                <option *ngFor="let item of rolelist" value="{{item._links.self.href}}">{{item.type}}</option>
+            </select>
+            <div *ngIf="getControl['role'].touched && getControl['role'].invalid" class="text-danger">
+              <div *ngIf="getControl['role'].errors?.['required']">Department is required.</div>
+            </div>
+
+            <label ><b>Department</b><span class="text-danger reqd">*</span></label>
+            <select formControlName="department">
+                <option disabled selected>select</option>
+                <option *ngFor="let item of departmentlist" value="{{item._links.self.href}}">{{item.name}}</option>
+            </select>
+            <div *ngIf="getControl['department'].touched && getControl['department'].invalid" class="text-danger">
+              <div *ngIf="getControl['department'].errors?.['required']">Department is required.</div>
+            </div>
+            <label><b>Username</b><span class="text-danger reqd">*</span></label>
+            <input type="text" placeholder="Enter Username"  formControlName="username" >
+            <div *ngIf="getControl['username'].touched && getControl['username'].invalid" class="text-danger">
+              <div *ngIf="getControl['username'].errors?.['required']">Username is required.</div>
+            </div>
+            <label><b>Password</b><span class="text-danger reqd">*</span></label>
+            <span class="p-input-icon-right" style="width:100%;">
+              <i [ngClass]="fieldTextType?'pi pi-eye':'pi pi-eye-slash'"
+              (click)="toggleFieldTextType()"></i>
+              <input [type]="fieldTextType ? 'text' : 'password'" placeholder="Enter Password" formControlName="password" >        
+          </span>
+          <div *ngIf="getControl['password'].touched && getControl['password'].invalid" class="text-danger">
+            <div *ngIf="getControl['password'].errors?.['required']">Password is required.</div>
+          </div>
+            <div class="clearfix fontcls">
+                <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+                <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
+            </div>
+        </div>
+    </form> 
+   
+
+    
+</p-dialog>
+<p-toast position="bottom-right"></p-toast>
