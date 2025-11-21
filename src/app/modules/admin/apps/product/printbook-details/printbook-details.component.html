@@ -4,18 +4,18 @@
 
   <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b ">
     <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
-      <div class="text-xl font-bold tracking-tight fontcls">{{mainTitle}}</div>
+      <div class="text-xl font-bold tracking-tight fontcls">{{magazine}}</div>
     </div>
 
-    <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
+<!--     <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 pr-3">
       <button style="background-color:#8ed93b;color:white" class="ml-4 " mat-stroked-button (click)="Edit()">
         <span class="ml-1 mr-1">Edit</span>
       </button>
-      <!-- Add product button -->
+      Add product button 
       <button style="background-color:#8ed93b;color:white" class="ml-4 " mat-stroked-button (click)="GoBack()">
         <span class="ml-1 mr-1">Magazine List</span>
       </button>
-    </div>
+    </div> -->
 
   </div>
   <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
@@ -24,16 +24,13 @@
             <p-scrollPanel [style]="{width: '100%', height: '450px'}">
 
               <div class="flex  flex-auto mb-3">
-                <div class="col-50">
-                  <div class="row">
-                    <p class="text-xl font-bold tracking-tight fontcls">Primary Information</p>
-                  </div>
+                <div class="col-90">
                   <div class="row">
                     <div class="col-30">
                       <label for="fname">Cover Image</label>
                     </div>
                     <div class="col-70">
-                      <img src={{url}} alt="Learn HTML5" style="width:60px;height:60px;" />
+                      <img src={{url}} alt="No image"  style="width:100px;height:60px;" />
                     </div>
                   </div>
                   <div class="row">
@@ -41,197 +38,15 @@
                       <label for="subject">Title</label>
                     </div>
                     <div class="col-70">
-                      <label for="fname">{{mainTitle}}</label>
+                      <label for="fname">{{magazine}}</label>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="lname">Sub Title</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{subtitle}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Title Type</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.titleType}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Author Type</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.authorType}}</label>
-                    </div>
-                  </div>
-                  <div class="row" *ngIf="singleTA">
-                    <div class="col-30">
-                      <label for="subject">Author</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{titleAuthorRoyalty?.author?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row" *ngIf="singleTA">
-                    <div class="col-30">
-                      <label for="subject">Royalty</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{titleAuthorRoyalty?.printBookRoyalty}}</label>
-                    </div>
-                  </div>
-                  <ng-container *ngIf="multipleTA">
-                    <ng-container *ngFor="let i of multipleTAlist; index as j">
-                      <div class="row">
-                        <div class="col-30">
-                          <label for="subject">Chapter {{j+1}}</label>
-                        </div>
-                        <div class="col-70">
-                          <label for="fname">{{multipleTAlist[j]?.name}}</label>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-30">
-                          <label for="subject">Author {{j+1}}</label>
-                        </div>
-                        <div class="col-70">
-                          <label for="fname">{{multipleTAlist[j]?.titleAuthorRoyalty[0]?.author?.name}}</label>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-30">
-                          <label for="subject">Royalty {{j+1}}</label>
-                        </div>
-                        <div class="col-70">
-                          <label for="fname">{{multipleTAlist[j]?.titleAuthorRoyalty[0]?.printBookRoyalty}}</label>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </ng-container>
-                  <ng-container *ngIf="MtitleSauthor">
-                    <ng-container *ngFor="let i of multipleTitlelist; index as j">
-                      <div class="row">
-                        <div class="col-30">
-                          <label for="subject">Chapter {{j+1}}</label>
-                        </div>
-                        <div class="col-70">
-                          <label for="fname">{{multipleTitlelist[j]?.name}}</label>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <div class="row">
-                      <div class="col-30">
-                        <label for="subject">Author</label>
-                      </div>
-                      <div class="col-70">
-                        <label for="fname">{{MultipletitleAuthorRoyalty?.author?.name}}</label>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-30">
-                        <label for="subject">Royalty</label>
-                      </div>
-                      <div class="col-70">
-                        <label for="fname">{{MultipletitleAuthorRoyalty?.printBookRoyalty}}</label>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngIf="StitleMauthor">
-                    <ng-container *ngFor="let i of MultipletitleAuthorRoyalty; index as j">
-                      <div class="row">
-                        <div class="col-30">
-                          <label for="subject">Author {{j+1}}</label>
-                        </div>
-                        <div class="col-70">
-                          <label for="fname">{{MultipletitleAuthorRoyalty[j]?.author?.name}}</label>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-30">
-                          <label for="subject">Royalty {{j+1}}</label>
-                        </div>
-                        <div class="col-70">
-                          <label for="fname">{{MultipletitleAuthorRoyalty[j]?.printBookRoyalty}}</label>
-                        </div>
-                      </div>
-                    </ng-container>
-
-                  </ng-container>
                   <div class="row">
                     <div class="col-30">
                       <label for="subject">Edition</label>
                     </div>
                     <div class="col-70">
-                      <label for="fname">{{book?.edition}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Volume</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.volume}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Imprint</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.imprint?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="country">Product Code</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.productCode}}</label>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">ISBN</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.isbnCode}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Superkey</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.superKey}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Language</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.language?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Expiry date</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.expiryDate}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="subject">Status</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.status}}</label>
+                      <label for="fname">{{edition}}</label>
                     </div>
                   </div>
 
@@ -243,164 +58,24 @@
                       <label for="fname">{{categories}}</label>
                     </div>
                   </div>
-                  <div class="row">
+                   <div class="row">
                     <div class="col-30">
-                      <label for="subject">Sub-Category</label>
+                      <label for="subject">No of pages</label>
                     </div>
                     <div class="col-70">
-                      <label for="fname">{{subcategories}}</label>
+                      <label for="fname">{{noOfPages}}</label>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-30">
-                      <label for="subject">Summary</label>
+                      <label for="subject">Description</label>
                     </div>
                     <div class="col-70">
-                      <label for="fname">{{book?.summary}}</label>
+                      <label for="fname">{{summary}}</label>
                     </div>
                   </div>
                 </div>
 
-                <p-divider layout="vertical"></p-divider>
-                <div class="col-50">
-                  <div class="row">
-                    <p class="text-xl font-bold tracking-tight fontcls">Title Information</p>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Translation</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.isTranslation?'Yes':'No'}}</label>
-                    </div>
-                  </div>
-                  <div class="row" *ngIf="book?.isTranslation">
-                    <div class="col-30">
-                      <label for="fname">English Title</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{translationTitle?.englishTitle}}</label>
-                    </div>
-                  </div>
-                  <div class="row" *ngIf="book?.isTranslation">
-                    <div class="col-30">
-                      <label for="fname">Original Title</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{translationTitle?.originalTitle}}</label>
-                    </div>
-                  </div>
-                  <div class="row" *ngIf="book?.isTranslation">
-                    <div class="col-30">
-                      <label for="fname">Original Language</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{translationTitle?.originalLanguage?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Country of origin</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.countryOfOrigin?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Publisher</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.publisher?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Copyright</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.copyrightType}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Third party</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.copyright?.name}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Editor</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{editor}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Compiler</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{compiler}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Translator</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{translator}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Illustrator</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{illustrator}}</label>
-                    </div>
-                  </div>
-                  <p-divider layout="horizontal"></p-divider>
-                  <div class="row">
-                    <p class="text-xl font-bold tracking-tight fontcls">Price Information</p>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">MRP</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.mrp}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Discount %</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.discountPercent}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Store price</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.storePrice}}</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-30">
-                      <label for="fname">Tax %</label>
-                    </div>
-                    <div class="col-70">
-                      <label for="fname">{{book?.printBook?.taxPercent}}</label>
-                    </div>
-                  </div>
-
-                </div>
               </div>
 
 
@@ -410,30 +85,4 @@
   </div>
 </div>
 
-<p-dialog [(visible)]="discountPopUp" header="Edit Discount" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"
-  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
-  <form [formGroup]="discountForm" (ngSubmit)="applyDiscount()" novalidate>
-    <div class="container">
-      <div class="row">
-        <div class="col-75">
-          <label for="editDiscount">Discount </label>
-          <input type="number" id="editDiscount" style="border-width:1px" formControlName="editDiscount"
-            placeholder="Type here..">
-          <div *ngIf="getDiscountControl['editDiscount'].touched && getDiscountControl['editDiscount'].invalid" class="text-danger">
-            <div *ngIf="getDiscountControl['editDiscount'].errors?.['required']">Discount is required.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-100 text-right fontcls">
-          <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm"
-            (click)="applyDiscountCancel()">CANCEL</button>
-          <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm">SUBMIT</button>
-        </div>
-      </div>
-    </div>
-  </form>
-
-</p-dialog>
 <p-toast position="bottom-right"></p-toast>

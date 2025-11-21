@@ -1,0 +1,168 @@
+.banner {
+    width: 75%;
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 10px;
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#print-image-upload1,#print-image-upload2,#print-image-upload3,#print-image-upload4,#ebook-image-upload1,#ebook-image-upload2,#ebook-image-upload3,#ebook-image-upload4,#audio-image-upload1,#audio-image-upload2,#audio-image-upload3,#audio-image-upload4 {
+    background-color: #8ed93b;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+label {
+    background-color: #94a3b845;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+#uploaded-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    display: none;
+}
+// .btn-rmv1,
+// .btn-rmv2,
+// .btn-rmv3,
+// .btn-rmv4,
+// .btn-rmv5 {
+//   display: none;
+// }
+
+.btn-rmv1,
+.btn-rmv2,
+.btn-rmv3,
+.btn-rmv4,
+.btn-rmv5  {
+    cursor: pointer;
+    color: #fff;
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    border: 1px solid #fff;
+    display: inline-flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgb(175, 40, 40);
+    width: 20px; /* Set a fixed width for the circular button */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    line-height: 1; /* Remove extra line height */
+}
+
+.rmv:hover {
+  background: rgba(255, 0, 0, 0.5);
+}
+.preview-container {
+    position: relative;
+    display: inline-block;
+    width: 200px; /* Set the desired width */
+    height: 100px; /* Set the desired height */
+    overflow: hidden; 
+}
+.preview1,.preview2,.preview3,.preview4{
+    width: 100%; /* Ensure the image takes the full width of the container */
+    height: 100%; /* Ensure the image takes the full height of the container */
+    object-fit: cover;
+    border-radius: 3px;
+    border: 5px solid #fff;
+    display:block;
+}
+.submitbtn {
+    margin-left: 1rem;
+    
+  }
+ 
+  .cancelbtn,.submitbtn{
+    font-size: 13px;
+    margin-top: 10px;
+
+  }
+  .cancelbtn:hover{
+    background-color: #f1cece;
+    color: #27272a;
+  }
+
+  button:hover {
+    background-color: #d8f3ba;
+    color: #27272a;
+  }
+  .col-50 {
+    float: left;
+    width: 45%;
+    margin-top: 6px;
+  }
+ .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    padding: 0.7rem !important;
+    font-weight: 600 !important;
+}
+:host ::ng-deep .p-tabview .p-tabview-panels {
+    padding: 0;
+}
+
+:host ::ng-deep .p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 0rem white;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    background: #ffffff;
+    border-color: #8ed93b;
+    color: #27272a;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav .p-tabview-ink-bar {
+    background-color: #8ed93b;
+  }
+  :host ::ng-deep .p-tabview .p-tabview-nav {
+    background: #ffffff;
+     //border: none; 
+    border-width: 1 1 1 1; 
+  }
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+ font-size:13px !important;
+  color: gray;
+  font-family: 'Hind';
+}
+.lasttd{
+  max-width: 200px; 
+  justify-content: right;
+}
+  // Source - https://stackoverflow.com/a
+// Posted by Iñigo, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-11-21, License - CC BY-SA 4.0
+button{
+float:left; 
+position:absolute; 
+}
+input[type="file"]{
+opacity: 0; //Not visible
+font-size: 0;
+//Button dimensions
+width: 140px; 
+height: 60px; 
+float: left; 
+}
+input:hover{
+cursor: pointer;
+}

@@ -14,7 +14,6 @@ import { searchlist } from '../../product/productModel/searchList';
 import { MultipleSearch } from '../../Recommendation/ModelRecommendation/MultipleSearch';
 import { RecommendationService } from '../../Recommendation/recommendation.service';
 import { Category } from '../../product/productModel/Category';
-import { Contributor } from '../../product/productModel/contributor';
 
 @Component({
   providers: [ConfirmationService,MessageService],
@@ -63,8 +62,6 @@ public comboAddList:ComboOfferList;
   selectedCategory: Array<Category>;
   filtercategory:Array<Category>=[];
   public category:Array<Category>;
-  public authorContributor:Array<Contributor>;
-  selectedAuthor: Array<Contributor>;
   public selectedBookLength:number;
   list: any[] = []; // Initialize list array
 public selectedList:any[]=[];
@@ -169,8 +166,6 @@ public selectedList:any[]=[];
   GetAuthorContributor(type:string){
     this.productService.getContributorByType(type).subscribe((response)=>{
       if(response._embedded.contributors.length>0){
-        this.authorContributor= new Array<Contributor>();
-        this.authorContributor=response._embedded.contributors;
       } 
        }) 
   }

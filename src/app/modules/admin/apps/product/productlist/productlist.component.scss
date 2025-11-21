@@ -265,3 +265,212 @@ option{
     background:none;
     border: none; 
   }
+  @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+.mat-stroked-button {
+    padding: 0 15px !important;
+    border-radius: 5px !important; 
+}
+.col-15 {
+    float: left;
+    width: 14%;
+    margin-top: 2px;
+  }
+  
+  /* Floating column for inputs: 75% width */
+  .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 0px;
+    margin-bottom: 3px;
+  }
+    .col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 0px;
+    margin-bottom: 3px;
+  }
+  .col-50 {
+    float: left;
+    width: 50%;
+    margin-top: 0px;
+    margin-bottom: 3px;
+  }
+  .col-15 {
+    float: left;
+    width: 12.5%;
+    margin-top: 1px;
+    margin-bottom: 3px;
+  }
+  .col-30 {
+    float: left;
+    width: 30%;
+    margin-top: 0px;
+    margin-bottom: 3px;
+  }
+  .col-90 {
+    float: left;
+    width: 100%;
+    margin-top: 3px;
+  }
+  .col-100 {
+    float: left;
+    width: 97%;
+    margin-top: 6px;
+    margin-bottom: 2rem;
+  }
+  .col-40 {
+    float: left;
+    width: 40%;
+    margin-top: 1px;
+    margin-bottom: 2rem;
+  }
+  input[type=text], select, textarea{
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 13px;
+    font-family: 'Hind';
+    color: gray;
+    line-height: 1.7rem;
+    //background-color: #f8f8f8;
+  }
+  input[type=file]{
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 13px;
+    font-family: 'Hind';
+    color: gray;
+    line-height: 1.7rem;
+    resize: unset;
+    //background-color: #f8f8f8;
+  }
+  select{
+    padding: 6.5px;
+  }
+  :host ::ng-deep .p-multiselect {
+    width: 100%;
+    padding: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical; 
+    height: 1.8rem;
+    font-size: 13px;
+    font-family: 'Hind';
+    color: gray;
+    //background-color: #f9f5f5;
+  }
+  :host ::ng-deep .p-multiselect .p-multiselect-label {
+    padding: 0.1rem 0.75rem;
+  }
+  input[type=text]{
+    border: 1px solid #ccc;
+    font-size: 13px;
+  }
+  :host ::ng-deep p-checkbox {
+    vertical-align: middle !important;
+    align-items: flex-start;
+  }
+  
+  /* Style the label to display next to the inputs */
+  label {
+    padding: 5px 12px 0px 0px;
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Hind';
+  }
+  .toptext{
+    font-family: 'Hind';
+    font-size: 15px;
+    color: gray;
+  }
+  .mat-standard-chip {
+    transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+    display: inline-flex;
+    padding: 3px 5px;
+    border-radius: 24px;
+    align-items: center;
+    cursor: default;
+    margin: 4px;
+    font-size: 10px;
+}
+.submitbtn {
+  margin-left: 1rem;
+}
+.font{
+  font-family: 'Hind';
+  font-size: 13px;
+}
+:host ::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
+  padding: 0.2rem 0.5rem;
+}
+.btncls{
+  background-color: #8ed93b;
+  color: white;
+  font-size: 14px;
+}
+
+#uploadfile {
+  position: relative;
+    overflow: hidden;
+}
+input#file-upload-button{
+  border: 0px;
+}
+
+:host ::ng-deep .p-panel .p-panel-content {
+  border:0px;
+}
+:host ::ng-deep .p-panel .p-panel-header {
+  border:0px;
+}
+
+input[type=file]::file-selector-button {
+  border: 1px solid #ccc;
+  padding: .2em .4em;
+  border-radius: .2em;
+  background-color: #ccc;
+  transition: 1s;
+}
+:host ::ng-deep  .p-panel .p-panel-header {
+  
+  background: #ffffff;
+}
+.cancelbtn ,.submitbtn {
+  font-size: 13px;
+}
+button:hover {
+  background-color: #8ed93b;
+}
+:host ::ng-deep.p-multiselect-trigger-icon{
+  font-size: 10px;
+  padding-right: 0px;
+}
+.reqd{
+  font-size:1rem;
+  vertical-align: sub; 
+}
+:host ::ng-deep .p-dropdown{
+  width: 100%;
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 13px;
+  font-family: 'Hind';
+  color: gray;
+  line-height: 1.7rem;
+}
+:host ::ng-deep .p-inputtext {
+  padding:0.1rem 0.1rem;
+  font-size: 13px;
+    font-family: 'Hind';
+    color: gray;
+}

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BlockedReasonsComponent } from './blocked-reasons/blocked-reasons.component';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
 import { CustomerlistComponent } from './customerlist/customerlist.component';
 import { AddbookaccessComponent } from './addbookaccess/addbookaccess.component';
@@ -22,14 +21,6 @@ const  CustomerRoutes:Routes = [
     data:{
       breadCrum:'CustomerList'
   }
-},
-{
-    path     : 'blockedreason',
-    component: BlockedReasonsComponent,
-    data:{
-      breadCrum:'Block Reason'
-  }
-
 },
 {
     path     : 'customerdetails',

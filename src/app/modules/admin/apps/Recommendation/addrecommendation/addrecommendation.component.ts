@@ -5,7 +5,6 @@ import { MessageService } from 'primeng/api';
 import { ProductService } from '../../product/product.service';
 import { BookDetails } from '../../product/productModel/bookdetails';
 import { Category } from '../../product/productModel/Category';
-import { Contributor } from '../../product/productModel/contributor';
 import { DepartmentList } from '../../users/UserModels/DepartmentModel';
 import { MultipleSearch } from '../ModelRecommendation/MultipleSearch';
 import { RecommendationService } from '../recommendation.service';
@@ -22,8 +21,6 @@ export class AddrecommendationComponent implements OnInit {
   selectedCategory: Array<Category>;
 filtercategory:Array<Category>=[];
 public category:Array<Category>;
-public authorContributor:Array<Contributor>;
-selectedAuthor: Array<Contributor>;
 public data:Array<BookDetails>;
 public bookType:string;
 public recommendationType:string;
@@ -47,7 +44,6 @@ perPage = 20;
       this.recommendationType=params['recommendationType'];
     });
     this.GetCategory();
-    this.GetAuthorContributor('AUTHOR');
     //this.data=[{'product':'Bhumiyude Avakashikal','version':'Audio','author':'Basheer','edition':2,'volume':1,'code':'HP4785','language':'Malayalam','mrp':'540 INR','revenue':'100 INR','royalty':20,'ramount':'42000 INR','payable':'32500 INR'}]
   }
   GetCategory(){
@@ -59,14 +55,7 @@ perPage = 20;
       //} 
        }) 
   }
-  GetAuthorContributor(type:string){
-    this.addservice.getContributorByType(type).subscribe((response)=>{
-      if(response._embedded.contributors.length>0){
-        this.authorContributor= new Array<Contributor>();
-        this.authorContributor=response._embedded.contributors;
-      } 
-       }) 
-  }
+
   GoBack(){
     this.router.navigate([`apps/Recommendation/recommendationlist`]); 
   }

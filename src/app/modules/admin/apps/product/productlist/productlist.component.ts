@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { ProductService } from '../product.service';
 import { BookDetails } from '../productModel/bookdetails';
 import { searchlist } from '../productModel/searchList';
+import { environment } from 'environments/environment';
 interface PaginationState {
   page: number;
   perPage: number;
@@ -67,7 +68,7 @@ export class ProductlistComponent implements OnInit {
   @ViewChild('dt1') table: Table;
   @ViewChild('dt5') table5: Table;
   PublishForm!: FormGroup;
-  stockForm!: FormGroup;
+  addFile!: FormGroup;
   perPage: number = 10;
   page: number = 0;
   totalRecords: number = 500000;
@@ -80,6 +81,13 @@ export class ProductlistComponent implements OnInit {
   currentTab: string;
   currentStatus: string;
   stockValue: any;
+  uploadImage: boolean;
+  selectedFiles: any;
+  imagePath: any;
+  url: string | ArrayBuffer;
+  uploadFile: boolean;
+  fileUrl: null;
+  searchMagazine: any;
   constructor(private messageService: MessageService, public formBuilder: FormBuilder, private router: Router, private confirmationService: ConfirmationService, public productservice: ProductService) { }
 
   ngOnInit(): void {
@@ -87,13 +95,10 @@ export class ProductlistComponent implements OnInit {
     // this.statusIndex=0;
     this.GetOnInitFunction();
     this.PublishForm = this.formBuilder.group({
-      groupname: ['', []],
-      date: ['', []],
-      time: ['', []],
+      cover: ['', []],
     });
-    this.stockForm = this.formBuilder.group({
-      outOfStock: ['', []],
-      editStock: ['', []],
+    this.addFile = this.formBuilder.group({
+      fileupload: ['', []],
     });
     const savedTabIndex = localStorage.getItem('selectedTabIndex');
     const savedTabStatusIndex = localStorage.getItem('selectedTabStatusIndex');
@@ -119,9 +124,7 @@ export class ProductlistComponent implements OnInit {
     });
   }
   GetOnInitFunction() {
-    this.GetPrintBookPublishList('PUBLISHED');
-    this.GetPrintDraft('DRAFT');
-    this.GetPrintArchived('ARCHIVED');
+    this.GetPrintBookPublishList();
   }
 
   editCancel() {
@@ -137,7 +140,7 @@ export class ProductlistComponent implements OnInit {
       });
     }
     else {
-      this.GetPrintBookPublishList('PUBLISHED');
+      this.GetPrintBookPublishList();
     }
 
   }
@@ -184,29 +187,33 @@ export class ProductlistComponent implements OnInit {
 
     this.tabindex.paginator.changePage(paginationState.page);
   }
-  GetPrintBookPublishList(status: string) {
-    this.productservice.getPrintBook(status, this.page, this.perPage).subscribe((response) => {
+  GetPrintBookPublishList() {
+    this.productservice.getMagazineList().subscribe((response) => {
+      console.log(response);  
       //if(response.content.length>0){
       this.printpublished = new Array<any>();
-      this.printpublished = response.content;
-
+      this.printpublished = response._embedded.magazineEditions.filter(book => book.status === 'ACTIVE');
+      this.printarchived= response._embedded.magazineEditions.filter(book => book.status === 'ARCHIVED');
+      this.searchMagazine = response._embedded.magazineEditions
+      ;
+console.log(this.printpublished);
       //}
     });
   }
   GetPrintDraft(status: string) {
-    this.productservice.getPrintBook(status, this.page, this.perPage).subscribe((response) => {
+    this.productservice.getMagazines().subscribe((response) => {
       // if(response.content.length>0){
       this.printdraft = new Array<any>();
-      this.printdraft = response.content;
+      this.printdraft = response.magazines;
 
       //}
     });
   }
   GetPrintArchived(status: string) {
-    this.productservice.getPrintBook(status, this.page, this.perPage).subscribe((response) => {
+    this.productservice.getMagazines().subscribe((response) => {
       //if(response.content.length>0){
       this.printarchived = new Array<any>();
-      this.printarchived = response.content;
+      this.printarchived = response.magazines;
 
       //}
     });
@@ -233,7 +240,7 @@ export class ProductlistComponent implements OnInit {
       header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        this.productservice.deleteBook(bookdetails.id).subscribe({
+        this.productservice.deleteMagazineList(bookdetails.id).subscribe({
           next: (response) => {
             this.GetOnInitFunction();
           },
@@ -276,9 +283,7 @@ window.open(url,'_blank');
   }
   EditPrintBook(product) {
     this.bookdetails = product;
-    this.bookdetails.bookType = 'PRINT';
     this.opp.hide();
-    this.opd.hide();
     this.router.navigate(['apps/product/printedit', this.bookdetails]);
 
   }
@@ -292,7 +297,7 @@ window.open(url,'_blank');
       header: 'Archive Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        this.productservice.changeStatus(product.id, 'ARCHIVED', product.bookType).subscribe({
+        this.productservice.changeStatus(product.id, 'ARCHIVED').subscribe({
           next: (response) => {
             this.GetOnInitFunction();
           },
@@ -314,8 +319,7 @@ window.open(url,'_blank');
   importList(event) {
       this.productservice.importBook('PRINT', event.target.files[0]).subscribe({
         next: (response) => {
-          this.GetPrintBookPublishList('PUBLISHED');
-          this.GetPrintDraft('DRAFT');
+          this.GetPrintBookPublishList();
           this.messageService.add({ severity: 'success', summary: response.status, detail: response.status });
         },
         error: (err) => {
@@ -342,29 +346,12 @@ window.open(url,'_blank');
     this.searchDetails.title = event.target.value;
     if (this.searchDetails.title) {
       if (this.statusIndex == 0) {
-        this.searchDetails.bookType = 'PRINT';
-        this.searchDetails.bookStatus = 'PUBLISHED';
-        this.SearchBook().then(() => {
-          this.printpublished = new Array<any>();
-          this.printpublished = this.searchBook;
-
-        });
+      this.printpublished=this.searchMagazine.filter(book => book.name.toLowerCase().includes(this.searchDetails.title.toLowerCase())
+      && book.status ==='ACTIVE');
       }
       else if (this.statusIndex == 1) {
-        this.searchDetails.bookType = 'PRINT';
-        this.searchDetails.bookStatus = 'DRAFT';
-        this.SearchBook().then(() => {
-          this.printdraft = new Array<any>();
-          this.printdraft = this.searchBook;
-        });
-      }
-      else if (this.statusIndex == 3) {
-        this.searchDetails.bookType = 'PRINT';
-        this.searchDetails.bookStatus = 'ARCHIVED';
-        this.SearchBook().then(() => {
-          this.printarchived = new Array<any>();
-          this.printarchived = this.searchBook;
-        });      
+          this.printarchived = this.searchMagazine.filter(book => book.name.toLowerCase().includes(this.searchDetails.title.toLowerCase())
+      && book.status ==='ARCHIVED');
       }
     }
     else {
@@ -408,7 +395,7 @@ window.open(url,'_blank');
       header: 'Draft Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
-        this.productservice.changeStatus(this.bookdetails.id,'DRAFT','EBOOK').subscribe({
+        this.productservice.changeStatus(this.bookdetails.id,'DRAFT').subscribe({
           next: (response) => {
             this.GetOnInitFunction();
           },
@@ -422,64 +409,105 @@ window.open(url,'_blank');
       }
     });
   }
-  PublishBook(bookdetails) {
-    this.publishingBook = bookdetails;
-    this.confirmationService.confirm({
-      message: 'Do you want to publish this book?',
-      header: 'Publish Confirmation',
-      icon: 'pi pi-info-circle',
-      accept: () => {
 
-        this.publish = true;
-      },
-      reject: () => {
-        //Actual logic to perform a confirmation
-      }
-    });
-  }
-  BookPublishing() {
-    if (this.Schedule == false) {
-      this.productservice.publishBook(this.publishingBook.id, this.publishingBook.bookType, 'IMMEDIATE').subscribe({
-        next: (response) => {
-          this.GetOnInitFunction();
-          this.publish = false;
-        },
-        error: (err) => {
-          this.publish = false;
-          this.messageService.add({ severity: 'error', summary: err.status, detail: err.error.error });
-
-        }
-      });
-    }
-    else if (this.Schedule == true) {
-      if (this.PublishForm.valid) {
-        const date = this.PublishForm.controls['date'].value;
-        const time = this.PublishForm.controls['time'].value;
-        console.log(date);
-        this.productservice.publishBook(this.publishingBook.id, this.publishingBook.bookType, 'SCHEDULE', date, time).subscribe({
-          next: (response) => {
-            this.GetOnInitFunction();
-            this.publish = false;
-          },
-          error: (err) => {
-            this.publish = false;
-            this.messageService.add({ severity: 'error', summary: err.status, detail: err.error.error });
-            //this.Cancel();
-          }
-        });
-
-      }
-      else {
-        this.validateAllFields(this.PublishForm);
-      }
-    }
-  }
 
   clear() {
     this.searchInputControl.setValue('');
     this.searchDetails = new searchlist();
     this.GetOnInitFunction();
   }
+  UploadFile(product){
+    this.opp.hide();
+    this.addFile.reset();
+    this.fileUrl=null;
+    this.bookdetails = product;
+    console.log(product);
+    this.uploadFile=true;
+  }
+  addFileMagazine(){
+    if(this.selectedFiles?.length>0 ){
+        this.productservice.addFile( this.selectedFiles[0]).subscribe({
+          next: (response)=>{
+            this.bookdetails.fileID=response.publicId;
+            this.addFileToMagazine();
+          },
+          error: (err) => {
+          this.bookdetails.fileID=null;
+          this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+          }
+      });
+      }
+  }
+  addFileToMagazine() {
+    this.productservice.updateMagazineFile(this.bookdetails.id,this.bookdetails.fileID).subscribe({
+      next: (response)=>{
+        this.messageService.add({severity:'success', summary:'Success', detail:'File added successfully'});
+        this.uploadFile=false;
+        this.GetOnInitFunction();
+        this.addFile.reset();
+      },
+      error: (err) => {
+       this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+      }
+    });
+  }
+  UploadCoverImage(product){
+    this.opp.hide();
+    this.PublishForm.reset();
+    this.url=null;
+    this.bookdetails = product;
+    console.log(product);
+    if(product.coverId!=null && product.coverId!=undefined){
+    this.url=environment.baseUrl+'/uploads/image/'+product.coverId;
+  }
+    console.log(this.bookdetails);
+    this.uploadImage=true;
+  }
+addCoverImage(){
+if(this.selectedFiles?.length>0 ){
+    this.productservice.addImage( this.selectedFiles[0]).subscribe({
+      next: (response)=>{
+        this.bookdetails.coverId=response.publicId;
+        this.addCover(); 
+     },
+     error: (err) => {
+      this.bookdetails.coverId=null;
+      this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+     }
+  })
+  }
+}
+addCover(){
+  this.productservice.updateMagazineCover(this.bookdetails.id,this.bookdetails.coverId).subscribe({
+    next: (response)=>{
+      this.messageService.add({severity:'success', summary:'Success', detail:'Cover image added successfully'});
+      this.uploadImage=false;
+      this.GetOnInitFunction();
+      this.PublishForm.reset();
+    },
+    error: (err) => {
+     this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+    }
+  })
+}
+onFileChanged(event) {
+  this.selectedFiles = event.target.files;
+  if (this.selectedFiles.length === 0)
+      return;
+
+  const mimeType = this.selectedFiles[0].type;
+  if (mimeType.match(/image\/*/) == null) {
+      //this.message = "Only images are supported.";
+      return;
+  }
+
+  const reader = new FileReader();
+  this.imagePath = this.selectedFiles;
+  reader.readAsDataURL(this.selectedFiles[0]); 
+  reader.onload = (_event) => { 
+      this.url = reader.result; 
+  }
+}
 
   GetIndex(){
     if (this.index == 0 && this.statusIndex == 0) {

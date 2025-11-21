@@ -22,33 +22,9 @@
                 <button pButton  class="icon-size-5" icon="pi pi-times-circle" (click)="clear()"></button>
         </mat-form-field>
         </div>
-        <button
-        class="ml-4 " 
-        mat-stroked-button style="background-color:#8ed93b;color:white"
-    (click)="NewCustomer()">
-    <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white;size:2px;"></mat-icon>
-    <span class="ml-1 mr-1">Add</span>
-    </button>
-        <div class="flex  sm:flex-row sm:ml-2 items-center  mt-6 sm:mt-0 ml-1"*ngIf="index==0">
-           
-     
-    <button mat-icon-button  aria-label="" title="More" (click)="More($event)" style="border: solid 1px  #8ed93b;background-color: #8ed93b;">
-      <mat-icon style="color:white;">more_horiz</mat-icon>
-      </button>
-    </div>
-    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 ml-2" *ngIf="index==1">
-      <button  style="background-color:#8ed93b;color:white"
-          mat-stroked-button (click)="BlockedReason()"
-     >
-      <span class="ml-1 mr-1 btn-sm">Blocked Reason</span>
-      </button>
-      
 
-<button mat-icon-button class="ml-2" aria-label="" title="More" style="border: solid 1px  #8ed93b;background-color: #8ed93b;" (click)="MoreBlocked($event)">
-<mat-icon style="color:white">more_horiz</mat-icon>
-</button>
-</div>
-<div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 ml-2 " *ngIf="index==2">
+
+<div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 ml-2 " >
 <button mat-icon-button  aria-label="" title="More" (click)="MoreArchive($event)" style="border: solid 1px  #8ed93b;background-color: #8ed93b;">
 <mat-icon style="color:white">more_horiz</mat-icon>
 </button>
@@ -84,7 +60,7 @@
                       <td title={{product.name}}  style="min-width:120px;cursor:pointer;">{{product.name}}</td>
                       <td title={{product.email}}  (click)="ShowCustomer(product)" style="cursor:pointer;min-width:120px;color: rgb(40, 150, 214);">{{product.email}}</td>
                       <td style="min-width:110px;">{{product.phone}}</td>
-                      <td>{{product.subscriptionStatus}}</td>
+                      <td>{{product.status}}</td>
                       <!-- <td style="min-width:110px;max-width:110px">{{product.merketingEnabled}}</td>
                       
                       <td style="min-width:100px;max-width:100px">{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td> -->
@@ -162,9 +138,9 @@
     <p-overlayPanel #ob>
         <ng-template pTemplate>
             <ul>      
-                <li style="cursor:pointer" (click)="UnblockCustomer(customerdetails)">UnBlock</li>
-                <HR SIZE="1">
-                <li style="cursor:pointer" (click)="ArchiveCustomer(customerdetails)">Archive</li>
+                <li style="cursor:pointer" (click)="UnblockCustomer(customerdetails)">Activate</li>
+                <!-- <HR SIZE="1">
+                <li style="cursor:pointer" (click)="ArchiveCustomer(customerdetails)">Archive</li> -->
             </ul>
         </ng-template>
     </p-overlayPanel>
@@ -172,9 +148,9 @@
     <p-overlayPanel #all>
         <ng-template pTemplate>
             <ul>      
-                <li style="cursor:pointer" (click)="UnblockCustomer(customerdetails)">Activate</li>
-                <HR SIZE="1">
-                <li style="cursor:pointer" (click)="ArchiveCustomer(customerdetails)">Block</li>
+                <!-- <li style="cursor:pointer" (click)="UnblockCustomer(customerdetails)">Activate</li>
+                <HR SIZE="1"> -->
+                <li style="cursor:pointer" (click)="BlockCustomer(customerdetails)">Block</li>
             </ul>
         </ng-template>
     </p-overlayPanel>

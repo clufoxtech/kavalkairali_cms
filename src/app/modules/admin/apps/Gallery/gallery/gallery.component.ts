@@ -5,6 +5,8 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 import { Table } from 'primeng/table';
 import { GalleryList } from '../galleryModel';
 import { Router } from '@angular/router';
+import { GalleryService } from '../galleryService.service';
+import { environment } from 'environments/environment';
 
 @Component({
   providers: [ConfirmationService,MessageService],
@@ -24,7 +26,9 @@ export class GalleryComponent implements OnInit {
   selectedFiles: any;
   imagePath: any;
   url: string | ArrayBuffer;
-  constructor(public formBuilder: FormBuilder,private messageService: MessageService,
+  imageScroll: boolean;
+  images: any[];
+  constructor(public formBuilder: FormBuilder,private messageService: MessageService, private galleryService: GalleryService,
     private confirmationService: ConfirmationService,private router: Router) { }
   public data =[];
   public product:GalleryList;
@@ -40,9 +44,9 @@ export class GalleryComponent implements OnInit {
    
   }
   GetAllGallery(){
-    // this.userService.getAllGallerys().subscribe((response)=>{
-    //   this.data=response._embedded.gallery;
-    //    })  
+    this.galleryService.getAllGallery().subscribe((response)=>{
+      this.data=response._embedded.galleries;
+       })  
   }
   NewGallery(){
     this.router.navigate(['apps/Gallery/add-gallery']);
@@ -60,7 +64,7 @@ show(event,product){
 }
 Edit(product){
 this.product=product;
-this.edit=true;
+this.router.navigate(['apps/Gallery/add-gallery', product]);
 this.op.hide();
 }
 EditCancel(edit:any){
@@ -73,16 +77,16 @@ Delete(id){
     header: 'Delete Confirmation',
     icon: 'pi pi-info-circle',
     accept: () => {
-    //   this.userService.deleteGallerys(id).subscribe(
-    //     {
-    //       next: (response)=>{
-    //         this.GetAllGallery();  
-    //   },
-    //   error: (err) => {
-    //     this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
-    //    //this.Cancel();
-    //   }
-    //  })
+      this.galleryService.deleteGallery(id).subscribe(
+        {
+          next: (response)=>{
+            this.GetAllGallery();  
+      },
+      error: (err) => {
+        this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+       //this.Cancel();
+      }
+     })
        
     },
     reject: () => {
@@ -93,8 +97,7 @@ Delete(id){
 AddGallery(){
   if (this.AddForm.valid) {
     this.product= new GalleryList();
-    this.product.name=this.AddForm.controls['galleryname'].value;
-    this.product.description=this.AddForm.controls['desc'].value;
+    this.product.title=this.AddForm.controls['galleryname'].value;
 //   this.userService.addGallerys(this.product.name,this.product.description).subscribe({
 //     next: (response)=>{
 //     // if(response.sTATUS=='SUCCESS'){
@@ -141,5 +144,26 @@ onFileChanged(event) {
   reader.onload = (_event) => { 
       this.url = reader.result; 
   }
+}
+ShowUser(product){
+  this.product=product;
+  console.log(this.product);
+  this.images = this.product.imageId;
+  this.imageScroll=true;
+
+  //this.populateGallery();
+}
+populateGallery() {
+  console.log(this.product);
+  const images = this.product.imageId;
+  console.log(images);
+  const galleryContainer = document.getElementById('image-gallery'); // Your gallery container ID
+console.log(galleryContainer);
+  images.forEach(image => {
+    const imgElement = document.createElement('img');
+    imgElement.src = environment.baseUrl+'upload/images/'+image; // Assuming 'url' is the image URL in your API response
+    imgElement.alt = 'Gallery image'; // Add alt text for accessibility
+    galleryContainer.appendChild(imgElement);
+  });
 }
 }

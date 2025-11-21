@@ -1,10 +1,8 @@
 export class GalleryList{
         public id:number;
-        public name:string;
-        public date:Date;
-        public member:string;
+        public title:string;
+        public imageId:any[];
         public creationTimestamp:Date;
-        public description:string;
         public _links:self[];
 }
 export class self{

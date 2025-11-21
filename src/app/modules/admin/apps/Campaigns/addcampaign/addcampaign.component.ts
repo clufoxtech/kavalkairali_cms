@@ -3,7 +3,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../product/product.service';
 import { Category } from '../../product/productModel/Category';
-import { Contributor } from '../../product/productModel/contributor';
 import { DepartmentList } from '../../users/UserModels/DepartmentModel';
 import { MultipleSearch } from '../../Recommendation/ModelRecommendation/MultipleSearch';
 import { RecommendationService } from '../../Recommendation/recommendation.service';
@@ -24,8 +23,6 @@ export class AddcampaignComponent implements OnInit {
   selectedCategory: Array<Category>;
   filtercategory: Array<Category> = [];
   public category: Array<Category>;
-  public authorContributor: Array<Contributor>;
-  selectedAuthor: Array<Contributor>;
   public data: any[];
   selectedOfferType: any = '';
   public OfferType: Array<any>;
@@ -158,8 +155,6 @@ export class AddcampaignComponent implements OnInit {
   GetAuthorContributor(type: string) {
     this.addservice.getContributorByType(type).subscribe((response) => {
       if (response._embedded.contributors.length > 0) {
-        this.authorContributor = new Array<Contributor>();
-        this.authorContributor = response._embedded.contributors;
       }
     });
   }

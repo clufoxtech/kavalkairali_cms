@@ -25,11 +25,11 @@ export class RecommendationService {
   
   }
   addRecommendationPosition(bookdetails:BookDetails,position:number,recommendationType):Observable<any>{
-    return this.httpClient.post(this.baseUrl+'/recommendations/update?type='+bookdetails.bookType+'&recommendationType='+recommendationType,{'id':bookdetails.id,'position':position},{headers:this.header,withCredentials : true});
+    return this.httpClient.post(this.baseUrl+'/recommendations/update?type=&recommendationType='+recommendationType,{'id':bookdetails.id,'position':position},{headers:this.header,withCredentials : true});
   
   }
   removeRecommendation(bookdetail:BookDetails,recommendationType):Observable<any>{
-    return this.httpClient.delete(this.baseUrl+'/recommendations/'+bookdetail.id+'?type='+bookdetail.bookType+'&recommendationType='+recommendationType,{headers:this.header,withCredentials : true});
+    return this.httpClient.delete(this.baseUrl+'/recommendations/'+bookdetail.id+'?type=&recommendationType='+recommendationType,{headers:this.header,withCredentials : true});
   
   }
 }

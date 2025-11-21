@@ -1,0 +1,76 @@
+<div
+  class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+
+
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-2 px-2 md:px-2 border-b">
+    <div class="col-sm-3 col-xs-4 col-md-4 pl-3">
+      <div class="text-xl font-bold tracking-tight fontcls">Home Screen Banner</div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <p style="color:rgb(112, 112, 236);size:14px;">Information : Banner resolution should be 640*360 and minimum size
+        should be 1 Mb.</p>
+    </div>
+    <form [formGroup]="AddPrintForm">
+      <div style="display: flex;">
+      <div class="mt-3" style="width: 74%;">
+      <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll" 
+      [resizableColumns]="true" style="border-width: 0 2px 0 0;"
+        [scrollable]="true" [value]="sortedPrintBanners" scrollHeight="380px" sortMode="multiple">
+
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th></th>
+            <th></th>
+            <th style="max-width:45px"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
+          <tr>
+            <td style="max-width: 200px;">Banner - {{product.position}}</td>
+            <td style="max-width: 200px;">
+              <button #file class="btn btn-light">Choose Image</button>
+              <div>
+                <input #myInput type="file" (change)="onFileSelected($event, product.position)"
+                  formControlName="image{{ product.position }}" id="print-image-upload{{ product.position }}"
+                  name="{{ product.position }}" accept="image/*">
+              </div>
+            </td>
+
+            <td style="max-width: 75px;">
+              <img id="PrintImgPreview{{ position }}" src="{{product.imageurl}}" class="preview{{ position }}" />
+              <input *ngIf="getBannerImage(position,'Print')" (click)="removeBanner(position)" type="button"
+                id="PrintremoveImage{{ position }}" value="x" class="btn-rmv{{ position }}" />
+            </td>
+            <td style="justify-content: center;border-width: 0 2px 0 0;">
+              <button type="button"  class="cancelbtn btn-outline-secondary btn btn-sm"
+                (click)="removeBanner(product.position)">Remove</button>
+            </td>
+            <!-- <td style="max-width: 200px; justify-content: left;">
+              <button type="button" class="submitbtn btn-outline-secondary btn btn-sm"
+                (click)="AddPrintBanner(product.position)">Confirm</button>
+            </td> -->
+          </tr>
+        </ng-template>
+      </p-table>
+      </div>
+      <div class="mb-5 mt-3" style="width: 10%;padding-top: 13%;padding-left: 5%;">
+        <div class="col-25 text-right fontcls">
+          <button type="button" class="submitbtn btn-outline-secondary btn btn-sm" (click)="AddPrintBanner()">SUBMIT</button>
+        </div>
+      </div>
+      </div>
+      <!-- <div class="row mb-5" >
+            <div class="col-50 text-right fontcls">
+                <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" >CANCEL</button>
+                <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
+            </div>
+        </div> -->
+    </form>
+  </div>
+
+</div>
+<p-toast position="bottom-right"></p-toast>

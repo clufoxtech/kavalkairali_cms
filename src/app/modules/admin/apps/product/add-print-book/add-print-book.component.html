@@ -1,121 +1,108 @@
-<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
+<div
+    class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent shadow content">
 
-  
+
     <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b">
         <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
             <div class="text-2xl font-bold tracking-tight fontcls">Add Magazine</div>
         </div>
-        
+
         <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 ">
-         
-      
-    <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3" >
-    
-        <button
-                class="ml-4 " 
-                mat-stroked-button style="background-color: #8ed93b;color:white"
-            (click)="GoBack()">
-            <span class="ml-1 mr-1 fontcls">Magazine List</span>
-            </button>
-         
-  
-  </div>
-  
+
+
+            <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3">
+
+                <button class="ml-4 " mat-stroked-button style="background-color: #8ed93b;color:white"
+                    (click)="GoBack()">
+                    <span class="ml-1 mr-1 fontcls">Magazine List</span>
+                </button>
+
+
+            </div>
+
         </div>
     </div>
-    
+
     <!-- Main -->
-    <form [formGroup]="AddForm" (ngSubmit)="AddPrintbook()" class="ml-3">
-    <p-scrollPanel [style]="{width: '100%', height: '500px'}">
-    <p-panel header="Magazine Information"  [toggleable]="true">
-        <ng-template pTemplate="icons">
-            <p-menu #menu id="config_menu" [model]="items" [popup]="true"></p-menu>
-        </ng-template>
-       
-       
-        <div class="row">
-            <div class="col-15 mb-1">
-                <label for="depname">Cover Image</label>
+    <form [formGroup]="AddForm" (ngSubmit)="AddMagazineEditions()" class="ml-3">
+        <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+
+            <div class="row">
+                <div class="col-15">
+                    <label for="cover">Cover image<span class="text-danger reqd">*</span></label>
+                </div>
+                <div class="col-50">
+                    <input type="file" id="file" formControlName="cover" accept=".jpg, .jpeg, image/png"
+                        (change)="onFileChanged($event)">
+                </div>
+                <div class="col-25 mb-1">
+                    <img src={{url}} alt="no image" style="width:50px;height:50px;" *ngIf="url">
+                </div>
+
             </div>
-            <div class="col-25 mb-1">
-              <!-- <label class="custom-file-upload"> formControlName="cover"-->
-                <input type="file" id="file" formControlName="cover" accept=".jpg, .jpeg, image/png" (change)="onFileChanged($event)">
-                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
-                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
-                        </div> -->
-                      <!-- </label> -->
+            <div class="row">
+                <div class="col-15">
+                    <label for="magazine">Magazine<span class="text-danger reqd">*</span></label>
+                </div>
+                <div class="col-50">
+                    <p-dropdown formControlName="magazine" placeholder="Select" [options]="magazines" optionLabel="name"
+                        optionValue="_links.self.href"></p-dropdown>
+                </div>
             </div>
-            <div class="col-25 mb-1">
-              <img src={{url}} style="width:50px;height:50px;" *ngIf="url">
+
+            <div class="row">
+                <div class="col-15">
+                    <label for="edition">Edition<span class="text-danger reqd">*</span></label>
+                </div>
+                <div class="col-50">
+                    <input type="text" id="edition" class="nameCapital" formControlName="edition">
+                </div>
+
             </div>
-        </div>
-               <div class="row">
-          
-      <div class="col-50">
-          <label for="magazine">Magazine<span class="text-danger reqd">*</span></label>
-                <p-dropdown formControlName="magazine"  placeholder="Select" [options]="category"  optionLabel="name" optionValue="id"></p-dropdown>   
-       
-      </div>
-            
-        </div>
-        <div class="row">
-            <div class="col-50">
-                <label for="title">Edition<span class="text-danger reqd">*</span></label>
-                <input type="text" id="title" class="nameCapital" formControlName="title" (blur)="TitleAlreadyExist()">
-                <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
-                          <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
-                        </div>
-                        <div *ngIf="msg" class="text-danger">{{msg}}</div>
-            </div>
-           
-           </div>
-           <div class="row">
-            <div class="col-50">
-              <label for="subtitle">No. of pages</label>
-              <input type="text" id="subtitle" class="nameCapital" formControlName="subtitle" >
-              <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+            <div class="row">
+                <div class="col-15">
+                    <label for="noofpages">No. of pages</label>
+                </div>
+                <div class="col-50">
+                    <input type="text" id="noofpages" formControlName="noofpages">
+                    <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
                         <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
                       </div> -->
-          </div>
+                </div>
             </div>
-        <div class="row">
-          
-      <div class="col-50">
-          <label for="category">Category<span class="text-danger reqd">*</span></label>
-                <p-multiSelect formControlName="categories" (onPanelHide)="CategoryOnClose()" placeholder="Select" [options]="category"  [(ngModel)]="selectedCategory" (onChange)="add($event)" optionLabel="name" optionValue="id"></p-multiSelect>
-                <div class="text-inside">
-                <mat-chip class="outside"
-                *ngFor="let category of filtercategory"
-                [selectable]="selectable"
-                [removable]="removable"
-                (removed)="remove(category)">
-                {{category.name}}
-                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-              </mat-chip> 
-          </div>     
-            
-       
-      </div>
-            
-        </div>
-        <div class="row">
-          <div class="col-50">
-            <label for="summary">Description</label>
-            <textarea id="summary" formControlName="summary"  rows="2"></textarea>
-         
-        </div>
-            </div>
-       
-    </p-panel>
+            <div class="row">
 
-    <div class="row" >
-        <div class="col-50 text-right fontcls">
-            <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="GoBack()">CANCEL</button>
-            <button type="submit" class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
-        </div>
-    </div>
-  </p-scrollPanel>
-  </form>
-    </div>
-    <p-toast position="bottom-right"></p-toast>
-    
+                <div class="col-15">
+                    <label for="category">Category<span class="text-danger reqd">*</span></label>
+                </div>
+                <div class="col-50">
+                    <p-dropdown formControlName="category" placeholder="Select" [options]="category" optionLabel="name"
+                        optionValue="_links.self.href"></p-dropdown>
+
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-15">
+                    <label for="description">Description</label>
+                </div>
+                <div class="col-50">
+                    <textarea id="description" formControlName="description" rows="2"></textarea>
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-50 text-right fontcls">
+                    <button type="button" class="cancelbtn btn-outline-secondary btn btn-md"
+                        (click)="GoBack()">CANCEL</button>
+                    <button type="submit" class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
+                </div>
+            </div>
+        </p-scrollPanel>
+    </form>
+</div>
+<p-toast position="bottom-right"></p-toast>

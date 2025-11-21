@@ -42,9 +42,9 @@ ngOnInit(): void {
   }
   GetCategory(){
     this.categoryservice.getCategory().subscribe((response)=>{
-      if(response._embedded.categoryModels.length>0){
+      if(response._embedded.magazineCategories.length>0){
         this.category= new Array<Category>();
-        this.category=response._embedded.categoryModels;
+        this.category=response._embedded.magazineCategories;
         console.log(this.category);
       } 
        }) 

@@ -5,7 +5,6 @@ import { CustomerlistComponent } from './customerlist/customerlist.component';
 
 import { SharedModule } from 'app/shared/shared.module';
 
-import { BlockedReasonsComponent } from './blocked-reasons/blocked-reasons.component';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
 
 import { EditcustomerComponent } from './editcustomer/editcustomer.component';
@@ -21,7 +20,6 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
   ],
   declarations: [
     CustomerlistComponent,
-    BlockedReasonsComponent,
     CustomerDetailsComponent,
     EditcustomerComponent,
     AddcustomerComponent,

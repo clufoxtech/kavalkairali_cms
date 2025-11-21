@@ -26,7 +26,12 @@
 }
 .col-30 {
   float: left;
-  width: 50%;
+  width: 20%;
+  margin-top: 2px;
+}
+.col-70 {
+  float: left;
+  width: 30%;
   margin-top: 2px;
 }
 .col-50 {
@@ -35,8 +40,9 @@
   margin-top: 2px;
 }
 /* Floating column for inputs: 75% width */
-.col-70 {
+.col-90 {
   float: left;
-  width: 50%;
+  width: 90%;
   margin-top: 2px;
+  margin-left: 2px;
 }

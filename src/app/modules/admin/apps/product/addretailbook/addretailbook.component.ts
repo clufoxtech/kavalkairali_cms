@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProductService } from '../product.service';
 import { Category } from '../productModel/Category';
-import { Contributor } from '../productModel/contributor';
 import { searchlist } from '../productModel/searchList';
 
 @Component({
@@ -16,7 +15,6 @@ import { searchlist } from '../productModel/searchList';
 export class AddretailbookComponent implements OnInit {
 public data:any[];
 public category:Array<Category>;
-public authorContributor:Array<Contributor>;
 SearchForm!: FormGroup;
   public searchDetails:searchlist;
   public selectedList: any[];
@@ -36,7 +34,6 @@ constructor(public formBuilder: FormBuilder,private messageService: MessageServi
       title: ['', []],
     });
     this.GetCategory();
-    this.GetAuthorContributor('AUTHOR');
     //this.data=[{'product':'Bhumiyude Avakashikal','version':'Audio','author':'Basheer','edition':2,'volume':1,'code':'HP4785','language':'Malayalam','mrp':'540 INR','revenue':'100 INR','royalty':20,'ramount':'42000 INR','payable':'32500 INR'}]
   }
   GoBack(){
@@ -51,14 +48,7 @@ constructor(public formBuilder: FormBuilder,private messageService: MessageServi
       }
        });
   }
-  GetAuthorContributor(type:string){
-    this.addservice.getContributorByType(type).subscribe((response)=>{
-      if(response._embedded.contributors.length>0){
-        this.authorContributor= new Array<Contributor>();
-        this.authorContributor=response._embedded.contributors;
-      } 
-       }) 
-  }
+
   clear(){
     this.SearchForm.reset();
     this.data=[];

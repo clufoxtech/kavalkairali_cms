@@ -108,42 +108,89 @@ export class ProductService {
   }
   //Category
   getCategory(): Observable<any> {
-    return this.httpClient.get(this.baseUrl + '/categories', { headers: this.header, withCredentials: true });
+    return this.httpClient.get(this.baseUrl + '/magazineCategories', { headers: this.header, withCredentials: true });
 
   }
   addCategory(name: string): Observable<any> {
-    return this.httpClient.post(this.baseUrl + '/categories', { 'name': name }, { headers: this.header, withCredentials: true });
+    return this.httpClient.post(this.baseUrl + '/magazineCategories', { 'name': name }, { headers: this.header, withCredentials: true });
 
   }
   editCategory(id: number, name: string): Observable<any> {
-    return this.httpClient.put(this.baseUrl + '/categories/' + id, { 'name': name }, { headers: this.header, withCredentials: true });
+    return this.httpClient.put(this.baseUrl + '/magazineCategories/' + id, { 'name': name }, { headers: this.header, withCredentials: true });
 
   }
   deleteCategory(id: number): Observable<any> {
-    return this.httpClient.delete(this.baseUrl + '/categories/' + id, { headers: this.header, withCredentials: true });
+    return this.httpClient.delete(this.baseUrl + '/magazineCategories/' + id, { headers: this.header, withCredentials: true });
 
   }
+  //magazines
+  getMagazines(): Observable<any> {
+    return this.httpClient.get(this.baseUrl + '/magazines', { headers: this.header, withCredentials: true });
+  }
+  addMagazine(name: string): Observable<any> {
+    return this.httpClient.post(this.baseUrl + '/magazines', { 'name': name }, { headers: this.header, withCredentials: true });
+  }
+  editMagazine(id: number, name: string): Observable<any> {
+    return this.httpClient.put(this.baseUrl + '/magazines/' + id, { 'name': name }, { headers: this.header, withCredentials: true });
+  }
+  deleteMagazine(id: number): Observable<any> {
+    return this.httpClient.delete(this.baseUrl + '/magazines/' + id, { headers: this.header, withCredentials: true });
+  }
+
   //Subcategory
-  getSubcategory(): Observable<any> {
-    return this.httpClient.get(this.baseUrl + '/subCategories', { headers: this.header, withCredentials: true });
+  getMagazineList(): Observable<any> {
+    return this.httpClient.get(this.baseUrl + '/magazineEditions', { headers: this.header, withCredentials: true });
 
   }
-  addSubcategory(name: string, category: string): Observable<any> {
-    return this.httpClient.post(this.baseUrl + '/subCategories', { 'name': name, 'category': category }, { headers: this.header, withCredentials: true });
+  addMagazineList(magazine: string, category: string, edition:string, 
+    noofpages:string,
+    description:string,
+    coverID:string
+  ): Observable<any> {
+    return this.httpClient.post(this.baseUrl + '/magazineEditions', 
+      { 'magazine': magazine, 
+        'category': category,
+        'edition':edition,
+        'noOfPages':noofpages,
+        'description':description,
+        'coverId':coverID
+      }, 
+      { headers: this.header, withCredentials: true });
 
   }
-  editSubcategory(id: number, name: string, category: string): Observable<any> {
-    return this.httpClient.patch(this.baseUrl + '/subCategories/' + id, { 'name': name, 'category': category }, { headers: this.header, withCredentials: true });
+  editMagazineList(bookdetails: BookDetails): Observable<any> {
+    console.log(bookdetails);
+    return this.httpClient.patch(this.baseUrl + '/magazineEditions/' + bookdetails.id, 
+     { 'magazine': bookdetails.magazine, 
+        'category': bookdetails.category,
+        'edition':bookdetails.edition,
+        'noOfPages':bookdetails.noofpages,
+        'description':bookdetails.description,
+        'coverId':bookdetails.coverId
+      }, 
+      { headers: this.header, withCredentials: true });
+  }
+   changeStatus(id: number, status: string): Observable<any> {
+    return this.httpClient.patch(this.baseUrl + '/magazineEditions/' + id , 
+      { 'status': status},
+      { headers: this.header, withCredentials: true });
 
   }
-  deleteSubcategory(id: number): Observable<any> {
-    return this.httpClient.delete(this.baseUrl + '/subCategories/' + id, { headers: this.header, withCredentials: true });
+  updateMagazineCover(id:number,coverID:string): Observable<any> {
+    return this.httpClient.patch(this.baseUrl + '/magazineEditions/' + id,
+      { 'coverId': coverID},
+      { headers: this.header, withCredentials: true });
+  }
+  updateMagazineFile(id:number,fileID:string): Observable<any> {
+    return this.httpClient.patch(this.baseUrl + '/magazineEditions/' + id,
+      { 'fileId': fileID},
+      { headers: this.header, withCredentials: true });
+  }
+  deleteMagazineList(id: number): Observable<any> {
+    return this.httpClient.delete(this.baseUrl + '/magazineEditions/' + id, { headers: this.header, withCredentials: true });
 
   }
-  getSubcategoryByCategory(list: any): Observable<any> {
-    return this.httpClient.post(this.baseUrl + '/subCategories/getOfCategories', { 'categories': list }, { headers: this.header, withCredentials: true });
 
-  }
   //Country
   getCountry(): Observable<any> {
     return this.httpClient.get(this.baseUrl + '/countries', { headers: this.header, withCredentials: true });
@@ -297,12 +344,7 @@ export class ProductService {
     return this.httpClient.get(this.baseUrl + '/books/detail/' + id, { headers: this.header, withCredentials: true });
 
   }
-  //print
-  getPrintBook(status, page: number, siz: number): Observable<any> {
-    const size = Number(siz) + 1;
-    return this.httpClient.get(this.baseUrl + '/books/byTypeStatus?type=PRINT&status=' + status + '&page=' + page + '&size=' + size, { headers: this.header, withCredentials: true });
 
-  }
   //audio
   getAudioBook(status, page: number, siz: number): Observable<any> {
     const size = Number(siz) + 1;
@@ -354,10 +396,7 @@ removePreTypes(id: number, type: string): Observable<any>{
     return this.httpClient.put(this.baseUrl + '/books/' + editDetails.id + '/rental/update', { 'bookFormat': editDetails.bookFormat, 'rentalFee': editDetails.rentalFee, 'duration': editDetails.duration }, { headers: this.header, withCredentials: true });
 
   }
-  changeStatus(id: number, status: string, type: string): Observable<any> {
-    return this.httpClient.put(this.baseUrl + '/books/' + id + '/status?type=' + type + '&status=' + status, { headers: this.header, withCredentials: true });
-
-  }
+ 
   editBook(addDetails: booklist): Observable<any> {
     var formData = new FormData();
     for (let key in addDetails) {
@@ -416,7 +455,7 @@ removePreTypes(id: number, type: string): Observable<any>{
     return this.httpClient.post(this.baseUrl + '/uploads/images', formData, { headers: this.header, withCredentials: true });
 
   }
-  addBookFile(file: any): Observable<any> {
+  addFile(file: any): Observable<any> {
     var formData = new FormData();
     formData.append('file', file);
     return this.httpClient.post(this.baseUrl + '/uploads/file', formData, { headers: this.header, withCredentials: true });
@@ -683,6 +722,26 @@ getProductIds(bookType: string, page: number, size: number): Observable<any> {
       });
       FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
     }
+  //block reason
+
+  getBlockReason():Observable<any>{
+    this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+    return this.httpClient.get(this.baseUrl+'/blockReasons',{headers:this.header,withCredentials : true});
+ 
 }
+addReason(name:string):Observable<any>{
+  this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+  return this.httpClient.post(this.baseUrl+'/blockReasons',{'name':name},{headers:this.header,withCredentials : true}); 
 
+}
+deleteblockedReason(id:number):Observable<any>{
+  this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+  return this.httpClient.delete(this.baseUrl+'/blockReasons/'+id,{headers:this.header,withCredentials : true});
 
+}
+editblockedReason(reason:any):Observable<any>{
+  this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+  return this.httpClient.patch(this.baseUrl+'/blockReasons/'+reason.id,{'name':reason.name},{headers:this.header,withCredentials : true});
+
+}
+}

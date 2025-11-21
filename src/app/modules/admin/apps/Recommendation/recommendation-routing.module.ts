@@ -9,21 +9,21 @@ const RecommendationRoutes: Routes = [
     pathMatch : 'full',
     redirectTo: 'recommendationlist',
     data:{
-       breadCrum:'RecommendationList'
+       breadCrum:'Home screen list'
    }
 },
 {
     path     : 'recommendationlist',
     component: RecommendationlistComponent,
     data:{
-       breadCrum:'RecommendationList'
+       breadCrum:'Home screen list'
    }
 },
 {
     path     : 'addrecommendation/:bookType/:recommendationType',
     component: AddrecommendationComponent,
     data:{
-       breadCrum:'Add Recommendation'
+       breadCrum:'Add home screen'
    }
 },
 ];

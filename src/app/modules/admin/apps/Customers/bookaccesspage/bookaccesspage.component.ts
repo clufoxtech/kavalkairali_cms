@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProductService } from '../../product/product.service';
 import { Category } from '../../product/productModel/Category';
-import { Contributor } from '../../product/productModel/contributor';
 import { searchlist } from '../../product/productModel/searchList';
 import { CustomerService } from '../customer.service';
 
@@ -16,7 +15,6 @@ import { CustomerService } from '../customer.service';
 export class BookaccesspageComponent implements OnInit {
   public data:any[];
   public category:Array<Category>;
-  public authorContributor:Array<Contributor>;
   SearchForm!: FormGroup;
   public searchDetails:searchlist;
   public selectedList:any[];

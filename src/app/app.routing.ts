@@ -106,7 +106,7 @@ export const appRoutes: Route[] = [
                     breadCrum:'Customer'
                 }, loadChildren: () => import('app/modules/admin/apps/Customers/customer.module').then(m => m.CustomerModule)},
                 {path: 'product', data: {
-                    breadCrum:'Product'
+                    breadCrum:'Magazine'
                 }, loadChildren: () => import('app/modules/admin/apps/product/product.module').then(m => m.ProductModule)},
                 {path: 'Articles', data: {
                     breadCrum:'Articles'
@@ -118,9 +118,9 @@ export const appRoutes: Route[] = [
                 {path: 'Subscription', data: {
                     breadCrum:'Subscription'
                 }, loadChildren: () => import('app/modules/admin/apps/Subscription/subscription.module').then(m => m.SubscriptionModule)},
-                {path: 'Recommendation', data: {
-                    breadCrum:'Recommendation'
-                }, loadChildren: () => import('app/modules/admin/apps/Recommendation/recommendation.module').then(m => m.RecommendationModule)},
+                {path: 'Homescreen', data: {
+                    breadCrum:'Home screen'
+                }, loadChildren: () => import('app/modules/admin/apps/Homescreen/homescreen.module').then(m => m.HomeScreenModule)},
                 {path: 'Campaigns', loadChildren: () => import('app/modules/admin/apps/Campaigns/campaigns.module').then(m => m.CampaignsModule)},
                 {path: 'Settings', loadChildren: () => import('app/modules/admin/apps/Settings/settings.module').then(m => m.SettingsModule)},
                {path: 'Reports', loadChildren: () => import('app/modules/admin/apps/Reports/reports.module').then(m => m.ReportsModule)},

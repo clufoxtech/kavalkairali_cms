@@ -12,7 +12,6 @@ import { orderSearch, searchlist } from '../../product/productModel/searchList';
 import { UserserviceService } from '../../users/userservice.service';
 import { ReportsService } from '../reports.service';
 import { ProductService } from '../../product/product.service';
-import { Contributor } from '../../product/productModel/contributor';
 
 @Component({
   providers: [ConfirmationService,MessageService],
@@ -59,7 +58,6 @@ export class ReportListComponent implements OnInit {
   public searchDetails:searchlist;
   public  selectedBook: string;
   public  selectedAuthor: string;
-  public authorList:Array<Contributor>;
   public exportlist:Array<any>;
   public index:number;
   cities:FilterModel[];
@@ -96,7 +94,6 @@ bookType:string;
     this.searchDetails.bookType=this.bookType;
     this.searchDetails.title='';
     this.GetBookList(this.searchDetails);
-    this.GetAuthorList(); 
    this. ClearFilter();
   }
   handleChange(e) {
@@ -175,14 +172,6 @@ bookType:string;
   //  this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
   }
 })
-  }
-  GetAuthorList(){
-    this.productservice.getContributorByType('AUTHOR').subscribe((response)=>{
-      if(response._embedded.contributors.length>0){
-        this.authorList= new Array<Contributor>();
-        this.authorList=response._embedded.contributors;
-      } 
-       }) 
   }
   DateRangeandBook(){
     this.startDate='';

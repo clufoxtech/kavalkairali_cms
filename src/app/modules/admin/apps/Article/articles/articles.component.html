@@ -16,7 +16,7 @@
                 matInput
                 [formControl]="searchInputControl"
                 [autocomplete]="'off'"
-                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'startsWith')">
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains')">
                 <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
         </mat-form-field>
             <!-- Add product button -->
@@ -33,7 +33,7 @@
     <!-- Main -->
     
         <div class="card ml-4">
-            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="data" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
+            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll" [globalFilterFields]="['title']"[value]="data" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
                
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -47,9 +47,9 @@
                 <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
                     <tr>
                         <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
-                        <td title={{product.name}} (click)="ShowUser(product)" style="min-width:100px;max-width:300px;">{{product.name| titlecase}}</td>
-                        <td title={{product.description}} style="min-width:100px;max-width:500px;">{{product.description}}</td>
-                        <td style="min-width:100px">{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td>
+                        <td title={{product.title}} style="min-width:100px;max-width:300px;">{{product.title| titlecase}}</td>
+                        <td style="min-width:100px;max-width:500px;">{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td>
+                        <td style="min-width:100px">{{product.author}}</td>
                         <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
                     </tr>
                 </ng-template>
@@ -71,7 +71,7 @@
    
 </div>
 <!--Add new Article-->
-<p-dialog [(visible)]="display" header="New Article" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+<p-dialog [(visible)]="edit" header="Edit Article" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
 [draggable]="false" [resizable]="false">
 
 
@@ -79,10 +79,11 @@
     <div class="container">
     <div class="row">
       <div class="col-25">
-        <label for="articlename">Name<span class="text-danger reqd">*</span></label>
+        <label for="articlename">Title<span class="text-danger reqd">*</span></label>
       </div>
       <div class="col-75">
-        <input type="text" id="articlename" class="nameCapital" formControlName="articlename" placeholder="Article name.." >
+        <input type="text" id="articlename" class="nameCapital" [(ngModel)]="product.title"
+        formControlName="articlename" placeholder="Article name.." >
         <div *ngIf="getControl['articlename'].touched && getControl['articlename'].invalid" class="text-danger">
             <div *ngIf="getControl['articlename'].errors?.['required']">Name is required.</div>
           </div>
@@ -91,18 +92,30 @@
        </div>
       </div>
     </div>
+      <div class="row">
+      <div class="col-25">
+        <label for="author">Author<span class="text-danger reqd">*</span></label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="author" class="nameCapital" formControlName="author" [(ngModel)]="product.author"
+         placeholder="Article name.." >
+        <div *ngIf="getControl['author'].touched && getControl['author'].invalid" class="text-danger">
+            <div *ngIf="getControl['author'].errors?.['required']">Author is required.</div>
+          </div>
+
+      </div>
+    </div>
     <div class="row">
         <div class="col-25">
           <label for="desc">Description<span class="text-danger reqd">*</span></label>
         </div>
         <div class="col-75">
-          <input type="text" id="desc" class="sentenceCase" formControlName="desc" placeholder="Enter description.." >
+          <input type="text" id="desc" class="sentenceCase" formControlName="desc" [(ngModel)]="product.description"
+          placeholder="Enter description.." >
           <div *ngIf="getControl['desc'].touched && getControl['desc'].invalid" class="text-danger">
             <div *ngIf="getControl['desc'].errors?.['required']">Description is required.</div>
           </div>
-          <div *ngIf="getControl['desc'].errors?.maxlength"  class="text-danger"> 
-            More than 100 characters is not allowed.
-       </div> 
+
         </div>
       </div>  
     <div class="row" >

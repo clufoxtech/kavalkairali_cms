@@ -23,7 +23,7 @@
   </div>
 
   <!-- Main -->
-  <form [formGroup]="AddForm" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8">
+  <form [formGroup]="AddForm" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8" (ngSubmit)="AddGallery()">
     <p-scrollPanel [style]="{width: '100%', height: '380px'}">
       <div class="container">
         <p-panel header="Gallery details">
@@ -33,7 +33,8 @@
               <label for="title">Title<span class="text-danger reqd">*</span></label>
             </div>
             <div class="col-75">
-              <input type="text" id="title" class="nameCapital" formControlName="title">
+              <input type="text" id="title" class="nameCapital" [(ngModel)]="galleryTitle" name="title"
+              formControlName="title">
               <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
                 <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
               </div>
@@ -60,7 +61,7 @@
           </div>
           <div class="row">
             <div class="col-50 text-right fontcls">
-              <button type="button" class="cancelbtn btn-outline-secondary btn btn-md">CANCEL</button>
+              <button type="button" class="cancelbtn btn-outline-secondary btn btn-md" (click)="GoBack()">CANCEL</button>
               <button type="submit" class="submitbtn btn-outline-secondary btn btn-md">SUBMIT</button>
             </div>
           </div>

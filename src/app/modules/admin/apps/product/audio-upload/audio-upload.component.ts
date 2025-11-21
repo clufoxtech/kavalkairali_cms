@@ -80,21 +80,7 @@ export class AudioUploadComponent implements OnInit {
         }
       } else {
         // If fileId is not a string, assume it's a File object and proceed with file upload
-        this.productservice.addBookFile(audioEntry.fileId).subscribe({
-          next: (response: any) => {
-            audioEntry.fileId = response.publicId;
-            // Push the updated audioEntry into the array
-            this.updatedDataArray.push(audioEntry);
-            // If all entries are updated, call the method to submit data to API
-            if (this.updatedDataArray.length === this.selectedAudioArray.length) {
-              this.submitAudioData();
-            }
-          },
-          error: (err) => {
-            console.error('Error uploading file:', err);
-            // Handle error if needed
-          }
-        });
+       
       }
     }
   }

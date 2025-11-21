@@ -1,8 +1,7 @@
 export class ArticleList{
-        public id:number;
-        public name:string;
-        public date:Date;
-        public member:string;
+        public id:string;
+        public title:string;
+        public author:string;
         public creationTimestamp:Date;
         public description:string;
         public _links:self[];

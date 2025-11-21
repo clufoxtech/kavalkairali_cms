@@ -35,32 +35,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
             },
            
             {
-                id      : 'apps.users',
-                title   : 'User',
-                type    : 'collapsable',
-                icon    : 'heroicons_outline:users',
-                children: [
-                    {
-                        id   : 'apps.users.userlist',
-                        title: 'User List',
-                        type : 'basic',
-                        link : '/apps/users/userlist'
-                    },
-                    {
-                        id   : 'apps.users.departments',
-                        title: 'Departments',
-                        type : 'basic',
-                        link : '/apps/users/departments'
-                    },
-                    {
-                        id   : 'apps.users.roles',
-                        title: 'Roles',
-                        type : 'basic',
-                        link : '/apps/users/roles'
-                    }
-                ]
-            },
-            {
                 id      : 'apps.Customers',
                 title   : 'Subscribers',
                 type    : 'collapsable',
@@ -91,13 +65,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                         title: 'Masters',
                         type : 'basic',
                         link    : '/apps/product/Master/',                   
-                    },
-                    {
-                        id   : 'apps.product.freebooklist',
-                        title: 'Free Book',
-                        type : 'basic',
-                        link    : '/apps/product/freebooklist',
-                       
                     },
                 ]
             },
@@ -130,43 +97,16 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 ]
             },
             {
-                id      : 'apps.Offers',
-                title   : 'Offers',
-                type    : 'collapsable',
-                icon    : 'heroicons_outline:academic-cap',
-                children: [
-                    {
-                        id   : 'apps.Campaigns.campaignlist',
-                        title: 'Offers List',
-                        type : 'basic',
-                        link : '/apps/Campaigns/campaignlist'
-                    },
-                    {
-                        id   : 'apps.Campaigns.couponlist',
-                        title: 'Coupon List',
-                        type : 'basic',
-                        link : '/apps/Campaigns/couponlist'
-                    }
-                    ,
-                    {
-                        id   : 'apps.Campaigns.comboOffer',
-                        title: 'Combo Offer',
-                        type : 'basic',
-                        link : '/apps/Campaigns/comboOffer'
-                    }
-                ]
-            },
-            {
-                id      : 'apps.Recommendation',
-                title   : 'Recommendation',
+                id      : 'apps.homescreen',
+                title   : 'Home screen',
                 type    : 'collapsable',
                 icon    : 'heroicons_outline:sparkles',
                 children: [
                     {
-                        id   : 'apps.Recommendation.recommendationlist',
-                        title: 'RecommendationList',
+                        id   : 'apps.Homescreen.homescreen',
+                        title: 'Home screen List',
                         type : 'basic',
-                        link : '/apps/Recommendation/recommendationlist'
+                        link : '/apps/Homescreen/homescreen'
                     },
                     // {
                     //     id   : 'apps.Recommendation.addrecommendation',
@@ -196,26 +136,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                     }
                 ]
             },
-            {
-                id      : 'apps.Reports',
-                title   : 'Reports',
-                type    : 'collapsable',
-                icon    : 'heroicons_outline:newspaper',
-                children: [
-                    {
-                        id   : 'apps.Reports.reportlist',
-                        title: 'Report',
-                        type : 'basic',
-                        link : '/apps/Reports/reportlist'
-                    },
-                    // {
-                    //     id   : 'apps.Reports.readers',
-                    //     title: 'Readers',
-                    //     type : 'basic',
-                    //     link : '/apps/Reports/readers'
-                    // }
-                ]
-            },
+            
             {
                 id      : 'apps.articles',
                 title   : 'Survey',

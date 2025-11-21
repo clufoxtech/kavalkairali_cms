@@ -60,11 +60,11 @@
                             <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
                                 <tr>
                                     <td style="max-width:45px">{{rowIndex+1}}</td>
-                                    <td title={{product.title}} (click)="ShowBook(product)"
-                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
-                                    <td title={{product.author}}>{{product.author}}</td>
-                                    <td>{{product.edition}}</td>
-                                    <td>{{product.volume}}</td>
+                                    <td title={{product.name}} (click)="ShowBook(product)"
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.name}}</td>
+                                    <td title={{product.edition}}>{{product.edition}}</td>
+                                    <td>{{product.categoryName}}</td>
+                                    <td>{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td>
 
                                     <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
                                             class="pi pi-ellipsis-v" (click)="showprintbookPublish($event,product)"></i></td>
@@ -97,50 +97,6 @@
                         </ng-template>
                     </p-overlayPanel>
                 </p-tabPanel>
-                <p-tabPanel header="Drafts" >
-                    <div class="card">
-                        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll" [totalRecords]="totalRecords"
-                        [globalFilterFields]="['title']" [value]="printdraft"  (onPage)="LazyLoadPrintDraft($event)" [lazy]="true" [paginator]="true" [rows]=perPage
-                            [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true" [scrollable]="true"
-                            scrollHeight="380px" sortMode="multiple">
-    
-                            <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th style="max-width:45px">NO</th>
-                                    <th >MAGAZINE</th>
-                                    <th>CATEGORY</th>
-                                    <th>EDITION</th>
-                                    <th style="max-width:45px"></th>
-                                </tr>
-    
-    
-                            </ng-template>
-                            <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
-                                <tr>
-                                    <td style="max-width:45px">{{rowIndex+1}}</td>
-                                    <td title={{product.name}} (click)="ShowBook(product)"
-                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
-                                    <td title={{product.author}}>{{product.author}}</td>
-                                    <td>{{product.edition}}</td>
-                                    <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
-                                            class="pi pi-ellipsis-v" (click)="showprintbookDraft($event,product)"></i></td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-    
-                    <p-overlayPanel #opd>
-                        <ng-template pTemplate>
-                            <ul>
-                                <li (click)="PublishBook(bookdetails)" style="cursor:pointer">Publish</li>
-                                <HR SIZE="1">
-                                <li (click)="EditPrintBook(bookdetails)" style="cursor:pointer">Edit</li>
-                                <HR SIZE="1">
-                                <li style="cursor:pointer" (click)="Delete(bookdetails)">Delete</li>
-                            </ul>
-                        </ng-template>
-                    </p-overlayPanel>
-                </p-tabPanel>
                 <p-tabPanel header="Archived" >
                     <div class="card">
                         <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt4 responsiveLayout="scroll" [totalRecords]="totalRecords"
@@ -162,10 +118,10 @@
                                 <tr>
                                     <td style="max-width:45px">{{rowIndex+1}}</td>
                                     <td title={{product.name}} (click)="ShowBook(product)"
-                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.title}}</td>
-                                    <td title={{product.author}}>{{product.author}}</td>
+                                        style="cursor:pointer;color: rgb(40, 150, 214);">{{product.name}}</td>
+                                    <td title={{product.categoryName}}>{{product.categoryName}}</td>
                                     <td>{{product.edition}}</td>
-                                    <td>{{product.volume}}</td>
+                                    <td>{{product.updateTimestamp | date:'dd-MM-yyyy'}}</td>
                                     <td style="justify-content: center;cursor:pointer;max-width:45px;"><i
                                             class="pi pi-ellipsis-v" (click)="showPrintArchive($event,product)"></i></td>
                                 </tr>
@@ -186,44 +142,56 @@
 
 <p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
 </p-confirmDialog>
-<p-dialog [(visible)]="publish" header="Choose" [breakpoints]="{'960px': '55vw', '640px': '80vw'}"  [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
+<p-dialog [(visible)]="uploadImage" header="Choose cover image" [breakpoints]="{'960px': '55vw', '640px': '80vw'}"  [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
 [draggable]="false" [resizable]="false">
 
-  <form [formGroup]="PublishForm" (ngSubmit)="BookPublishing()" >
+  <form [formGroup]="PublishForm" (ngSubmit)="addCoverImage()" >
     <div class="container">
-    <div class="row">
-      <div class="col-25">
-        <p-radioButton formControlName="groupname" (click)="SchedulePublish('Schedule')" value="Schedule" label="Schedule"  [(ngModel)]="selectedValue"></p-radioButton>
-      </div>
-      <div class="col-25 mt-1">
-        
-      <p-radioButton formControlName="groupname" (click)="SchedulePublish('Immediate')" value="Immediate" label="Immediate" [(ngModel)]="selectedValue"></p-radioButton>
-       
-      </div>
-    </div>
-    <div class="row mt-2" *ngIf="Schedule">
-        <div class="col-12">
-            <label>Date</label>
+   <div class="row">
+
+            <div class="col-75 mb-1">
+              <!-- <label class="custom-file-upload"> formControlName="cover"-->
+                <input type="file" id="file" formControlName="cover" accept=".jpg, .jpeg, image/png" (change)="onFileChanged($event)">
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+                      <!-- </label> -->
+            </div>
+            <div class="col-25 mb-1">
+              <img src={{url}} alt="no image" style="width:50px;height:50px;" *ngIf="url">
+            </div>
         </div>
-        <div class="col-30">
-            <input type="date" formControlName="date">
-            <div *ngIf="getControl['date'].touched && getControl['date'].invalid" class="text-danger">
-                    <div *ngIf="getControl['date'].errors?.['required']">Date is required.</div>
-                  </div>
-        </div>
-        <div class="col-12">
-            <label>Time</label>
-        </div>
-        <div class="col-30">
-            <input type="time" formControlName="time">
-            <div *ngIf="getControl['time'].touched && getControl['time'].invalid" class="text-danger">
-                    <div *ngIf="getControl['time'].errors?.['required']">Time is required.</div>
-                  </div>
-        </div>
-    </div>
       
    <div class="row" >
-    <div class="col-100 text-right fontcls">
+    <div class="fontcls" style="text-align: center; padding-top:25px;">
+        <button type="submit" class="cancelbtn btn-outline-secondary btn btn-sm" >OK</button>
+    </div>
+</div>
+  </div>
+  </form>
+</p-dialog>
+<p-dialog [(visible)]="uploadFile" header="Choose cover image" [breakpoints]="{'960px': '55vw', '640px': '80vw'}"  [modal]="true" [style]="{width: '30vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+
+  <form [formGroup]="addFile" (ngSubmit)="addFileMagazine()" >
+    <div class="container">
+   <div class="row">
+
+            <div class="col-75 mb-1">
+              <!-- <label class="custom-file-upload"> formControlName="cover"-->
+                <input type="file" id="file" formControlName="fileupload" accept=".pdf" (change)="onFileChanged($event)">
+                <!-- <div *ngIf="getControl['depname'].touched && getControl['depname'].invalid" class="text-danger">
+                          <div *ngIf="getControl['depname'].errors?.['required']">Name is required.</div>
+                        </div> -->
+                      <!-- </label> -->
+            </div>
+            <div class="col-25 mb-1">
+              <img src={{fileUrl}} alt="no image" style="width:50px;height:50px;" *ngIf="fileUrl">
+            </div>
+        </div>
+      
+   <div class="row" >
+    <div class="fontcls" style="text-align: center; padding-top:25px;">
         <button type="submit" class="cancelbtn btn-outline-secondary btn btn-sm" >OK</button>
     </div>
 </div>

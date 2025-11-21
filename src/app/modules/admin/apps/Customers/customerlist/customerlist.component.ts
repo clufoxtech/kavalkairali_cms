@@ -8,10 +8,10 @@ import { FilterModel } from '../CustomerModels/dropdownfilter';
 import { Table } from 'primeng/table';
 import { UserserviceService } from '../../users/userservice.service';
 import { CustomerService } from '../customer.service';
-import { BlockedReason } from '../CustomerModels/BlockedReason';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
 import { customerSearch } from '../../product/productModel/searchList';
+import { BlockedReason } from '../../product/productModel/blockedreason';
 @Component({
   providers: [ConfirmationService],
   selector: 'app-customerlist',
@@ -161,6 +161,7 @@ export class CustomerlistComponent implements OnInit {
        })
   }
   GetActiveCustomerList(){
+    this.activecustomer= new Array<CustomerDetails>();
     this.customerservice.getCustomerByStatus('ACTIVE',this.page,this.perPage).subscribe((response)=>{
       this.activecustomer= new Array<CustomerDetails>();
       this.activecustomer=response?._embedded?.customers;
@@ -172,6 +173,7 @@ export class CustomerlistComponent implements OnInit {
        })
   }
   GetBlockedCustomerList(){
+    this.blockedcustomer= new Array<CustomerDetails>();
     this.customerservice.getCustomerByStatus('BLOCKED',this.page,this.perPage).subscribe((response)=>{
       this.blockedcustomer= new Array<CustomerDetails>();
       this.blockedcustomer=response?._embedded?.customers;
@@ -201,6 +203,7 @@ export class CustomerlistComponent implements OnInit {
         this.customerservice.getBlockReason().subscribe((response)=>{
           this.Blockreason = new Array<BlockedReason>();
           this.Blockreason=response._embedded.blockReasons;
+
            })
           
       },
@@ -242,6 +245,7 @@ export class CustomerlistComponent implements OnInit {
       icon: 'pi pi-info-circle',
       accept: () => {
         this.customerservice.changeStatus('ACTIVE',customerdetails.id).subscribe((response)=>{
+          this.GetAllCustomerList();
           this.GetActiveCustomerList();
     this.GetBlockedCustomerList();
     this.GetArchivedCustomerList();
@@ -408,7 +412,8 @@ this.router.navigate([`apps/Customers/customerdetails`,this.customerdetails]);
       var reason=this.AddBlockForm.controls['blockreason'].value;
       var comment=this.AddBlockForm.controls['blockcomment'].value;
     this.customerservice.addBlockReason(reason,comment,id).subscribe((response)=>{   
-      this.blockreason=false;  
+      this.blockreason=false;
+      this.GetAllCustomerList();
       this.GetActiveCustomerList();
       this.GetBlockedCustomerList();
       this.GetArchivedCustomerList();
@@ -432,7 +437,12 @@ else {
   }
   showAll(event,product){
     this.customerdetails=product;
+    if(this.customerdetails.status=='ACTIVE' || this.customerdetails.status=='ARCHIVED'){
     this.all.show(event);
+    }
+    else if(this.customerdetails.status=='BLOCKED'){
+      this.ob.show(event);
+      }
   }
   ViewReason(event,product){
     this.viewreason=product;

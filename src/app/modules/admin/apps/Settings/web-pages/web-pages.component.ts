@@ -13,10 +13,6 @@ export class WebPagesComponent implements OnInit {
     ngOnInit(): void {
       this.data=[{'No':1,'webpages':'Terms and conditions'},
       {'No':2,'webpages':'Privacy policy'},
-      {'No':3,'webpages':'Refund policy'},
-      {'No':4,'webpages':'Cancellation policy'},
-      {'No':5,'webpages':'Shipping policy'},
-      {'No':6,'webpages':'Return policy'}
     ];
 
     console.log(this.data);

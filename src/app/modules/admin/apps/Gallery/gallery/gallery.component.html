@@ -16,7 +16,7 @@
                 matInput
                 [formControl]="searchInputControl"
                 [autocomplete]="'off'"
-                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'startsWith')">
+                [placeholder]="'Search'" (input)="dt1.filterGlobal($event.target.value, 'contains')">
                 <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button> -->
         </mat-form-field>
             <!-- Add product button -->
@@ -33,21 +33,24 @@
     <!-- Main -->
     
         <div class="card ml-4">
-            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']"[value]="data" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
+            <p-table styleClass="p-datatable-sm" #dt1 responsiveLayout="scroll" [globalFilterFields]="['title']"[value]="data" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
                
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="max-width:45px;min-width:30px;">NO</th>
-                        <th style="min-width:100px;max-width:300px;">TITLE</th>
-                        <th style="min-width:100px;max-width:500px;">PUBLISHED</th> 
+                        <th>TITLE</th>
+                        <th>PUBLISHED</th> 
+                        <th>NO OF IMAGES</th> 
                         <th style="max-width:45px;"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
                     <tr>
                         <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
-                        <td title={{product.name}} (click)="ShowUser(product)" style="min-width:100px;max-width:300px;">{{product.name| titlecase}}</td>
-                        <td title={{product.description}} style="min-width:100px;max-width:500px;">{{product.description}}</td>
+                        <td title={{product.title}} (click)="ShowUser(product)"
+                        style="cursor:pointer;color: rgb(40, 150, 214);" >{{product.title| titlecase}}</td>
+                        <td >{{product.creationTimestamp | date:'dd-MM-yyyy'}}</td>
+                        <td >{{product.imageId.length}}</td>
                         <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
                     </tr>
                 </ng-template>
@@ -128,6 +131,13 @@
   </div>
   </form>
 
+</p-dialog>
+
+<p-dialog [(visible)]="imageScroll" header="tst" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="false">
+<div *ngFor="let image of images" style="display:inline-block; width: 25%;">
+  <img [src]="'https://api.kavalkairali.in/kaval-kairali/uploads/image/'+image" height="100px" width="100px" >
+</div>
 </p-dialog>
 <!--End-->
 <p-confirmDialog  [breakpoints]="{'960px': '50vw', '640px': '80vw'}" [style]="{width: '30vw'}">
