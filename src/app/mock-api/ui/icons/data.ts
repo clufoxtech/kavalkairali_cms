@@ -1795,6 +1795,9 @@ export const material = [
     'zoom_out',
     'zoom_out_map'
 ];
+export const article = [
+    'article_icon'
+]
 export const feather = [
     'activity',
     'airplay',

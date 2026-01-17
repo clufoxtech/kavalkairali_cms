@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash-es';
 import { FuseMockApiService } from '@fuse/lib/mock-api';
-import { feather, heroicons, material } from 'app/mock-api/ui/icons/data';
+import { feather, heroicons, material,article } from 'app/mock-api/ui/icons/data';
 
 @Injectable({
     providedIn: 'root'
@@ -11,6 +11,7 @@ export class IconsMockApi
     private readonly _feather: any = feather;
     private readonly _heroicons: any = heroicons;
     private readonly _material: any = material;
+    private readonly article: any = article;
 
     /**
      * Constructor
@@ -44,7 +45,17 @@ export class IconsMockApi
                     list     : cloneDeep(this._feather)
                 }
             ]);
-
+  this._fuseMockApiService
+            .onGet('api/ui/icons/articles_icon')
+            .reply(() => [
+                200,
+                {
+                    namespace: 'articles_icon',
+                    name     : 'Articles_icon',
+                    grid     : 'icon-size-6',
+                    list     : cloneDeep(this.article)
+                }
+            ]);
         // -----------------------------------------------------------------------------------------------------
         // @ Heroicons outline icons - GET
         // -----------------------------------------------------------------------------------------------------
