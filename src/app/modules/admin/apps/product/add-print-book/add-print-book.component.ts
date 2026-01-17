@@ -26,6 +26,10 @@ public category:Array<Category>;
   url: string | ArrayBuffer;
   imagePath: any;
   coverID: any;
+  selectedFilesUpload: any;
+  fileUploadPath: any;
+  urlUpload: string | ArrayBuffer;
+  fileId: any;
   constructor(public formBuilder: FormBuilder,private messageService: MessageService,private router: Router,public addservice:ProductService) {
     
    }
@@ -37,6 +41,8 @@ public category:Array<Category>;
       noofpages: ['', []],
       category: ['', []],
       description: ['', []],
+      fileUpload: ['', []],
+      cover: ['', []],
     }) 
     this.GetMagazine();
     this.GetCategory();
@@ -88,7 +94,7 @@ AddMagazineEditions(){
     const noofpages = this.AddForm.controls['noofpages'].value;
     const category = this.AddForm.controls['category'].value;
     const description = this.AddForm.controls['description'].value;
-    this.addservice.addMagazineList(magazine, category, edition, noofpages, description,this.coverID).subscribe({
+    this.addservice.addMagazineList(magazine, category, edition, noofpages, description,this.coverID, this.fileId).subscribe({
       next: (response) => {
         this.router.navigate(['apps/product/productlist']);
       },
@@ -101,10 +107,25 @@ AddMagazineEditions(){
 
  
 addCoverImage(){
+  console.log(this.selectedFiles);
 if(this.selectedFiles?.length>0 ){
     this.addservice.addImage( this.selectedFiles[0]).subscribe({
       next: (response)=>{
         this.coverID=response.publicId;
+       this.addFileUpload();
+     },
+     error: (err) => {
+      this.coverID=null;
+      this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+     }
+  })
+  }
+}
+addFileUpload(){
+if(this.selectedFilesUpload?.length>0 ){
+    this.addservice.addFile( this.selectedFilesUpload[0]).subscribe({
+      next: (response)=>{
+        this.fileId=response.publicId;
         this.AddMagazine(); 
      },
      error: (err) => {
@@ -131,6 +152,24 @@ onFileChanged(event) {
   reader.readAsDataURL(this.selectedFiles[0]); 
   reader.onload = (_event) => { 
       this.url = reader.result; 
+  }
+}
+onFileUploadChanged(event) {
+ this.selectedFilesUpload = event.target.files;
+  if (this.selectedFilesUpload.length === 0)
+      return;
+
+  const mimeType = this.selectedFilesUpload[0].type;
+  if (mimeType.match(/pdf\/*/) == null) {
+      //this.message = "Only images are supported.";
+      return;
+  }
+
+  const reader = new FileReader();
+  this.fileUploadPath = this.selectedFilesUpload;
+  reader.readAsDataURL(this.selectedFilesUpload[0]); 
+  reader.onload = (_event) => { 
+      this.urlUpload = reader.result; 
   }
 }
 get getControl(){

@@ -36,7 +36,20 @@
                         (change)="onFileChanged($event)">
                 </div>
                 <div class="col-25 mb-1">
-                    <img src={{url}} alt="no image" style="width:50px;height:50px;" *ngIf="url">
+                    <img src={{url}}  style="width:50px;height:50px;" *ngIf="url">
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-15">
+                    <label for="cover">Upload file<span class="text-danger reqd">*</span></label>
+                </div>
+                <div class="col-50">
+                    <input type="file" id="file" formControlName="fileUpload" accept=".pdf"
+                        (change)="onFileUploadChanged($event)">
+                </div>
+                <div class="col-25 mb-1">
+                    <img src={{urlUpload}} alt="no image" style="width:50px;height:50px;" *ngIf="url">
                 </div>
 
             </div>

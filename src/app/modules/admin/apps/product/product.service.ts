@@ -145,7 +145,8 @@ export class ProductService {
   addMagazineList(magazine: string, category: string, edition:string, 
     noofpages:string,
     description:string,
-    coverID:string
+    coverID:string,
+    fileId:string
   ): Observable<any> {
     return this.httpClient.post(this.baseUrl + '/magazineEditions', 
       { 'magazine': magazine, 
@@ -153,7 +154,8 @@ export class ProductService {
         'edition':edition,
         'noOfPages':noofpages,
         'description':description,
-        'coverId':coverID
+        'coverId':coverID,
+        'fileId':fileId
       }, 
       { headers: this.header, withCredentials: true });
 

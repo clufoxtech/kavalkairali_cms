@@ -2,8 +2,8 @@
 
   
     <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center justify-between py-2 px-2 md:px-2 border-b ">
-        <div class="col-sm-3 col-xs-5 col-md-3 pl-3">
-            <div class="text-xl font-bold tracking-tight fontcls">Magazine List</div>
+        <div class="col-sm-3 col-xs-5 col-md-3">
+            <div class="text-xl font-bold tracking-tight fontcls" style="font-size: 17px !important;">MAGAZINE LIST</div>
         </div>
         
         <div class="flex  flex-col sm:flex-row flex-0 justify-between shrink-0 items-center mt-6 sm:mt-0 pr-3">
@@ -26,7 +26,7 @@
         
         <button
                 class="ml-4 " 
-                mat-stroked-button style="background-color:#8ed93b;color:white"
+                mat-stroked-button style="background-color:#495057;color:white"
             (click)="AddProduct()">
             <mat-icon [svgIcon]="'heroicons_outline:plus'" style="color:white;size:2px;"></mat-icon>
             <span class="ml-1 mr-1">Add magazine</span>
@@ -48,10 +48,10 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th style="max-width:45px">NO</th>
-                                    <th >MAGAZINE</th>
-                                    <th>EDITION</th>
-                                    <th>CATEGORY</th>
-                                    <th>PUBLISHED</th>
+                                    <th >Magazine</th>
+                                    <th>Edition</th>
+                                    <th>Category</th>
+                                    <th>Published</th>
                                     <th style="max-width:45px"></th>
                                 </tr>
     
@@ -107,10 +107,10 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th style="max-width:45px">NO</th>
-                                    <th >MAGAZINE</th>
-                                    <th>CATEGORY</th>
-                                    <th>EDITION</th>
-                                    <th>ARCHIVED</th>
+                                    <th >Magazine</th>
+                                    <th>Category</th>
+                                    <th>Edition</th>
+                                    <th>Archived</th>
                                     <th style="max-width:45px"></th>
                                 </tr>
                             </ng-template>

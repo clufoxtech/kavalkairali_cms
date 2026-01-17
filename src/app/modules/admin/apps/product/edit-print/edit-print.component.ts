@@ -30,6 +30,10 @@ AddForm!: FormGroup;
   category: any;
   magazines: Magazine[];
   coverId: any;
+  selectedFilesUpload: any;
+  fileUploadPath: any;
+  urlUpload: string | ArrayBuffer;
+  fileId: any;
   constructor(public formBuilder: FormBuilder,private messageService: MessageService,
     private router: Router,public addservice:ProductService,private Aroute: ActivatedRoute) { }
   
@@ -104,7 +108,24 @@ AddForm!: FormGroup;
     }
   }
 
+onFileUploadChanged(event) {
+ this.selectedFilesUpload = event.target.files;
+  if (this.selectedFilesUpload.length === 0)
+      return;
 
+  const mimeType = this.selectedFilesUpload[0].type;
+  if (mimeType.match(/pdf\/*/) == null) {
+      //this.message = "Only images are supported.";
+      return;
+  }
+
+  const reader = new FileReader();
+  this.fileUploadPath = this.selectedFilesUpload;
+  reader.readAsDataURL(this.selectedFilesUpload[0]); 
+  reader.onload = (_event) => { 
+      this.urlUpload = reader.result; 
+  }
+}
   add(event){
     this.filtercategory=[];
     if(event.value.length>0){
@@ -153,7 +174,7 @@ if(this.selectedFiles?.length>0 ){
     this.addservice.addImage( this.selectedFiles[0]).subscribe({
       next: (response)=>{
         this.coverId=response.publicId;
-        this.Editprintbook(); 
+        this.addFileUpload(); 
      },
      error: (err) => {
       this.coverId=null;
@@ -163,6 +184,24 @@ if(this.selectedFiles?.length>0 ){
   }
   else{
     this.coverId=this.editDetails.coverId;
+    this.addFileUpload();
+  }
+}
+addFileUpload(){
+if(this.selectedFilesUpload?.length>0 ){
+    this.addservice.addFile( this.selectedFilesUpload[0]).subscribe({
+      next: (response)=>{
+        this.fileId=response.publicId;
+        this.Editprintbook(); 
+     },
+     error: (err) => {
+      this.fileId=null;
+      this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
+     }
+  })
+  }
+   else{
+    this.fileId=this.editDetails.fileId;
     this.Editprintbook();
   }
 }

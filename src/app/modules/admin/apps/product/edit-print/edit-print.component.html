@@ -27,7 +27,7 @@
     <form [formGroup]="AddForm" (ngSubmit)="editMagazine()" class="ml-3">
         <p-scrollPanel [style]="{width: '100%', height: '500px'}">
 
- <div class="row">
+            <div class="row">
                 <div class="col-15">
                     <label for="cover">Cover image<span class="text-danger reqd">*</span></label>
                 </div>
@@ -36,7 +36,20 @@
                         (change)="onFileChanged($event)">
                 </div>
                 <div class="col-25 mb-1">
-                    <img src={{url}} alt="no image" style="width:50px;height:50px;" *ngIf="url">
+                    <img src={{url}}  style="width:50px;height:50px;" *ngIf="url">
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-15">
+                    <label for="cover">Upload file<span class="text-danger reqd">*</span></label>
+                </div>
+                <div class="col-50">
+                    <input type="file" id="file" formControlName="fileUpload" accept=".pdf"
+                        (change)="onFileUploadChanged($event)">
+                </div>
+                <div class="col-25 mb-1">
+                    <img src={{urlUpload}} alt="no image" style="width:50px;height:50px;" *ngIf="url">
                 </div>
 
             </div>
@@ -53,7 +66,7 @@
             <div class="row">
                 <div class="col-15">
                     <label for="edition">Edition<span class="text-danger reqd">*</span></label>
-                     </div>
+                </div>
                 <div class="col-50">
                     <input type="text" id="edition" class="nameCapital" formControlName="edition">
                 </div>
@@ -62,7 +75,7 @@
             <div class="row">
                 <div class="col-15">
                     <label for="noofpages">No. of pages</label>
-                     </div>
+                </div>
                 <div class="col-50">
                     <input type="text" id="noofpages" formControlName="noofpages">
                 </div>
@@ -70,7 +83,7 @@
             <div class="row">
                 <div class="col-15">
                     <label for="category">Category<span class="text-danger reqd">*</span></label>
-                     </div>
+                </div>
                 <div class="col-50">
                     <p-dropdown formControlName="category" [options]="category" optionLabel="name"
                         optionValue="_links.self.href"></p-dropdown>
@@ -80,7 +93,7 @@
             <div class="row">
                 <div class="col-15">
                     <label for="description">Description</label>
-                     </div>
+                </div>
                 <div class="col-50">
                     <textarea id="description" formControlName="description" rows="2"></textarea>
                 </div>

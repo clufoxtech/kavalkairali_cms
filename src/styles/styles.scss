@@ -7,7 +7,11 @@
     border-radius: 5px !important; 
   }
  .fontcls{
+  //f7f7f7
   font-family: 'Hind';
+  color: black !important;
+  font-size:13px !important;
+  opacity: revert;
  }
  ul{
   padding-left: 0rem !important;
@@ -112,7 +116,7 @@ button:hover {
   padding: 0px !important;
 }
 .p-datatable .p-datatable-tbody tr:nth-child(even){
-  background-color: #f2f2f2 !important;
+  background-color: #f7f7f7 !important;
 }
 .nameCapital{
   text-transform: capitalize;

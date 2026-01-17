@@ -38,6 +38,7 @@
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="max-width:45px;min-width:30px;">NO</th>
+                        <th >LIST</th>
                         <th >MAGAZINE</th>
                         <th >CATEGORY</th> 
                         <th style="max-width:45px;"></th>
@@ -46,6 +47,7 @@
                 <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
                     <tr>
                         <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
+                        <td >List {{rowIndex+1}}</td>
                         <td title={{product.railMagazine.name}}>{{product.railMagazine.name| titlecase}}</td>
                         <td title={{product.railMagazineCategory.name}}>{{product.railMagazineCategory.name}}</td>
                         <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>

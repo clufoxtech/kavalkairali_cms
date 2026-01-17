@@ -23,9 +23,9 @@ export class GalleryService {
     this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
     return this.httpClient.post(this.baseUrl+'/galleries',{'title':title,'imageId':imageIds},{headers:this.header,withCredentials : true})
   }
-  editGallery(id:number,name:string,description:string):Observable<any>{
+  editGallery(id:number,title:string,imageIds:string[]):Observable<any>{
     this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
-    return this.httpClient.patch(this.baseUrl+'/galleries/'+id,{'description':description,'name':name},{headers:this.header,withCredentials : true})
+    return this.httpClient.patch(this.baseUrl+'/galleries/'+id,{'title':title,'imageId':imageIds},{headers:this.header,withCredentials : true})
   }
   deleteGallery(id:string):Observable<any>{
     this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
