@@ -33,7 +33,7 @@
     </div>
     
     <!-- Main -->
-    <p-tabView class="ml-4 mt-2" (onChange)="handleChange($event)" [(activeIndex)]="index">
+    <p-tabView class="mt-2" (onChange)="handleChange($event)" [(activeIndex)]="index">
       <p-tabPanel header="All" >
         <div class="card">
           <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt0 responsiveLayout="scroll" [paginator]="true" [totalRecords]="totalRecords"
