@@ -113,6 +113,10 @@ export class AddGalleryComponent implements OnInit {
   }
   AddGallery() {
     this.imageIds = new Array();
+    if(this.selectedFiles.length==0){
+      this.SubmitGallery();
+      return;
+    }
     this.processItems().subscribe({
       next: (results: any[]) => {
         // All HTTP calls are complete, 'results' contains the data from each call
@@ -149,6 +153,8 @@ export class AddGalleryComponent implements OnInit {
   }
   SubmitGallery() {
     console.log(this.imageIds);
+    console.log(this.editImages);
+    console.log(this.AddForm);
     if (this.AddForm.valid) {
       this.product = new GalleryList();
       this.product.title = this.AddForm.controls['title'].value;
@@ -188,6 +194,8 @@ removeImage(url: any){
     this.url.splice(index, 1);
     this.editImages.splice(index, 1);
   }
-  this.noOfImages=this.imageIds.length + this.editImages.length;
+  console.log(this.editImages);
+  console.log(this.imageIds);
+  this.noOfImages=this.imageIds?.length ?? 0  + this.editImages?.length;
 }
 }

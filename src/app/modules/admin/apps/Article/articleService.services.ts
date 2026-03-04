@@ -26,10 +26,10 @@ export class ArticleService {
       {'description':description,'title':name, 'author':author, 'coverId':imageId},
       {headers:this.header,withCredentials : true})
   }
-  editArticles(id:string,title:string,description:string, author:string):Observable<any>{
+  editArticles(id:string,title:string,description:string, author:string, imageId: string):Observable<any>{
     this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
     return this.httpClient.patch(this.baseUrl+'/articles/'+id,
-      {'description':description,'title':title,'author':author},{headers:this.header,withCredentials : true})
+      {'description':description,'title':title,'author':author, 'coverId':imageId},{headers:this.header,withCredentials : true})
   }
   deleteArticles(id:string):Observable<any>{
     this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });

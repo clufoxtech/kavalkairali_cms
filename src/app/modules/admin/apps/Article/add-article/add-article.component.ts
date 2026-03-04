@@ -22,6 +22,8 @@ export class AddArticleComponent implements OnInit {
   titleEdit: any;
   authorEdit: any;
   descEdit: any;
+  filechanged: boolean= false;
+  coverImage: any;
 
   constructor(public formBuilder: FormBuilder, private articleService: ArticleService,
     private messageService: MessageService,
@@ -36,8 +38,8 @@ export class AddArticleComponent implements OnInit {
       this.titleEdit=params['title'];
       this.authorEdit=params['author'];
       this.descEdit=params['description'];
-      const coverImage=params['coverId'];
-      this.url=environment.baseUrl+'/uploads/image/'+coverImage;
+    this.coverImage=params['coverId'];
+      this.url=environment.baseUrl+'/uploads/image/'+this.coverImage;
     console.log(this.url);
       }
     });
@@ -58,13 +60,16 @@ export class AddArticleComponent implements OnInit {
       const title = this.AddForm.get('title').value;
       const desc = this.AddForm.get('summary').value;
       const author = this.AddForm.get('author').value;
-  this.articleService.editArticles(this.articleId,title,desc,author).subscribe((response)=>{
-    console.log(response);
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Article Edited Successfully' });
-    this.router.navigate([`apps/Articles/articles`]);
-  },(error)=>{
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to edit Article' });
-  });
+      if(this.filechanged){
+        this.articleService.addCoverImage(this.selectedFiles[0]).subscribe((response) => {
+          console.log(response);
+          const selectedCover = response.publicId;
+           this.editArticelInternal(title, desc, author, selectedCover);
+      });
+      return;
+    }
+  this.editArticelInternal(title,desc,author,this.coverImage);
+    
   return;
     
 
@@ -100,6 +105,7 @@ export class AddArticleComponent implements OnInit {
   }
 
   onFileChanged(event) {
+    this.filechanged = true;
     this.selectedFiles = event.target.files;
     if (this.selectedFiles.length === 0)
       return;
@@ -121,5 +127,15 @@ export class AddArticleComponent implements OnInit {
   get getControl() {
     return this.AddForm.controls;
   }
+
+    private editArticelInternal(title: any, desc: any, author: any, selectedCover: any) {
+      this.articleService.editArticles(this.articleId, title, desc, author, selectedCover).subscribe((response) => {
+        console.log(response);
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Article Edited Successfully' });
+        this.router.navigate([`apps/Articles/articles`]);
+      }, (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to edit Article' });
+      });
+    }
 }
 
