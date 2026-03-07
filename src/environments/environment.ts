@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    baseUrl:'https://api.kavalkairali.in/kaval-kairali'
+    baseUrl:'https://10.5.141.82/museum-zoo'
 };
 
 /*
