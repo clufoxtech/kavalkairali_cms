@@ -22,6 +22,7 @@ export class BlockedReasonsComponent implements OnInit {
   public product:BlockedReason;
   AddForm!: FormGroup;
   EditForm!:FormGroup;
+  totalRecords: number;
   constructor(private router: Router,public formBuilder: FormBuilder,private messageService: MessageService,private confirmationService: ConfirmationService,private productService:ProductService) { }
 
   ngOnInit(): void {
@@ -39,6 +40,7 @@ export class BlockedReasonsComponent implements OnInit {
   GetAllBlockReason(){
     this.productService.getBlockReason().subscribe((response)=>{
       this.blockreason=response._embedded.blockReasons;
+      this.totalRecords=this.blockreason.length;
        })  
   }
   AddReason(){

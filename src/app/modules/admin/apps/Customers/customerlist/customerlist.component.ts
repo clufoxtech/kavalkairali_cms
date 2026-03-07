@@ -58,6 +58,7 @@ export class CustomerlistComponent implements OnInit {
   page=0;
   totalRecords=0;
   searchlist:Array<any>;
+  totalRecordsBlocked: any;
   constructor(private router: Router,public formBuilder: FormBuilder,private confirmationService: ConfirmationService,public userservice:UserserviceService,public customerservice:CustomerService) { }
 
   ngOnInit(): void {
@@ -178,7 +179,7 @@ export class CustomerlistComponent implements OnInit {
       this.blockedcustomer= new Array<CustomerDetails>();
       this.blockedcustomer=response?._embedded?.customers;
       console.log(this.blockedcustomer);
-      this.totalRecords=response.page.totalElements;
+      this.totalRecordsBlocked=response.page.totalElements;
        })
   }
   GetArchivedCustomerList(){

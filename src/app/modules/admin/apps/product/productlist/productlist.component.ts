@@ -71,7 +71,7 @@ export class ProductlistComponent implements OnInit {
   addFile!: FormGroup;
   perPage: number = 10;
   page: number = 0;
-  totalRecords: number = 500000;
+  totalRecords: number = 0;
   searchBook: Array<any>;
   searchDetails: searchlist;
   searchInputControl = new FormControl('');
@@ -88,6 +88,7 @@ export class ProductlistComponent implements OnInit {
   uploadFile: boolean;
   fileUrl: null;
   searchMagazine: any;
+  totalRecordsArchived: number;
   constructor(private messageService: MessageService, public formBuilder: FormBuilder, private router: Router, private confirmationService: ConfirmationService, public productservice: ProductService) { }
 
   ngOnInit(): void {
@@ -193,7 +194,9 @@ export class ProductlistComponent implements OnInit {
       //if(response.content.length>0){
       this.printpublished = new Array<any>();
       this.printpublished = response._embedded.magazineEditions.filter(book => book.status === 'ACTIVE');
+      this.totalRecords = this.printpublished.length;
       this.printarchived= response._embedded.magazineEditions.filter(book => book.status === 'ARCHIVED');
+      this.totalRecordsArchived=this.printarchived.length;
       this.searchMagazine = response._embedded.magazineEditions
       ;
 console.log(this.printpublished);

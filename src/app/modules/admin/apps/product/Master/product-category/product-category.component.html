@@ -33,7 +33,10 @@
     <!-- Main -->
     
         <div class="card">
-            <p-table styleClass="p-datatable-sm" [value]="category" #dt1 responsiveLayout="scroll" [globalFilterFields]="['name']" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
+            <p-table styleClass="p-datatable-sm" [value]="category" #dt1 responsiveLayout="scroll"
+             [globalFilterFields]="['name']" [paginator]="true" [rows]="10" 
+             [rowsPerPageOptions]="[10,25,50]" totalRecords="totalRecords" 
+             [resizableColumns]="true"  [scrollable]="true"  scrollHeight="400px" sortMode="multiple">
                
                 <ng-template pTemplate="header" let-columns>
                     <tr>

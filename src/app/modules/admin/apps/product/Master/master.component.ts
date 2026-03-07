@@ -11,8 +11,8 @@ public data=[];
   constructor(private router: Router) { }
 
   ngOnInit(): void {
-    this.data=[{'No':1,'Master':'Magazines','Link':'magazines'},
-    {'No':2,'Master':'Magazine catgory','Link':'product-category'},
+    this.data=[{'No':1,'Master':'Magazine names','Link':'magazines'},
+    {'No':2,'Master':'Magazine category','Link':'product-category'},
     {'No':3,'Master':'Home screen banner','Link':'banners'},
     {'No':4,'Master':'Blocked reasons','Link':'blocked-reasons'},
   ];

@@ -19,7 +19,10 @@
     <!-- Main -->
     
         <div class="card">
-            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll" [value]="blockreason" [paginator]="true" [rows]="9" [rowsPerPageOptions]="[10,25,50]" [resizableColumns]="true"  [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
+            <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt1 responsiveLayout="scroll" 
+            [value]="blockreason" [paginator]="true" [rows]="10" 
+            [rowsPerPageOptions]="[10,25,50]" totalRecords="totalRecords" 
+            [resizableColumns]="true"  [scrollable]="true"  scrollHeight="380px" sortMode="multiple">
                
                 <ng-template pTemplate="header" let-columns>
                     <tr>

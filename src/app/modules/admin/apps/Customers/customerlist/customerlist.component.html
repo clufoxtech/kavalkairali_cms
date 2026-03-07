@@ -36,8 +36,10 @@
     <p-tabView class="mt-2" (onChange)="handleChange($event)" [(activeIndex)]="index">
       <p-tabPanel header="All" >
         <div class="card">
-          <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt0 responsiveLayout="scroll" [paginator]="true" [totalRecords]="totalRecords"
-          [globalFilterFields]="['title']"   [value]="allCustomers" (onPage)="LazyLoadAllCustomer($event)" [rows]="perPage"
+          <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt0 responsiveLayout="scroll" 
+          [paginator]="true" [totalRecords]="totalRecords"
+          [globalFilterFields]="['title']"   [value]="allCustomers"
+           (onPage)="LazyLoadAllCustomer($event)" [rows]="perPage"
           [rowsPerPageOptions]="[5,10,25,50,100]"  [resizableColumns]="true" [scrollable]="true" [lazy]="true"
               scrollHeight="380px" sortMode="multiple">
          
@@ -108,7 +110,7 @@
 
     <p-tabPanel header="Blocked" >
       <div class="card">
-        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll" [paginator]="true" [totalRecords]="totalRecords"
+        <p-table styleClass="p-datatable-sm" [autoLayout]="true" #dt2 responsiveLayout="scroll" [paginator]="true" [totalRecords]="totalRecordsBlocked"
           [globalFilterFields]="['title']"   [value]="blockedcustomer" (onPage)="LazyLoadBlockCustomer($event)" [rows]="perPage"
           [rowsPerPageOptions]="[5,10,25,50,100]"  [resizableColumns]="true" [scrollable]="true" [lazy]="true"
               scrollHeight="380px" sortMode="multiple">

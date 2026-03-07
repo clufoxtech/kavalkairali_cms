@@ -16,6 +16,7 @@ export class MagazinesComponent implements OnInit {
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   @ViewChild('op',{static:true}) op: OverlayPanel;
   noSpecial: RegExp = /[A-Za-zÀ-ȕ ]/;
+  totalRecords: number;
   constructor(public formBuilder: FormBuilder,private messageService: MessageService,public magazineservice:ProductService,private confirmationService: ConfirmationService) { }
 public magazine:Array<Magazine>;
 public product:Magazine;
@@ -44,7 +45,8 @@ ngOnInit(): void {
     this.magazineservice.getMagazines().subscribe((response)=>{
       if(response._embedded.magazines.length>0){
         this.magazine= new Array<Magazine>();
-        this.magazine=response._embedded.magazines
+        this.magazine=response._embedded.magazines;
+        this.totalRecords=this.magazine.length;
         console.log(this.magazine);
       } 
        }) 
@@ -116,10 +118,16 @@ Edit(product){
   console.log(this.product);
 }
 EditMagazine(){
-  if (this.EditForm.valid) {
     this.editDetails= new Magazine();
     this.editDetails.id=this.product.id;
     this.editDetails.name=this.EditForm.controls['editmagazine'].value;
+    const existingMagazineIndex = this.magazine.findIndex(item => item.name.toLowerCase() === this.editDetails.name.toLowerCase());
+    if (existingMagazineIndex > -1) {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Magazine already exists'});
+      return;
+    }
+  if (this.EditForm.valid) {
+
   this.magazineservice.editMagazine(this.editDetails.id,this.editDetails.name).subscribe({
    next: (response)=>{
     // if(response.sTATUS=='SUCCESS'){

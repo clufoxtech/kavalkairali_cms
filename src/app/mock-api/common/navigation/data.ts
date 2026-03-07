@@ -137,20 +137,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 ]
             },
             
-            {
-                id      : 'apps.articles',
-                title   : 'Survey',
-                type    : 'collapsable',
-                icon    : 'heroicons_outline:survey',
-                children: [
-                    {
-                        id   : 'apps.survey.survey',
-                        title: 'Survey',
-                        type : 'basic',
-                        link : '/apps/Survey/survey'
-                    }
-                ]
-            },
+            
            
            
             // {

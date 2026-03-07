@@ -29,6 +29,9 @@ export class HomescreenComponent implements OnInit {
   category: Category[];
   editMagazine: any;
   editCategory: any;
+  selectedMagazine: string;
+  magazineDisplay: any[] ;
+  magazineList: Magazine[];
   constructor(public formBuilder: FormBuilder,private messageService: MessageService,
     private homeScreenService: HomeScreenService, private addservice: ProductService,
     private router: Router,private confirmationService: ConfirmationService) { }
@@ -40,15 +43,14 @@ export class HomescreenComponent implements OnInit {
     this.user=false;
     this.AddForm = this.formBuilder.group({
       magazine: ['', [Validators.required]],
-      category: ['', [Validators.required]],
     });
     this.editForm = this.formBuilder.group({
       magazine: ['', [Validators.required]],
-      category: ['', [Validators.required]],
     });
     this.GetAllHomeScreen();
    this.GetMagazine();
    this.GetCategory();
+   this.GetMagazines();
   }
   GetAllHomeScreen(){
     this.homeScreenService.getAllHomeScreen().subscribe((response)=>{
@@ -64,7 +66,11 @@ this.add=true;
     table.clear();
 }
 Cancel(){
-  this.display=false;
+  this.add=false;
+  this.GetAllHomeScreen();
+}
+CancelEdit(){
+  this.edit=false;
   this.GetAllHomeScreen();
 }
 show(event,product){
@@ -74,26 +80,24 @@ show(event,product){
 Edit(product){
 this.product=product;
 console.log(product);
-this.magazines.filter((magazine)=>{
-  if(magazine.name==product.railMagazine.name){
-    this.editMagazine=magazine._links.self.href;
-  }
-});
-this.category.filter((category)=>{
-  if(category.name==product.railMagazineCategory.name){
-    this.editCategory=category._links.self.href;
-  }
-});
+const editMagazinelist = this.magazineDisplay.filter(
+  m=>m.magazineName===product.railMagazine.name 
+  && m.category===product.railMagazineCategory.name)[0];
+this.editMagazine=editMagazinelist.value;
+console.log(this.editMagazine);
 this.edit=true;
 this.op.hide();
 }
 EditHomeScreen(){
   if (this.editForm.valid) {
     const magazine=this.editForm.controls['magazine'].value;
-   const category=this.editForm.controls['category'].value;
     console.log(magazine);
+    const magazineName = this.magazineDisplay.filter(m=>m.value === magazine)[0].magazineName;
+    const magazineLink = this.magazineList.filter(m=>m.name === magazineName)[0]._links.self.href;
+    const category=this.magazineDisplay.filter(m=>m.value === magazine)[0].category;
+    const categoryLink=this.category.filter(c=>c.name === category)[0]._links.self.href;
     console.log(category);
-  this.homeScreenService.editHomeScreen(this.product.id,magazine,category).subscribe(
+  this.homeScreenService.editHomeScreen(this.product.id,magazineLink,categoryLink).subscribe(
     {
       next: (response)=>{
         this.messageService.add({severity:'success', summary:'Success', detail:'Home Screen Edited Successfully'});
@@ -138,16 +142,21 @@ Delete(){
 });
 }
 AddHomeScreen(){
+  console.log(this.AddForm);
+  console.log(this.category);
   if (this.AddForm.valid) {
     const magazine=this.AddForm.controls['magazine'].value;
-   const category=this.AddForm.controls['category'].value;
     console.log(magazine);
+    const magazineName = this.magazineDisplay.filter(m=>m.value === magazine)[0].magazineName;
+    const magazineLink = this.magazineList.filter(m=>m.name === magazineName)[0]._links.self.href;
+    const category=this.magazineDisplay.filter(m=>m.value === magazine)[0].category;
+    const categoryLink=this.category.filter(c=>c.name === category)[0]._links.self.href;
     console.log(category);
-  this.homeScreenService.addHomeScreen(magazine,category).subscribe(
+  this.homeScreenService.addHomeScreen(magazineLink,categoryLink).subscribe(
     {
       next: (response)=>{
         this.messageService.add({severity:'success', summary:'Success', detail:'Home Screen Added Successfully'});
-        this.display=false;
+        this.add=false;
         this.GetAllHomeScreen();  
   },
   error: (err) => {
@@ -174,20 +183,46 @@ validateAllFields(formGroup: FormGroup) {
   });
 }
     GetMagazine(){
-        this.addservice.getMagazines().subscribe((response)=>{
-          if(response._embedded.magazines.length>0){
+      this.magazineDisplay= new Array<any>();
+        this.addservice.getMagazineList().subscribe((response)=>{
+          if(response._embedded.magazineEditions.length>0){
             this.magazines= new Array<Magazine>();
-            this.magazines=response._embedded.magazines;
+            this.magazines=response._embedded.magazineEditions.filter((magazine)=>{
+              if(magazine.status=="ACTIVE"){
+                this.magazineDisplay.push({
+                  label: magazine.name+"-"+magazine.categoryName,
+                  category: magazine.categoryName,
+                  magazineName: magazine.name,
+                  value: magazine._links.self.href
+                });
+                console.log(this.magazineDisplay);
+                return magazine;
+              }
+            });
             console.log(this.magazines);
           } 
            }) 
       }
 
-      GetCategory(){
-        this.category= new Array<Category>();
-        this.addservice.getCategory().subscribe((response)=>{
-            this.category=response._embedded.magazineCategories;
-            console.log(this.category);
-           });
+  GetCategory(){
+  
+  this.addservice.getCategory().subscribe((response)=>{
+    console.log(response);
+    if(response._embedded.magazineCategories.length>0){
+      console.log(response);
+      this.category=response._embedded.magazineCategories;
+      };
+     })
+   console.log(this.category);
+  }
+  GetMagazines(){
+    this.addservice.getMagazines().subscribe((response)=>{
+      if(response._embedded.magazines.length>0){
+        this.magazineList= new Array<Magazine>();
+        this.magazineList=response._embedded.magazines;
+        console.log(this.magazineList);
+      } 
+       })
       }
+
 }

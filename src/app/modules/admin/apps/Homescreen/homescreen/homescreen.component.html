@@ -48,8 +48,8 @@
                     <tr>
                         <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
                         <td >List {{rowIndex+1}}</td>
-                        <td title={{product.railMagazine.name}}>{{product.railMagazine.name| titlecase}}</td>
-                        <td title={{product.railMagazineCategory.name}}>{{product.railMagazineCategory.name}}</td>
+                        <td title={{product.railMagazine?.name}}>{{product.railMagazine?.name| titlecase}}</td>
+                        <td title={{product.railMagazineCategory?.name}}>{{product.railMagazineCategory?.name}}</td>
                         <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
                     </tr>
                 </ng-template>
@@ -71,32 +71,25 @@
    
 </div>
 <!--Add new HomeScreen-->
-<p-dialog [(visible)]="add" header="Add HomeScreen" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
+<p-dialog [(visible)]="add" header="Add HomeScreen" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
 [draggable]="false" [resizable]="false">
 
 
   <form [formGroup]="AddForm" (ngSubmit)="AddHomeScreen()"  novalidate>
     <div class="container">
-    <div class="row">
-      <div class="col-25">
-        <label for="magazine">Magazine<span class="text-danger reqd">*</span></label>
+    <div class="row" style="height: 100px;">
+      <div class="col-25" style="width: 30%;">
+        <label for="magazine">Magazine - Category<span class="text-danger reqd">*</span></label>
       </div>
-      <div class="col-75">
-      <p-dropdown formControlName="magazine"  placeholder="Select" [options]="magazines"
-      style="width: 75%;"  optionLabel="name" optionValue="_links.self.href"></p-dropdown>   
+      <div class="col-75" style="width: 65%;">
+      <p-dropdown formControlName="magazine"  placeholder="Select" [options]="magazineDisplay" 
+      optionLabel="label" optionValue="value"
+      style="width: 75%;" ></p-dropdown>   
  </div>
     </div>
-      <div class="row">
-      <div class="col-25">
-        <label for="category">Category<span class="text-danger reqd">*</span></label>
-      </div>
-      <div class="col-75">   
-               <p-dropdown formControlName="category"  placeholder="Select" [options]="category"  optionLabel="name" optionValue="_links.self.href"></p-dropdown>        
-    </div>
-    </div>
- 
-    <div class="row" >
-        <div class="col-75 center-text fontcls">
+  
+    <div class="row" style="height: 120px;">
+        <div class="col-70 margin-30 fontcls">
             <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
             <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
         </div>
@@ -108,34 +101,25 @@
 <!--End-->
 
 <!--Add new HomeScreen-->
-<p-dialog [(visible)]="edit" header="Edit HomeScreen" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '40vw'}" [baseZIndex]="10000"
-[draggable]="false" [resizable]="false">
+<p-dialog [(visible)]="edit" header="Edit HomeScreen" [breakpoints]="{'960px': '55vw', '640px': '95vw'}"  [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[draggable]="false" [resizable]="true">
 
 
   <form [formGroup]="editForm" (ngSubmit)="EditHomeScreen()"  novalidate>
     <div class="container">
-    <div class="row">
-      <div class="col-25">
-        <label for="magazine">Magazine<span class="text-danger reqd">*</span></label>
+    <div class="row" style="height: 100px;">
+      <div class="col-25" style="width: 30%;">
+        <label for="magazine">Magazine - Category<span class="text-danger reqd">*</span></label>
       </div>
-      <div class="col-75">
-      <p-dropdown formControlName="magazine"  placeholder="Select" [options]="magazines" [(ngModel)]="editMagazine"
-      optionLabel="name" optionValue="_links.self.href"></p-dropdown>   
+      <div class="col-75" style="width: 65%;">
+      <p-dropdown formControlName="magazine"  placeholder="Select" [options]="magazineDisplay" [(ngModel)]="editMagazine"
+      optionLabel="label" optionValue="value"></p-dropdown>   
  </div>
     </div>
-      <div class="row">
-      <div class="col-25">
-        <label for="category">Category<span class="text-danger reqd">*</span></label>
-      </div>
-      <div class="col-75">   
-               <p-dropdown formControlName="category"  placeholder="Select" [options]="category" [(ngModel)]="editCategory"
-                 optionLabel="name" optionValue="_links.self.href"></p-dropdown>        
-    </div>
-    </div>
  
-    <div class="row" >
-        <div class="col-75 center-text fontcls">
-            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="Cancel()">CANCEL</button>
+    <div class="row" style="height: 120px;">
+        <div class="col-70 margin-30 fontcls">
+            <button type="button" class="cancelbtn btn-outline-secondary btn btn-sm" (click)="CancelEdit()">CANCEL</button>
             <button type="submit" class="submitbtn btn-outline-secondary btn btn-sm" >SUBMIT</button>
         </div>
     </div>

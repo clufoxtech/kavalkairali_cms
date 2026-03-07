@@ -16,6 +16,7 @@ export class ProductCategoryComponent implements OnInit {
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   @ViewChild('op',{static:true}) op: OverlayPanel;
   noSpecial: RegExp = /[A-Za-zÀ-ȕ ]/;
+  totalRecords: number;
   constructor(public formBuilder: FormBuilder,private messageService: MessageService,public categoryservice:ProductService,private confirmationService: ConfirmationService) { }
 public category:Array<Category>;
 public product:Category;
@@ -45,6 +46,7 @@ ngOnInit(): void {
       if(response._embedded.magazineCategories.length>0){
         this.category= new Array<Category>();
         this.category=response._embedded.magazineCategories;
+        this.totalRecords=this.category.length;
         console.log(this.category);
       } 
        }) 
@@ -115,10 +117,15 @@ Edit(product){
   console.log(this.product);
 }
 EditCategory(){
-  if (this.EditForm.valid) {
     this.editDetails= new Category();
     this.editDetails.id=this.product.id;
     this.editDetails.name=this.EditForm.controls['editcategory'].value;
+  const existingCategoryIndex = this.category.findIndex(item => item.name.toLowerCase() === this.editDetails.name.toLowerCase());
+  if (existingCategoryIndex > -1) {
+    this.messageService.add({severity:'error', summary:'Error', detail:'Category already exists'});
+    return;
+  }
+  if (this.EditForm.valid) {
   this.categoryservice.editCategory(this.editDetails.id,this.editDetails.name).subscribe({
    next: (response)=>{
     // if(response.sTATUS=='SUCCESS'){

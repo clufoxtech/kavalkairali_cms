@@ -100,7 +100,7 @@ AddMagazineEditions(){
       },
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: err.error.status, detail: err.error.error });
-        this.router.navigate(['apps/product/productlist']);
+        //this.router.navigate(['apps/product/productlist']);
       }
     });
   }
