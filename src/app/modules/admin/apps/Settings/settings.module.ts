@@ -23,11 +23,13 @@ import { SupportComponent } from './support/support.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { WebPagesComponent } from './web-pages/web-pages.component';
 import { AddPolicyComponent } from './web-pages/add-policy/add-policy.component';
+import { MessagesComponent } from './messages/messages.component';
 @NgModule({
   declarations: [
     SupportComponent,
     WebPagesComponent,
-    AddPolicyComponent
+    AddPolicyComponent,
+    MessagesComponent
   ],
   imports: [
     CommonModule,
