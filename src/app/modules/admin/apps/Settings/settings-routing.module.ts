@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SupportComponent } from './support/support.component';
 import { WebPagesComponent } from './web-pages/web-pages.component';
 import { AddPolicyComponent } from './web-pages/add-policy/add-policy.component';
+import { MessagesComponent } from './messages/messages.component';
 
 const settingsroutes: Routes = [
   {
@@ -33,6 +34,13 @@ const settingsroutes: Routes = [
     component: AddPolicyComponent,
     data:{
       breadCrum:'Add policy'
+  }
+},
+{
+    path     : 'messages',
+   component: MessagesComponent,
+    data:{
+      breadCrum:'Messages'
   }
 }
 ];

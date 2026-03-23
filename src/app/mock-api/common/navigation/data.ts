@@ -133,7 +133,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
                         title: 'Web pages',
                         type : 'basic',
                         link : '/apps/Settings/web-pages'
+                    },
+                    {
+                         id   : 'apps.Settings.messages',
+                        title: 'Messages',
+                        type : 'basic',
+                        link : '/apps/Settings/messages'
                     }
+
                 ]
             },
             
