@@ -42,7 +42,6 @@
                     <tr>
                         <th style="max-width:45px;min-width:30px;">NO</th>
                         <th >TITLE</th>
-                        <th >BODY</th>
                         <th >CREATED DATE</th> 
                         <th style="max-width:45px;"></th>
                     </tr>
@@ -51,8 +50,7 @@
                     <tr>
                         <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
                         <td >{{product.title}}</td>
-                        <td title={{product.description}} (click)="ShowUser(product)" >{{product.description}}</td>
-                        <td >{{product.creationTimestamp | date: 'dd-MM-yyyy'}}</td>
+                       <td >{{product.creationTimestamp | date: 'dd-MM-yyyy'}}</td>
                         <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
                     
                     </tr>
@@ -81,7 +79,7 @@
         <label for="title">Title</label>
       </div>
       <div class="col-75">
-        <input type="text" id="title" class="nameCapital"  formControlName="title" placeholder="Type here.." >
+        <input type="text" id="title" maxlength="30"   formControlName="title" placeholder="Type here.." >
         <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
             <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
           </div>
@@ -92,7 +90,7 @@
         <label for="body">Body</label>
       </div>
       <div class="col-75">
-        <textarea id="body" class="nameCapital"  formControlName="body" placeholder="Type here.." ></textarea>
+        <textarea id="body"  maxlength="150"  formControlName="body" placeholder="Type here.." ></textarea>
         <div *ngIf="getControl['body'].touched && getControl['body'].invalid" class="text-danger">
             <div *ngIf="getControl['body'].errors?.['required']">Body is required.</div>
           </div>
@@ -119,7 +117,7 @@
         <label for="edittitle">Title</label>
       </div>
       <div class="col-75">
-        <input type="text" id="edittitle" class="nameCapital"  formControlName="edittitle" 
+        <input type="text" id="edittitle" maxlength="30" class="nameCapital"  formControlName="edittitle" 
         [(ngModel)]="editMessageTitle" placeholder="Type here.." >
         <div *ngIf="getEditControl['edittitle'].touched && getEditControl['edittitle'].invalid" class="text-danger">
             <div *ngIf="getEditControl['edittitle'].errors?.['required']">Title is required.</div>
@@ -131,7 +129,7 @@
         <label for="editbody">Body</label>
       </div>
       <div class="col-75">
-        <textarea id="editbody" class="nameCapital"  formControlName="editbody" 
+        <textarea id="editbody" maxlength="150" class="nameCapital"  formControlName="editbody" 
         [(ngModel)]="editMessageBody" placeholder="Type here.." ></textarea>
         <div *ngIf="getEditControl['editbody'].touched && getEditControl['editbody'].invalid" class="text-danger">
             <div *ngIf="getEditControl['editbody'].errors?.['required']">Body is required.</div>

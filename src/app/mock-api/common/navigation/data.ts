@@ -26,19 +26,12 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon    : 'heroicons_outline:home',
         
         children: [
-            {
-                id   : 'apps.Dashboard.dashboard-page',
-                title: 'Dashboard',
-                type : 'basic',
-                icon : 'heroicons_outline:home',
-                link : '/apps/Dashboard/dashboard-page'
-            },
+            
            
             {
                 id      : 'apps.Customers',
                 title   : 'Subscribers',
                 type    : 'collapsable',
-                icon    : 'heroicons_outline:user-group',
                 children: [
                     {
                         id   : 'apps.customers.customerslist',
@@ -52,7 +45,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id      : 'apps.product',
                 title   : 'Magazines',
                 type    : 'collapsable',
-                icon    : 'heroicons_outline:product-list',
                 children: [
                     {
                         id   : 'apps.product.productlist',
@@ -72,7 +64,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id      : 'apps.articles',
                 title   : 'Articles',
                 type    : 'collapsable',
-                icon    : 'heroicons_outline:articles-list',
                 children: [
                     {
                         id   : 'apps.articles.articleslist',
@@ -86,7 +77,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id      : 'apps.gallery',
                 title   : 'Gallery',
                 type    : 'collapsable',
-                icon    : 'heroicons_outline:gallery-list',
                 children: [
                     {
                         id   : 'apps.gallery.gallerylist',
@@ -100,7 +90,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id      : 'apps.homescreen',
                 title   : 'Home screen',
                 type    : 'collapsable',
-                icon    : 'heroicons_outline:sparkles',
                 children: [
                     {
                         id   : 'apps.Homescreen.homescreen',
@@ -120,7 +109,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id      : 'apps.Settings',
                 title   : 'Settings',
                 type    : 'collapsable',
-                icon    : 'heroicons_outline:sun',
                 children: [
                     {
                         id   : 'apps.Settings.support',
