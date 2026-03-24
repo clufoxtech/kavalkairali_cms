@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    baseUrl:'https://api.kavalkairali.in/kaval-kairali'
+    baseUrl:'http://117.193.73.166/forest'
 };
