@@ -34,6 +34,7 @@ AddForm!: FormGroup;
   fileUploadPath: any;
   urlUpload: string | ArrayBuffer;
   fileId: any;
+  selectedCategory: any;
   constructor(public formBuilder: FormBuilder,private messageService: MessageService,
     private router: Router,public addservice:ProductService,private Aroute: ActivatedRoute) { }
   
@@ -41,8 +42,9 @@ AddForm!: FormGroup;
     this.Aroute.params.subscribe(params => {
       this.magazineId=params['id'];
     });
-    this.GetBookDetails();
+    
     this.GetCategory();
+    this.GetBookDetails();
     this.GetMagazine();
   this.AddForm = this.formBuilder.group({
     cover: ['', []],
@@ -61,7 +63,16 @@ AddForm!: FormGroup;
 //const tempdetails =this.magazineList.find(magazine => magazine.id == this.magazineId);
 
       this.editDetails = this.magazineList.find(magazine => magazine.id == this.magazineId);
+      
       console.log(this.editDetails);
+        
+           this.selectedCategory = this.category.find(category => category.name == this.editDetails.categoryName);
+           console.log(this.category);
+           console.log(this.selectedCategory);
+           this.AddForm.patchValue({
+            category: this.selectedCategory._links.self.href
+           });
+            console.log(this.category);
       this.addservice.getMagazines().subscribe((response)=>{
           if(response._embedded.magazines.length>0){
             this.magazines= new Array<Magazine>();
@@ -74,11 +85,13 @@ AddForm!: FormGroup;
           magazine: tempdetails._links.self.href,
           edition: this.editDetails.edition,
           noofpages: this.editDetails.noOfPages,
-          category: this.editDetails.categoryName,
+         // category: this.editDetails.categoryName,
           description: this.editDetails.description, 
           cover:environment.baseUrl+'/uploads/image/'+this.editDetails.coverId
         });
+         
          } 
+         
            }) 
      
   });
@@ -136,7 +149,7 @@ onFileUploadChanged(event) {
         this.category= new Array<Category>();
         this.addservice.getCategory().subscribe((response)=>{
             this.category=response._embedded.magazineCategories;
-            console.log(this.category);
+           
            });
       }
       GetMagazine(){
