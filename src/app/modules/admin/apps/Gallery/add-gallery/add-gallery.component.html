@@ -25,8 +25,29 @@
   <!-- Main -->
   <form [formGroup]="AddForm" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8" (ngSubmit)="AddGallery()">
     <div class="container">
+ <div class="row" style="height: 100px;">
+      <div class="col-25" >
+        <label for="galleryType">Type<span class="text-danger reqd">*</span></label>
+      </div>
+      <div class="col-75" >
+      <p-dropdown formControlName="galleryType"  placeholder="Select" [options]="galleryTypes"
+      optionLabel="label" placeholder="select" optionValue="value" [(ngModel)]="selectedType"></p-dropdown>   
+ </div>
+    </div>
+    <div class="row" *ngIf="selectedType==='videoGallery'">
+        <div class="col-25">
+          <label for="youtubeUrl">Youtube Url<span class="text-danger reqd">*</span></label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="youtubeUrl" class="nameCapital" [(ngModel)]="galleryyoutubeUrl" name="youtubeUrl"
+            formControlName="youtubeUrl">
+          <div *ngIf="getControl['youtubeUrl'].touched && getControl['youtubeUrl'].invalid" class="text-danger">
+            <div *ngIf="getControl['youtubeUrl'].errors?.['required']">YouTube URL is required.</div>
+          </div>
+        </div>
 
-      <div class="row">
+      </div>
+      <div class="row" *ngIf="selectedType==='imageGallery'">
         <div class="col-25">
           <label for="title">Title<span class="text-danger reqd">*</span></label>
         </div>
@@ -39,7 +60,7 @@
         </div>
 
       </div>
-      <div class="row">
+      <div class="row" *ngIf="selectedType==='imageGallery'">
         <div class="col-25">
           <label for="depname">Upload images (upto 20 images)</label>
         </div>

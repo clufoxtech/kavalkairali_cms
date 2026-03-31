@@ -53,6 +53,8 @@ export class AddGalleryComponent implements OnInit {
   galleryTitle: any;
   editImages: any[];
   noOfImages: any;
+  selectedType: any;
+  galleryTypes: { label: string; value: string; }[];
   constructor(public formBuilder: FormBuilder, private messageService: MessageService, private http: HttpClient,
     private galleryService: GalleryService,
     private router: Router, private aroute: ActivatedRoute) {
@@ -69,17 +71,25 @@ export class AddGalleryComponent implements OnInit {
     this.url = [];
     this.editImages = [];
     console.log(this.galleryId);
-    this.GetAllGallery(this.galleryId);
+    if(this.galleryId != null && this.galleryId != undefined){
+      this.GetAllGallery(this.galleryId);
+    }
     this.previews = [];
     this.AddForm = this.formBuilder.group({
       title: ['', [Validators.required]],
-    })
+      galleryType: ['', [Validators.required]],
+    });
+    this.galleryTypes = [
+      { label: 'Image Gallery', value: 'imageGallery' },
+      { label: 'Video Gallery', value: 'videoGallery' },
+    ];
 
   }
   GetAllGallery(id: any) {
     this.galleryService.getAllGallery().subscribe((response) => {
       this.gallery = response._embedded.galleries.find(gallery => gallery.id == id);
       this.galleryTitle = this.gallery.title;
+      this.selectedType = this.gallery.galleryType;
       console.log(this.gallery);
       this.noOfImages=this.gallery.imageId.length;
       for (const imageId of this.gallery.imageId) {

@@ -23,6 +23,8 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { GalleryRoutingModule } from './gallery-routing.module';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { PanelModule } from 'primeng/panel';
+import { A11yModule } from "@angular/cdk/a11y";
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { PanelModule } from 'primeng/panel';
     ReactiveFormsModule,
     DividerModule,
     ToastModule,
-    PanelModule
-  ]
+    PanelModule,
+    A11yModule,
+    DropdownModule
+]
 })
 export class GalleryModule { }
