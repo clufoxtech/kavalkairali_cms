@@ -25,11 +25,13 @@ import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 import { PanelModule } from 'primeng/panel';
 import { A11yModule } from "@angular/cdk/a11y";
 import { DropdownModule } from 'primeng/dropdown';
+import { VideoGalleryComponent } from './video-gallery/video-gallery.component';
 
 @NgModule({
   declarations: [
     GalleryComponent,
     AddGalleryComponent,
+    VideoGalleryComponent,
   ],
   imports: [
     CommonModule,

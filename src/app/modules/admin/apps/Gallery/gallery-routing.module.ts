@@ -2,6 +2,7 @@ import { Route, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { GalleryComponent } from './gallery/gallery.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
+import { VideoGalleryComponent } from './video-gallery/video-gallery.component';
 
 export const GalleryRoutes: Route[] = [
     {
@@ -24,6 +25,13 @@ export const GalleryRoutes: Route[] = [
         component: AddGalleryComponent,
         data:{
             breadCrum:'add gallery'
+        }
+    },
+    {
+        path     : 'video-gallery',
+        component: VideoGalleryComponent,
+        data:{
+            breadCrum:'video gallery'
         }
     }
 ];

@@ -64,6 +64,7 @@ export class AddGalleryComponent implements OnInit {
   ngOnInit() {
     this.aroute.params.subscribe(params => {
       this.galleryId = params['id'];
+      this.selectedType = params['type'] == 1 ? 'imageGallery' : 'videoGallery';
       //this.galleryId= params['title'];
     });
 
@@ -76,10 +77,10 @@ export class AddGalleryComponent implements OnInit {
     }
     this.previews = [];
     this.AddForm = this.formBuilder.group({
-      title: ['', [Validators.required]],
-      galleryType: ['', [Validators.required]],
+      title: [''],
+      galleryType: [''],
       videotitle: [''],
-      videourl: ['']
+      youtubeUrl: ['']
     });
     this.galleryTypes = [
       { label: 'Image Gallery', value: 'imageGallery' },
@@ -123,7 +124,36 @@ export class AddGalleryComponent implements OnInit {
     this.noOfImages=this.selectedFiles.length + this.editImages.length;
     console.log(this.selectedFiles);
   }
+  addVideoGallery() {
+    if (this.AddForm.valid) {
+      this.product = new GalleryList();
+      this.product.title = this.AddForm.controls['videotitle'].value;
+      this.product.youtubeUrl = this.AddForm.controls['youtubeUrl'].value;
+      if (this.galleryId != null && this.galleryId != undefined) {
+        this.galleryService.editVideoGallery(this.galleryId, this.product.title, this.product.youtubeUrl).subscribe({
+          next: (response) => {
+            this.router.navigate(['apps/Gallery/video-gallery']);
+          }
+        });
+      }
+      else {
+        this.galleryService.addVideoGallery(this.product.title, this.product.youtubeUrl).subscribe({
+          next: (response) => {
+            this.router.navigate(['apps/Gallery/video-gallery']);
+
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: err.error.status, detail: err.error.error });
+          }
+        })
+      }
+    }
+  }
   AddGallery() {
+    if(this.selectedType === 'videoGallery'){
+      this.addVideoGallery();
+    }
+    else if(this.selectedType === 'imageGallery'){
     this.imageIds = new Array();
     if(this.selectedFiles.length==0){
       this.SubmitGallery();
@@ -147,6 +177,7 @@ export class AddGalleryComponent implements OnInit {
       }
     });
   }
+}
   processItems(): Observable<any[]> {
     const httpCalls: Observable<any>[] = [];
     console.log(this.selectedFiles);

@@ -37,4 +37,24 @@ export class GalleryService {
     return this.httpClient.post(this.baseUrl+'/uploads/images',formData,
     {headers:this.header,withCredentials : true})
   }
+
+  //video gallery api calls
+  addVideoGallery(title:string,videoUrl:string):Observable<any>{
+    this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+    return this.httpClient.post(this.baseUrl+'/videoGalleries',{'title':title,'url':videoUrl},{headers:this.header,withCredentials : true})
+  }
+  editVideoGallery(id:number,title:string,videoUrl:string):Observable<any>{
+    this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+    return this.httpClient.patch(this.baseUrl+'/videoGalleries/'+id,{'title':title,'url':videoUrl},{headers:this.header,withCredentials : true})
+  }
+  deleteVideoGallery(id:string):Observable<any>{
+    this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+    return this.httpClient.delete(this.baseUrl+'/videoGalleries/'+id,{headers:this.header,withCredentials : true})
+  }
+  getAllVideoGallery():Observable<any>{
+    this.header = new HttpHeaders({ 'Authorization': `Bearer `+this.authservice.accessToken });
+      return this.httpClient.get(this.baseUrl+'/videoGalleries',{headers:this.header,withCredentials : true});  
+  }
+
+
 }

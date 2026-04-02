@@ -10,11 +10,11 @@ import { environment } from 'environments/environment';
 
 @Component({
   providers: [ConfirmationService,MessageService],
-  selector: 'app-gallery',
-  templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.scss']
+  selector: 'app-video-gallery',
+  templateUrl: './video-gallery.component.html',
+  styleUrls: ['./video-gallery.component.scss']
 })
-export class GalleryComponent implements OnInit {
+export class VideoGalleryComponent implements OnInit {
   isLoading: boolean = false;
   display: boolean = false;
   edit: boolean = false;
@@ -44,12 +44,12 @@ export class GalleryComponent implements OnInit {
    
   }
   GetAllGallery(){
-    this.galleryService.getAllGallery().subscribe((response)=>{
-      this.data=response._embedded.galleries;
+    this.galleryService.getAllVideoGallery().subscribe((response)=>{
+      this.data=response._embedded.videoGalleries;
        })  
   }
   NewGallery(){
-    this.router.navigate(['apps/Gallery/add-gallery',{type:1}]);
+    this.router.navigate(['apps/Gallery/add-gallery',{type:2}]);
   }
   clear(table: Table) {
     table.clear();
@@ -77,7 +77,7 @@ Delete(id){
     header: 'Delete Confirmation',
     icon: 'pi pi-info-circle',
     accept: () => {
-      this.galleryService.deleteGallery(id).subscribe(
+      this.galleryService.deleteVideoGallery(id).subscribe(
         {
           next: (response)=>{
             this.GetAllGallery();  
@@ -94,57 +94,8 @@ Delete(id){
   }
 });
 }
-AddGallery(){
-  if (this.AddForm.valid) {
-    this.product= new GalleryList();
-    this.product.title=this.AddForm.controls['galleryname'].value;
-//   this.userService.addGallerys(this.product.name,this.product.description).subscribe({
-//     next: (response)=>{
-//     // if(response.sTATUS=='SUCCESS'){
-//       this.GetAllGallery();
-//       this.display=false;
-      
-//    },
-//    error: (err) => {
-//     this.messageService.add({severity:'error', summary:err.error.status, detail:err.error.error});
-//    }
-//  })
-    }
-     else {
-      this.validateAllFields(this.AddForm); 
-  } 
-}
-get getControl(){
-  return this.AddForm.controls;
-}
-validateAllFields(formGroup: FormGroup) {         
-  Object.keys(formGroup.controls).forEach(field => {  
-      const control = formGroup.get(field);            
-      if (control instanceof FormControl) {             
-          control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {        
-          this.validateAllFields(control);  
-      }
-  });
-}
-onFileChanged(event) {
-  this.selectedFiles = event.target.files;
-  if (this.selectedFiles.length === 0)
-      return;
 
-  const mimeType = this.selectedFiles[0].type;
-  if (mimeType.match(/image\/*/) == null) {
-      //this.message = "Only images are supported.";
-      return;
-  }
 
-  const reader = new FileReader();
-  this.imagePath = this.selectedFiles;
-  reader.readAsDataURL(this.selectedFiles[0]); 
-  reader.onload = (_event) => { 
-      this.url = reader.result; 
-  }
-}
 ShowUser(product){
   this.product=product;
   console.log(this.product);
