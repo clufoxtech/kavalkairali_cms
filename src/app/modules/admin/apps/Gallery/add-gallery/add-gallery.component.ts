@@ -78,6 +78,8 @@ export class AddGalleryComponent implements OnInit {
     this.AddForm = this.formBuilder.group({
       title: ['', [Validators.required]],
       galleryType: ['', [Validators.required]],
+      videotitle: [''],
+      videourl: ['']
     });
     this.galleryTypes = [
       { label: 'Image Gallery', value: 'imageGallery' },
