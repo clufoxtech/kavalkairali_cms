@@ -92,7 +92,7 @@
         <label for="body">Body</label>
       </div>
       <div class="col-75">
-        <textarea id="body" class="nameCapital"  formControlName="body" placeholder="Type here.." ></textarea>
+        <textarea id="body" class="nameCapital" maxlength="170" formControlName="body" placeholder="Type here.." ></textarea>
         <div *ngIf="getControl['body'].touched && getControl['body'].invalid" class="text-danger">
             <div *ngIf="getControl['body'].errors?.['required']">Body is required.</div>
           </div>
@@ -131,7 +131,7 @@
         <label for="editbody">Body</label>
       </div>
       <div class="col-75">
-        <textarea id="editbody" class="nameCapital"  formControlName="editbody" 
+        <textarea id="editbody" maxlength="170" class="nameCapital"  formControlName="editbody" 
         [(ngModel)]="editMessageBody" placeholder="Type here.." ></textarea>
         <div *ngIf="getEditControl['editbody'].touched && getEditControl['editbody'].invalid" class="text-danger">
             <div *ngIf="getEditControl['editbody'].errors?.['required']">Body is required.</div>

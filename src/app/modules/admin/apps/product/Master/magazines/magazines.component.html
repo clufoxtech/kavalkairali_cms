@@ -48,7 +48,7 @@
                 <ng-template pTemplate="body" let-product let-columns="columns" let-rowIndex="rowIndex">
                     <tr>
                         <td style="max-width:45px;min-width:30px;">{{rowIndex+1}}</td>
-                        <td  style="min-width:100px">{{product.name | titlecase}}</td>
+                        <td  style="min-width:100px">{{product.name }}</td>
                         <td style="justify-content: center;cursor:pointer;max-width:45px;"><i class="pi pi-ellipsis-v" (click)="show($event,product)"></i></td>
                     </tr>
                 </ng-template>
@@ -74,7 +74,7 @@
         <label for="magazine">Magazine</label>
       </div>
       <div class="col-75">
-        <input type="text" id="magazine" class="nameCapital"  formControlName="magazine" placeholder="Type here.." >
+        <input type="text" id="magazine"   formControlName="magazine" placeholder="Type here.." >
         <div *ngIf="getControl['magazine'].touched && getControl['magazine'].invalid" class="text-danger">
             <div *ngIf="getControl['magazine'].errors?.['required']">Name is required.</div>
           </div>
@@ -102,7 +102,7 @@
         <label for="editmagazine">Magazine</label>
       </div>
       <div class="col-75">
-        <input type="text" id="editmagazine" class="nameCapital"  formControlName="editmagazine" placeholder="Type here.." [(ngModel)]="editMagazineName">
+        <input type="text" id="editmagazine"   formControlName="editmagazine" placeholder="Type here.." [(ngModel)]="editMagazineName">
         <div *ngIf="getEditControl['editmagazine'].touched && getEditControl['editmagazine'].invalid" class="text-danger">
             <div *ngIf="getEditControl['editmagazine'].errors?.['required']">Name is required.</div>
           </div>
