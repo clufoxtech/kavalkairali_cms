@@ -55,6 +55,7 @@ export class AddGalleryComponent implements OnInit {
   noOfImages: any;
   selectedType: any;
   galleryTypes: { label: string; value: string; }[];
+  galleryyoutubeUrl: any;
   constructor(public formBuilder: FormBuilder, private messageService: MessageService, private http: HttpClient,
     private galleryService: GalleryService,
     private router: Router, private aroute: ActivatedRoute) {
@@ -89,10 +90,19 @@ export class AddGalleryComponent implements OnInit {
 
   }
   GetAllGallery(id: any) {
+    if(this.selectedType === 'videoGallery'){
+      this.galleryService.getAllVideoGallery().subscribe((response) => {
+        this.gallery = response._embedded.videoGalleries.find(gallery => gallery.id == id);
+        this.galleryTitle = this.gallery.title;
+        this.galleryyoutubeUrl = this.gallery.url;
+        console.log(this.gallery);
+        this.noOfImages=this.gallery.imageId.length;
+      })
+    }
+    else if(this.selectedType === 'imageGallery'){
     this.galleryService.getAllGallery().subscribe((response) => {
       this.gallery = response._embedded.galleries.find(gallery => gallery.id == id);
       this.galleryTitle = this.gallery.title;
-      this.selectedType = this.gallery.galleryType;
       console.log(this.gallery);
       this.noOfImages=this.gallery.imageId.length;
       for (const imageId of this.gallery.imageId) {
@@ -100,6 +110,7 @@ export class AddGalleryComponent implements OnInit {
         this.editImages.push(imageId);
       }
     })
+  }
   }
   onFileChanged(event: any) {
     const files: FileList = event.target.files;

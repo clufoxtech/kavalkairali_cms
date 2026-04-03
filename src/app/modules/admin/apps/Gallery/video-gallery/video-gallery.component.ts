@@ -64,6 +64,7 @@ show(event,product){
 }
 Edit(product){
 this.product=product;
+product.type=2;
 this.router.navigate(['apps/Gallery/add-gallery', product]);
 this.op.hide();
 }
