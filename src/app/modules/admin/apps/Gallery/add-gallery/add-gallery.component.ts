@@ -238,8 +238,13 @@ get getControl() {
   return this.AddForm.controls;
 }
 GoBack() {
-  this.AddForm.reset();
+  //this.AddForm.reset();
+  if(this.selectedType === 'videoGallery'){
+    this.router.navigate([`apps/Gallery/video-gallery`]);
+  }
+   else if(this.selectedType === 'imageGallery'){ 
   this.router.navigate([`apps/Gallery/gallery`]);
+}
 }
 removeImage(url: any){
   console.log(url);

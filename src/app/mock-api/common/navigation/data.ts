@@ -90,7 +90,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 children: [
                     {
                         id   : 'apps.gallery.gallerylist',
-                        title: 'Audio gallery',
+                        title: 'Image gallery',
                         type : 'basic',
                         link : '/apps/Gallery/gallery'
                     },
