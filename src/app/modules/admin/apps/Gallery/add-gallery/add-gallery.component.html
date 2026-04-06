@@ -40,7 +40,7 @@
           <label for="videotitle">Title<span class="text-danger reqd">*</span></label>
         </div>
         <div class="col-75">
-          <input type="text" [maxlength]="60" id="videotitle" class="nameCapital" [(ngModel)]="galleryTitle" name="videotitle"
+          <input type="text" [maxlength]="60" id="videotitle"  [(ngModel)]="galleryTitle" name="videotitle"
             formControlName="videotitle">
              <p style="font-size: 11px;color: #80808096;">
                     {{ galleryTitle?.length || 0 }}/60
@@ -69,7 +69,7 @@
           <label for="title">Title<span class="text-danger reqd">*</span></label>
         </div>
         <div class="col-75">
-          <input type="text" id="title" class="nameCapital" [(ngModel)]="galleryTitle" name="title"
+          <input type="text" id="title" [maxlength]="60" [(ngModel)]="galleryTitle" name="title"
             formControlName="title">
               <p style="font-size: 11px;color: #80808096;">
                     {{ galleryTitle?.length || 0 }}/60
