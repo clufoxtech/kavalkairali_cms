@@ -60,11 +60,13 @@ this.display=true;
 AddMagazine(){
  this.addDetails= new Magazine();
     this.addDetails.name=this.AddForm.controls['magazine'].value;
+    if(this.magazine && this.magazine.length > 0) {
     const existingMagazineIndex = this.magazine.findIndex(item => item.name.toLowerCase() === this.addDetails.name.toLowerCase());
     if (existingMagazineIndex > -1) {
       this.messageService.add({severity:'error', summary:'Error', detail:'Magazine already exists'});
       return;
     }
+  }
   if (this.AddForm.valid) {
    
   this.magazineservice.addMagazine(this.addDetails.name).subscribe({
