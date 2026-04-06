@@ -60,11 +60,13 @@ this.display=true;
 AddCategory(){
   this.addDetails= new Category();
     this.addDetails.name=this.AddForm.controls['category'].value;
+    if(this.category && this.category.length > 0) {
   const existingCategoryIndex = this.category.findIndex(item => item.name.toLowerCase() === this.addDetails.name.toLowerCase());
   if (existingCategoryIndex > -1) {
     this.messageService.add({severity:'error', summary:'Error', detail:'Category already exists'});
     return;
   }
+}
   if (this.AddForm.valid) {
       this.categoryservice.addCategory(this.addDetails.name).subscribe({
    next: (response)=>{
