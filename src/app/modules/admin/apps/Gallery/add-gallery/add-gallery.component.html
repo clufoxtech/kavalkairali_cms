@@ -12,7 +12,7 @@
 
       <div class="flex  sm:flex-row  items-center  mt-6 sm:mt-0 pr-3">
 
-        <button class="ml-4 " mat-stroked-button style="background-color: #8ed93b;color:white">
+        <button class="ml-4 " (click)="GoBack()"-stroked-button style="background-color: #8ed93b;color:white">
           <span class="ml-1 mr-1 fontcls">Magazine List</span>
         </button>
 
@@ -25,21 +25,62 @@
   <!-- Main -->
   <form [formGroup]="AddForm" novalidate class="mr-20 md:ml-2   mt-10 sm:ml-8" (ngSubmit)="AddGallery()">
     <div class="container">
+ <div class="row" style="height: 100px;">
+      <div class="col-25" >
+        <label for="galleryType">Type<span class="text-danger reqd">*</span></label>
+      </div>
+      <div class="col-75" >
+      <input type="text" formControlName="galleryType" disabled 
+       [(ngModel)]="selectedType"> 
+ </div>
+    </div>
+    
+      <div class="row" *ngIf="selectedType==='videoGallery'">
+        <div class="col-25">
+          <label for="videotitle">Title<span class="text-danger reqd">*</span></label>
+        </div>
+        <div class="col-75">
+          <input type="text" [maxlength]="60" id="videotitle"  [(ngModel)]="galleryTitle" name="videotitle"
+            formControlName="videotitle">
+             <p style="font-size: 11px;color: #80808096;">
+                    {{ galleryTitle?.length || 0 }}/60
+              </p>
+          <div *ngIf="getControl['videotitle'].touched && getControl['videotitle'].invalid" class="text-danger">
+            <div *ngIf="getControl['videotitle'].errors?.['required']">Title is required.</div>
+          </div>
+        </div>
 
-      <div class="row">
+      </div>
+    <div class="row" *ngIf="selectedType==='videoGallery'">
+        <div class="col-25">
+          <label for="youtubeUrl">Youtube Url<span class="text-danger reqd">*</span></label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="youtubeUrl" class="nameCapital" [(ngModel)]="galleryyoutubeUrl" name="youtubeUrl"
+            formControlName="youtubeUrl">
+          <div *ngIf="getControl['youtubeUrl'].touched && getControl['youtubeUrl'].invalid" class="text-danger">
+            <div *ngIf="getControl['youtubeUrl'].errors?.['required']">YouTube URL is required.</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row" *ngIf="selectedType==='imageGallery'">
         <div class="col-25">
           <label for="title">Title<span class="text-danger reqd">*</span></label>
         </div>
         <div class="col-75">
-          <input type="text" id="title" class="nameCapital" [(ngModel)]="galleryTitle" name="title"
+          <input type="text" id="title" [maxlength]="60" [(ngModel)]="galleryTitle" name="title"
             formControlName="title">
+              <p style="font-size: 11px;color: #80808096;">
+                    {{ galleryTitle?.length || 0 }}/60
+              </p>
           <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
             <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
           </div>
         </div>
 
       </div>
-      <div class="row">
+      <div class="row" *ngIf="selectedType==='imageGallery'">
         <div class="col-25">
           <label for="depname">Upload images (upto 20 images)</label>
         </div>

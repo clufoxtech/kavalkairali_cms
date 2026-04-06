@@ -53,6 +53,9 @@ export class AddGalleryComponent implements OnInit {
   galleryTitle: any;
   editImages: any[];
   noOfImages: any;
+  selectedType: any;
+  galleryTypes: { label: string; value: string; }[];
+  galleryyoutubeUrl: any;
   constructor(public formBuilder: FormBuilder, private messageService: MessageService, private http: HttpClient,
     private galleryService: GalleryService,
     private router: Router, private aroute: ActivatedRoute) {
@@ -62,6 +65,7 @@ export class AddGalleryComponent implements OnInit {
   ngOnInit() {
     this.aroute.params.subscribe(params => {
       this.galleryId = params['id'];
+      this.selectedType = params['type'] == 1 ? 'imageGallery' : 'videoGallery';
       //this.galleryId= params['title'];
     });
 
@@ -69,14 +73,33 @@ export class AddGalleryComponent implements OnInit {
     this.url = [];
     this.editImages = [];
     console.log(this.galleryId);
-    this.GetAllGallery(this.galleryId);
+    if(this.galleryId != null && this.galleryId != undefined){
+      this.GetAllGallery(this.galleryId);
+    }
     this.previews = [];
     this.AddForm = this.formBuilder.group({
-      title: ['', [Validators.required]],
-    })
+      title: [''],
+      galleryType: [''],
+      videotitle: [''],
+      youtubeUrl: ['']
+    });
+    this.galleryTypes = [
+      { label: 'Image Gallery', value: 'imageGallery' },
+      { label: 'Video Gallery', value: 'videoGallery' },
+    ];
 
   }
   GetAllGallery(id: any) {
+    if(this.selectedType === 'videoGallery'){
+      this.galleryService.getAllVideoGallery().subscribe((response) => {
+        this.gallery = response._embedded.videoGalleries.find(gallery => gallery.id == id);
+        this.galleryTitle = this.gallery.title;
+        this.galleryyoutubeUrl = this.gallery.url;
+        console.log(this.gallery);
+        this.noOfImages=this.gallery.imageId.length;
+      })
+    }
+    else if(this.selectedType === 'imageGallery'){
     this.galleryService.getAllGallery().subscribe((response) => {
       this.gallery = response._embedded.galleries.find(gallery => gallery.id == id);
       this.galleryTitle = this.gallery.title;
@@ -87,6 +110,7 @@ export class AddGalleryComponent implements OnInit {
         this.editImages.push(imageId);
       }
     })
+  }
   }
   onFileChanged(event: any) {
     const files: FileList = event.target.files;
@@ -111,7 +135,36 @@ export class AddGalleryComponent implements OnInit {
     this.noOfImages=this.selectedFiles.length + this.editImages.length;
     console.log(this.selectedFiles);
   }
+  addVideoGallery() {
+    if (this.AddForm.valid) {
+      this.product = new GalleryList();
+      this.product.title = this.AddForm.controls['videotitle'].value;
+      this.product.youtubeUrl = this.AddForm.controls['youtubeUrl'].value;
+      if (this.galleryId != null && this.galleryId != undefined) {
+        this.galleryService.editVideoGallery(this.galleryId, this.product.title, this.product.youtubeUrl).subscribe({
+          next: (response) => {
+            this.router.navigate(['apps/Gallery/video-gallery']);
+          }
+        });
+      }
+      else {
+        this.galleryService.addVideoGallery(this.product.title, this.product.youtubeUrl).subscribe({
+          next: (response) => {
+            this.router.navigate(['apps/Gallery/video-gallery']);
+
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: err.error.status, detail: err.error.error });
+          }
+        })
+      }
+    }
+  }
   AddGallery() {
+    if(this.selectedType === 'videoGallery'){
+      this.addVideoGallery();
+    }
+    else if(this.selectedType === 'imageGallery'){
     this.imageIds = new Array();
     if(this.selectedFiles.length==0){
       this.SubmitGallery();
@@ -135,6 +188,7 @@ export class AddGalleryComponent implements OnInit {
       }
     });
   }
+}
   processItems(): Observable<any[]> {
     const httpCalls: Observable<any>[] = [];
     console.log(this.selectedFiles);
@@ -184,8 +238,13 @@ get getControl() {
   return this.AddForm.controls;
 }
 GoBack() {
-  this.AddForm.reset();
+  //this.AddForm.reset();
+  if(this.selectedType === 'videoGallery'){
+    this.router.navigate([`apps/Gallery/video-gallery`]);
+  }
+   else if(this.selectedType === 'imageGallery'){ 
   this.router.navigate([`apps/Gallery/gallery`]);
+}
 }
 removeImage(url: any){
   console.log(url);

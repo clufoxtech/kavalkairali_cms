@@ -79,9 +79,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 children: [
                     {
                         id   : 'apps.gallery.gallerylist',
-                        title: 'Gallery list',
+                        title: 'Image gallery',
                         type : 'basic',
                         link : '/apps/Gallery/gallery'
+                    },
+                    {
+                        id   : 'apps.gallery.videogallery',
+                        title: 'Video gallery',
+                        type : 'basic',
+                        link : '/apps/Gallery/video-gallery'
                     }
                 ]
             },
@@ -122,11 +128,12 @@ export const defaultNavigation: FuseNavigationItem[] = [
                         link : '/apps/Settings/web-pages'
                     },
                     {
-                        id   : 'apps.Settings.messages',
+                         id   : 'apps.Settings.messages',
                         title: 'Messages',
                         type : 'basic',
                         link : '/apps/Settings/messages'
                     }
+
                 ]
             },
             

@@ -53,7 +53,10 @@
         <div class="row">
             <div class="col-50">
                 <label for="title">Title<span class="text-danger reqd">*</span></label>
-                <input type="text" id="title" class="nameCapital" formControlName="title" [(ngModel)]="titleEdit" >
+                <input type="text" id="title" [maxlength]="75" formControlName="title" [(ngModel)]="titleEdit" >
+                <p style="font-size: 11px;color: #80808096;">
+                    {{ titleEdit?.length || 0 }}/75
+                </p>
                 <div *ngIf="getControl['title'].touched && getControl['title'].invalid" class="text-danger">
                           <div *ngIf="getControl['title'].errors?.['required']">Title is required.</div>
                         </div>

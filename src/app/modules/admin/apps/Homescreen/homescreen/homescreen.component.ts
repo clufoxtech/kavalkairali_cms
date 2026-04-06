@@ -189,6 +189,8 @@ validateAllFields(formGroup: FormGroup) {
             this.magazines= new Array<Magazine>();
             this.magazines=response._embedded.magazineEditions.filter((magazine)=>{
               if(magazine.status=="ACTIVE"){
+                const exists = this.magazineDisplay.some(c => c.label === magazine.name+"-"+magazine.categoryName);
+                if(!exists){
                 this.magazineDisplay.push({
                   label: magazine.name+"-"+magazine.categoryName,
                   category: magazine.categoryName,
@@ -196,6 +198,7 @@ validateAllFields(formGroup: FormGroup) {
                   value: magazine._links.self.href
                 });
                 console.log(this.magazineDisplay);
+              }
                 return magazine;
               }
             });
