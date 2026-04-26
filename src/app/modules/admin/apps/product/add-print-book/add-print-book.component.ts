@@ -108,7 +108,7 @@ AddMagazineEditions(){
  
 addCoverImage(){
   console.log(this.selectedFiles);
-if(this.selectedFiles?.length>0 ){
+if(this.selectedFiles?.length>0 && this.selectedFiles[0].type.match(/image\/*/) != null){
     this.addservice.addImage( this.selectedFiles[0]).subscribe({
       next: (response)=>{
         this.coverID=response.publicId;
@@ -120,9 +120,12 @@ if(this.selectedFiles?.length>0 ){
      }
   })
   }
+  else{
+    this.messageService.add({severity:'error', summary:'Invalid File', detail:'Please select a valid image file for the cover.'});
+  }
 }
 addFileUpload(){
-if(this.selectedFilesUpload?.length>0 ){
+if(this.selectedFilesUpload?.length>0 && this.selectedFilesUpload[0].type.match(/pdf\/*/) != null){
     this.addservice.addFile( this.selectedFilesUpload[0]).subscribe({
       next: (response)=>{
         this.fileId=response.publicId;
@@ -134,6 +137,9 @@ if(this.selectedFilesUpload?.length>0 ){
      }
   })
   }
+  else{
+    this.messageService.add({severity:'error', summary:'Invalid File', detail:'Please select a valid PDF file for upload.'});
+  }
 }
 
 onFileChanged(event) {
@@ -143,7 +149,9 @@ onFileChanged(event) {
 
   const mimeType = this.selectedFiles[0].type;
   if (mimeType.match(/image\/*/) == null) {
-      //this.message = "Only images are supported.";
+      this.messageService.add({severity:'error', summary:'Invalid File', detail:'Please select a valid image file for the cover.'});
+      this.AddForm.patchValue({ cover: '' }); // Clear the file input
+      this.selectedFiles = null; // Clear the selected files
       return;
   }
 
@@ -156,12 +164,14 @@ onFileChanged(event) {
 }
 onFileUploadChanged(event) {
  this.selectedFilesUpload = event.target.files;
-  if (this.selectedFilesUpload.length === 0)
-      return;
-
+  if (this.selectedFilesUpload.length === 0 )
+    return;
+  
   const mimeType = this.selectedFilesUpload[0].type;
   if (mimeType.match(/pdf\/*/) == null) {
-      //this.message = "Only images are supported.";
+      this.messageService.add({severity:'error', summary:'Invalid File', detail:'Please select a valid PDF file for upload.'});
+     this.AddForm.patchValue({ fileUpload: '' }); // Clear the file input
+      this.selectedFilesUpload = null; // Clear the selected files
       return;
   }
 
