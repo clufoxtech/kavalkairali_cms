@@ -109,7 +109,9 @@ AddForm!: FormGroup;
   
     const mimeType = this.selectedFiles[0].type;
     if (mimeType.match(/image\/*/) == null) {
-        //this.message = "Only images are supported.";
+        this.messageService.add({severity:'error', summary:'Invalid File', detail:'Please select a valid image file for the cover.'});
+        this.AddForm.patchValue({ cover: '' }); // Clear the file input
+        this.selectedFiles = null; // Clear the selected files
         return;
     }
   
@@ -128,7 +130,9 @@ onFileUploadChanged(event) {
 
   const mimeType = this.selectedFilesUpload[0].type;
   if (mimeType.match(/pdf\/*/) == null) {
-      //this.message = "Only images are supported.";
+      this.messageService.add({severity:'error', summary:'Invalid File', detail:'Please select a valid PDF file for upload.'});
+      this.AddForm.patchValue({ fileUpload: '' }); // Clear the file input
+      this.selectedFilesUpload = null; // Clear the selected files
       return;
   }
 
