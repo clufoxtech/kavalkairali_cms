@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 
@@ -20,42 +20,81 @@ export class AuthInterceptor implements HttpInterceptor
      * @param req
      * @param next
      */
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+{
+    // Clone request
+    let newReq = req.clone();
+
+    // Add access token if not expired
+    if (
+        this._authService.accessToken &&
+        !AuthUtils.isTokenExpired(this._authService.accessToken)
+    )
     {
-        // Clone the request object
-        let newReq = req.clone();
-
-        // Request
-        //
-        // If the access token didn't expire, add the Authorization header.
-        // We won't add the Authorization header if the access token expired.
-        // This will force the server to return a "401 Unauthorized" response
-        // for the protected API routes which our response interceptor will
-        // catch and delete the access token from the local storage while logging
-        // the user out from the app.
-        if ( this._authService.accessToken && !AuthUtils.isTokenExpired(this._authService.accessToken) )
-        {
-            newReq = req.clone({
-                headers: req.headers.set('Authorization', 'Bearer ' + this._authService.accessToken)
-            });
-        }
-
-        // Response
-        return next.handle(newReq).pipe(
-            catchError((error) => {
-
-                // Catch "401 Unauthorized" responses
-                if ( error instanceof HttpErrorResponse && error.status === 401 )
-                {
-                    // Sign out
-                    this._authService.signOut();
-
-                    // Reload the app
-                    location.reload();
-                }
-
-                return throwError(error);
-            })
-        );
+        newReq = req.clone({
+            headers: req.headers.set(
+                'Authorization',
+                'Bearer ' + this._authService.accessToken
+            )
+        });
     }
+
+    return next.handle(newReq).pipe(
+
+        catchError((error) => {
+
+            // Handle 401
+            if (
+                error instanceof HttpErrorResponse &&
+                error.status === 401 &&
+                !req.url.includes('/auth/login') &&
+                !req.url.includes('/auth/refresh')
+            )
+            {
+                // Call refresh token API
+                return this._authService.refreshsignIn().pipe(
+
+                    switchMap((response: any) => {
+
+                        // Save new access token
+                        this._authService.accessToken =
+                            response.accessToken;
+
+                        // OPTIONAL:
+                        // If API returns new refresh token
+                        if (response.refreshToken)
+                        {
+                            localStorage.setItem(
+                                'refreshToken',
+                                response.refreshToken
+                            );
+                        }
+
+                        // Retry original request
+                        const retryReq = req.clone({
+                            headers: req.headers.set(
+                                'Authorization',
+                                'Bearer ' + response.accessToken
+                            )
+                        });
+
+                        return next.handle(retryReq);
+                    }),
+
+                    catchError((refreshError) => {
+
+                        // Refresh token failed
+                        this._authService.signOut();
+
+                        location.reload();
+
+                        return throwError(() => refreshError);
+                    })
+                );
+            }
+
+            return throwError(() => error);
+        })
+    );
+}
 }

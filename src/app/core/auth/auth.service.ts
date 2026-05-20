@@ -39,7 +39,15 @@ export class AuthService
     {
         return localStorage.getItem('accessToken') ?? '';
     }
+ set refreshToken(token: string)
+    {
+        localStorage.setItem('refreshToken', token);
+    }
 
+    get refreshToken(): string
+    {
+        return localStorage.getItem('refreshToken') ?? '';
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -83,6 +91,7 @@ export class AuthService
                 // Store the access token in the local storage
                 this.accessToken = response.token;
 
+                this.refreshToken = response.refreshToken;
                 // Set the authenticated flag to true
                 this._authenticated = true;
                 this.userEmail=credentials.email;
@@ -95,7 +104,17 @@ export class AuthService
             })
         );
     }
+    refreshsignIn(): Observable<any>
+{
+    const refreshToken = this.refreshToken;
 
+    return this._httpClient.post(
+        this.baseUrl + '/auth/refresh',
+        {
+            refreshToken: refreshToken
+        }
+    );
+}
     /**
      * Sign in using the access token
      */
@@ -123,6 +142,7 @@ export class AuthService
                 {
                     this.accessToken = response.accessToken;
                 }
+                
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
